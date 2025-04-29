@@ -1,11 +1,17 @@
 import type { BestingConfig } from './types'
-import { loadConfig } from 'bunfig'
+
+/**
+ * Simple configuration loader for Besting
+ */
+export function loadConfig(userConfig?: Partial<BestingConfig>): BestingConfig {
+  return {
+    ...defaultConfig,
+    ...userConfig,
+  };
+}
 
 export const defaultConfig: BestingConfig = {
   verbose: true,
 }
 
-// eslint-disable-next-line antfu/no-top-level-await
-export const config: BestingConfig = await loadConfig({
-  defaultConfig,
-})
+export const config: BestingConfig = loadConfig();

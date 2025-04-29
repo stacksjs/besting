@@ -6,23 +6,140 @@
 <!-- [![npm downloads][npm-downloads-src]][npm-downloads-href] -->
 <!-- [![Codecov][codecov-src]][codecov-href] -->
 
-# besting
+# Besting
 
-This is an opinionated TypeScript Starter kit to help kick-start development of your next Bun package.
+A Pest-inspired testing utility for Bun.
+
+## Overview
+
+Besting is a lightweight wrapper around Bun's built-in test runner that provides a more fluent, Pest-like API for writing tests. It builds on Bun's Jest-compatible test runner and adds a more expressive, chainable API for assertions.
+
+## Installation
+
+```bash
+bun add -d besting
+```
 
 ## Features
 
-This Starter Kit comes pre-configured with the following:
+- **Fluent, chainable assertions** - Make multiple assertions on the same value with a chainable API.
+- **Pest-style syntax** - Use a similar style to PHP's Pest testing framework.
+- **Zero overhead** - Built directly on Bun's native test runner for maximum performance.
+- **Full compatibility** - Works with all of Bun's testing features including lifecycle hooks, snapshots, and more.
 
-- 🛠️ [Powerful Build Process](https://github.com/oven-sh/bun) - via Bun
-- 💪🏽 [Fully Typed APIs](https://www.typescriptlang.org/) - via TypeScript
-- 📚 [Documentation-ready](https://vitepress.dev/) - via VitePress
-- ⌘ [CLI & Binary](https://www.npmjs.com/package/bunx) - via Bun & CAC
-- 🧪 [Built With Testing In Mind](https://bun.sh/docs/cli/test) - pre-configured unit-testing powered by [Bun](https://bun.sh/docs/cli/test)
-- 🤖 [Renovate](https://renovatebot.com/) - optimized & automated PR dependency updates
-- 🎨 [ESLint](https://eslint.org/) - for code linting _(and formatting)_
-- 📦️ [pkg.pr.new](https://pkg.pr.new) - Continuous (Preview) Releases for your libraries
-- 🐙 [GitHub Actions](https://github.com/features/actions) - runs your CI _(fixes code style issues, tags releases & creates its changelogs, runs the test suite, etc.)_
+## Basic Usage
+
+```typescript
+import { test, expect } from 'besting';
+
+test('basic addition', () => {
+  expect(1 + 1).toBe(2);
+});
+```
+
+## Chainable Assertions
+
+```typescript
+import { test, expect } from 'besting';
+
+test('multiple assertions on same value', () => {
+  expect('Hello World')
+    .toContain('Hello')
+    .toContain('World')
+    .toHaveLength(11)
+    .toStartWith('Hello')
+    .toEndWith('World');
+});
+```
+
+## Pest-Style API
+
+```typescript
+import { pest } from 'besting';
+
+const p = pest();
+
+p.describe('Calculator', () => {
+  p.test('addition works', () => {
+    p.it(1 + 1).toBe(2);
+  });
+
+  p.test('subtraction works', () => {
+    p.it(3 - 1).toBe(2);
+  });
+});
+```
+
+## Test Suites
+
+```typescript
+import { describe, test, expect } from 'besting';
+
+describe('Math operations', () => {
+  test('addition works', () => {
+    expect(1 + 1).toBe(2);
+  });
+
+  test('subtraction works', () => {
+    expect(3 - 1).toBe(2);
+  });
+});
+```
+
+## Lifecycle Hooks
+
+```typescript
+import { describe, test, beforeEach, expect } from 'besting';
+
+describe('User', () => {
+  let user;
+
+  beforeEach(() => {
+    user = { name: 'John', email: 'john@example.com' };
+  });
+
+  test('has correct properties', () => {
+    expect(user.name).toBe('John');
+    expect(user.email).toBe('john@example.com');
+  });
+});
+```
+
+## Test Groups
+
+```typescript
+import { testGroup } from 'besting';
+
+testGroup('Hello World', (str) => {
+  // All assertions are against the string 'Hello World'
+  str.toContain('Hello')
+    .toContain('World')
+    .toStartWith('Hello')
+    .toEndWith('World')
+    .not.toBeEmpty();
+});
+```
+
+## Special Matchers
+
+Besting includes all matchers from Bun's test runner, plus additional Pest-inspired matchers:
+
+- `toStartWith(prefix)` - Assert that a string starts with a prefix
+- `toEndWith(suffix)` - Assert that a string ends with a suffix
+- `toBeEmpty()` - Assert that a string, array, or object is empty
+- `toPass(validator, message?)` - Assert that a value passes a custom validation function
+
+## Running Tests
+
+Use Bun's built-in test runner to run your tests:
+
+```bash
+bun test
+```
+
+## License
+
+MIT
 
 ## Get Started
 
@@ -68,7 +185,7 @@ For casual chit-chat with others using this package:
 
 ## Postcardware
 
-“Software that is free, but hopes for a postcard.” We love receiving postcards from around the world showing where Stacks is being used! We showcase them on our website too.
+"Software that is free, but hopes for a postcard." We love receiving postcards from around the world showing where Stacks is being used! We showcase them on our website too.
 
 Our address: Stacks.js, 12665 Village Ln #2306, Playa Vista, CA 90094, United States 🌎
 
