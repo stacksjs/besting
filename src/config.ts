@@ -1,13 +1,11 @@
-import type { BinaryConfig } from './types'
+import type { BestingConfig } from './types'
 import { loadConfig } from 'bunfig'
 
-export const defaultConfig: BinaryConfig = {
-  from: 'localhost:5173',
+export const defaultConfig: BestingConfig = {
   verbose: true,
 }
 
 // eslint-disable-next-line antfu/no-top-level-await
-export const config: BinaryConfig = await loadConfig({
-  name: 'binary',
+export const config: BestingConfig = await loadConfig({
   defaultConfig,
 })
