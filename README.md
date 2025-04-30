@@ -8,7 +8,7 @@
 
 # Besting
 
-A Pest & Jest inspired testing utilities for Bun.
+A Jest & Pest inspired testing utilities for Bun. _UI coming soon!_
 
 ## Overview
 
@@ -26,6 +26,7 @@ bun add -d besting
 - **Pest-style syntax** - Use a similar style to PHP's Pest testing framework.
 - **Zero overhead** - Built directly on Bun's native test runner for maximum performance.
 - **Full compatibility** - Works with all of Bun's testing features including lifecycle hooks, snapshots, and more.
+- **API Testing** - Laravel-inspired API testing utilities for testing HTTP endpoints.
 
 ## Basic Usage
 
@@ -118,6 +119,117 @@ testGroup('Hello World', (str) => {
     .toEndWith('World')
     .not
     .toBeEmpty()
+})
+```
+
+## API Testing
+
+Besting includes Laravel-inspired API testing utilities for testing HTTP endpoints.
+
+### Basic API Testing
+
+```typescript
+import { api, assertResponse, test } from 'besting'
+
+test('Basic API test', async () => {
+  // Make a GET request to an API
+  const response = await api('https://api.example.com')
+    .get('/users/1')
+
+  // Assert on the response
+  const assertion = await assertResponse(response).assertOk()
+  await assertion.assertStatus(200)
+  await assertion.assertHeader('content-type')
+
+  // Get and assert on JSON data
+  const data = await response.json()
+  expect(data).toHaveProperty('id', 1)
+})
+```
+
+### HTTP Methods
+
+```typescript
+import { api, assertResponse, test } from 'besting'
+
+test('Testing different HTTP methods', async () => {
+  const baseApi = api('https://api.example.com')
+
+  // GET with query parameters
+  const getResponse = await baseApi
+    .withQuery({ filter: 'active' })
+    .get('/users')
+
+  // POST with JSON data
+  const postResponse = await baseApi
+    .post('/users', { name: 'John', email: 'john@example.com' })
+
+  // PUT to update a resource
+  const putResponse = await baseApi
+    .put('/users/1', { name: 'Updated Name' })
+
+  // DELETE a resource
+  const deleteResponse = await baseApi
+    .delete('/users/1')
+})
+```
+
+### Authentication
+
+```typescript
+import { api, test } from 'besting'
+
+test('Authenticated API requests', async () => {
+  // Using Bearer token
+  const tokenResponse = await api('https://api.example.com')
+    .withToken('your-auth-token')
+    .get('/secured-endpoint')
+
+  // Using Basic Authentication
+  const basicAuthResponse = await api('https://api.example.com')
+    .withBasicAuth('username', 'password')
+    .get('/secured-endpoint')
+})
+```
+
+### JSON Assertions
+
+```typescript
+import { api, assertResponse, test } from 'besting'
+
+test('Testing JSON responses', async () => {
+  const response = await api('https://api.example.com')
+    .get('/users/1')
+
+  // Assert on specific JSON paths
+  const assertion = await assertResponse(response)
+  await assertion.assertJsonPath('name', 'John Doe')
+  await assertion.assertJsonPath('email')
+  await assertion.assertJsonPath('address.city', 'New York')
+
+  // Assert on the entire JSON structure
+  await assertion.assertJson({
+    id: 1,
+    name: 'John Doe',
+    email: 'john@example.com'
+  })
+})
+```
+
+### Configuration
+
+```typescript
+import { api, test } from 'besting'
+
+test('Configuring API requests', async () => {
+  const response = await api('https://api.example.com')
+    .withHeaders({
+      'X-Custom-Header': 'Value',
+      'Accept-Language': 'en-US'
+    })
+    .withTimeout(5000) // 5 seconds timeout
+    .withJson() // Ensure JSON content type
+    .get('/endpoint')
 })
 ```
 
