@@ -9,3 +9,5 @@ export * from './event'
 export * from './test'
 export * from './types'
 export * from './url'
+
+export { afterEach, beforeEach, describe, expect, it, test } from 'bun:test'

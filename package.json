@@ -52,6 +52,9 @@
     "prepublishOnly": "bun --bun run build && bun run compile:all && bun run zip",
     "release": "bun run changelog && bunx bumpp package.json --all",
     "test": "bun test",
+    "test:custom": "bun run src/bin.ts",
+    "test:standard": "bun test",
+    "test:debug": "BESTING_DEBUG=true bun test",
     "test:core": "bun test test/index.test.ts",
     "test:stress": "bun test test/stress.test.ts",
     "test:errors": "bun test test/error-handling.test.ts",
@@ -60,6 +63,9 @@
     "build:docs": "bun --bun vitepress build docs",
     "preview:docs": "bun --bun vitepress preview docs",
     "typecheck": "bun --bun tsc --noEmit"
+  },
+  "dependencies": {
+    "cac": "^6.7.14"
   },
   "devDependencies": {
     "@stacksjs/docs": "^0.70.23",
@@ -78,8 +84,5 @@
   },
   "lint-staged": {
     "*.{js,ts}": "bunx --bun eslint . --fix"
-  },
-  "dependencies": {
-    "cac": "^6.7.14"
   }
 }

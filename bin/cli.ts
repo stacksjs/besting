@@ -8,9 +8,9 @@ interface CliOption {
 }
 
 cli
-  .command('abc', 'some command')
+  .command('test', 'Run the tests')
   .option('--verbose', 'Enable verbose logging')
-  .example('besting abc --verbose')
+  .example('besting test --verbose')
   .action(async (options?: CliOption) => {
     console.log('Options:', options)
   })

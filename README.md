@@ -365,13 +365,31 @@ Besting includes all matchers from Bun's test runner, plus additional Pest-inspi
 - `toBeEmpty()` - Assert that a string, array, or object is empty
 - `toPass(validator, message?)` - Assert that a value passes a custom validation function
 
-## Running Tests
+## Testing
 
-Use Bun's built-in test runner to run your tests:
+Besting uses Bun's native test runner, providing a seamless testing experience with all of Bun's built-in test features.
 
 ```bash
+# Run all tests with Bun's standard test runner
 bun test
+
+# Run all tests with our custom runner (ensures all test files are executed)
+bun run test:custom
+
+# Run a specific test file
+bun test path/to/test.ts
+
+# Run tests with debugging enabled
+bun run test:debug
 ```
+
+Besting seamlessly integrates with Bun's test runner, allowing you to:
+
+1. Use all of Bun's test features (snapshots, mocks, etc.)
+2. Get beautifully formatted test output
+3. Run tests in parallel for better performance
+
+> **Note:** Bun's test runner may sometimes have issues discovering or executing all test files (see [Bun issue #3506](https://github.com/oven-sh/bun/issues/3506)). If you notice that some test files are not being executed, you can use our custom test runner with `bun run test:custom`, which ensures all test files are discovered and executed individually.
 
 ## License
 
