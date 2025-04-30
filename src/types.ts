@@ -36,3 +36,57 @@ export interface ApiTestCase {
   withJson: () => ApiTestCase
   withTimeout: (ms: number) => ApiTestCase
 }
+
+// Cache testing types
+export interface CacheStore {
+  get: (key: string) => Promise<any>
+  set: (key: string, value: any, ttl?: number) => Promise<void>
+  has: (key: string) => Promise<boolean>
+  delete: (key: string) => Promise<boolean>
+  clear: () => Promise<void>
+}
+
+export interface CacheTestCase {
+  assertHas: (key: string) => Promise<CacheTestCase>
+  assertMissing: (key: string) => Promise<CacheTestCase>
+  assertExists: (key: string) => Promise<CacheTestCase>
+  assertNotExists: (key: string) => Promise<CacheTestCase>
+  store: (name?: string) => CacheTestCase
+  get: <T = any>(key: string) => Promise<T | null>
+  set: (key: string, value: any, ttl?: number) => Promise<void>
+  has: (key: string) => Promise<boolean>
+  delete: (key: string) => Promise<boolean>
+  clear: () => Promise<void>
+}
+
+// Cookie testing types
+export interface CookieJar {
+  get: (name: string) => string | null
+  set: (name: string, value: string, options?: CookieOptions) => void
+  has: (name: string) => boolean
+  remove: (name: string) => void
+  clear: () => void
+  getAll: () => Record<string, string>
+}
+
+export interface CookieOptions {
+  domain?: string
+  path?: string
+  expires?: Date
+  maxAge?: number
+  secure?: boolean
+  httpOnly?: boolean
+  sameSite?: 'Strict' | 'Lax' | 'None'
+}
+
+export interface CookieTestCase {
+  assertHas: (name: string) => CookieTestCase
+  assertMissing: (name: string) => CookieTestCase
+  assertValue: (name: string, value: string) => CookieTestCase
+  assertValueContains: (name: string, value: string) => CookieTestCase
+  get: (name: string) => string | null
+  set: (name: string, value: string, options?: CookieOptions) => CookieTestCase
+  remove: (name: string) => CookieTestCase
+  clear: () => CookieTestCase
+  getAll: () => Record<string, string>
+}

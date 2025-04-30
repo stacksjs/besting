@@ -27,6 +27,9 @@ bun add -d besting
 - **Zero overhead** - Built directly on Bun's native test runner for maximum performance.
 - **Full compatibility** - Works with all of Bun's testing features including lifecycle hooks, snapshots, and more.
 - **API Testing** - Laravel-inspired API testing utilities for testing HTTP endpoints.
+- **Cache Testing** - Utilities for testing cache operations.
+- **Cookie Testing** - Utilities for testing cookies.
+- **URL Testing** - Utilities for testing URL components.
 
 ## Basic Usage
 
@@ -230,6 +233,122 @@ test('Configuring API requests', async () => {
     .withTimeout(5000) // 5 seconds timeout
     .withJson() // Ensure JSON content type
     .get('/endpoint')
+})
+```
+
+## Cache Testing
+
+Besting includes utilities for testing cache operations, inspired by Laravel's cache assertions.
+
+### Basic Cache Testing
+
+```typescript
+import { cache, test } from 'besting'
+
+test('Basic cache operations', async () => {
+  const cacheStore = cache()
+
+  // Store a value in cache
+  await cacheStore.set('user_id', 1)
+
+  // Assert that the key exists
+  await cacheStore.assertHas('user_id')
+
+  // Get a value from cache
+  const userId = await cacheStore.get('user_id')
+
+  // Delete a key
+  await cacheStore.delete('user_id')
+
+  // Assert that the key is gone
+  await cacheStore.assertMissing('user_id')
+})
+```
+
+### Expiration Testing
+
+```typescript
+import { cache, test } from 'besting'
+
+test('Cache expiration', async () => {
+  const cacheStore = cache()
+
+  // Set a value with a 1 second TTL
+  await cacheStore.set('temp', 'value', 1)
+
+  // Value should exist initially
+  await cacheStore.assertExists('temp')
+
+  // Wait for expiration
+  await new Promise(resolve => setTimeout(resolve, 1100))
+
+  // Value should be gone after TTL expires
+  await cacheStore.assertNotExists('temp')
+})
+```
+
+## Cookie Testing
+
+Besting includes utilities for testing cookies, compatible with both browser and server environments.
+
+### Basic Cookie Testing
+
+```typescript
+import { cookie, test } from 'besting'
+
+test('Basic cookie operations', () => {
+  const cookieJar = cookie()
+
+  // Set cookies
+  cookieJar
+    .set('session_id', '123456789')
+    .set('theme', 'dark')
+
+  // Assert cookies exist
+  cookieJar
+    .assertHas('session_id')
+    .assertHas('theme')
+
+  // Assert cookie values
+  cookieJar
+    .assertValue('session_id', '123456789')
+    .assertValue('theme', 'dark')
+
+  // Remove a cookie
+  cookieJar.remove('theme')
+
+  // Assert cookie is gone
+  cookieJar.assertMissing('theme')
+})
+```
+
+## URL Testing
+
+Besting includes utilities for testing URL components.
+
+### Basic URL Testing
+
+```typescript
+import { test, url } from 'besting'
+
+test('URL component testing', () => {
+  const testUrl = url('https://example.com/users?sort=asc&page=1#profile')
+
+  // Assert URL components
+  testUrl
+    .hasProtocol('https')
+    .hasHost('example.com')
+    .hasPath('/users')
+    .hasQuery('sort', 'asc')
+    .hasQuery('page', '1')
+    .hasFragment('profile')
+
+  // Check for absence of query parameters
+  testUrl.doesntHaveQuery('filter')
+
+  // Get URL components
+  console.log(testUrl.path) // '/users'
+  console.log(testUrl.queryParams) // { sort: 'asc', page: '1' }
 })
 ```
 
