@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, test } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { defaultConfig, loadConfig } from '../src/config'
 
 // Test basic assertion functionality

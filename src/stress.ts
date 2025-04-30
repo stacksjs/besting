@@ -1,5 +1,6 @@
-import type { BunFile } from 'bun'
+/* eslint-disable no-console */
 import { spawn } from 'bun'
+import process from 'node:process'
 
 // Types for stress test results
 export interface StressTestResult {
@@ -281,7 +282,7 @@ class StressTest implements StressTestBuilder {
       const exitCode = await proc.exited
       return exitCode === 0
     }
-    catch (error) {
+    catch {
       return false
     }
   }
@@ -349,7 +350,7 @@ class StressTest implements StressTestBuilder {
     try {
       bombardierResult = JSON.parse(output)
     }
-    catch (e) {
+    catch {
       throw new Error(`Failed to parse bombardier output: ${output}`)
     }
 
@@ -677,7 +678,7 @@ export async function runStressCommand(args: string[]): Promise<void> {
           try {
             payload = JSON.parse(args[++i])
           }
-          catch (e) {
+          catch {
             console.error(`Error parsing payload: ${args[i]}`)
             process.exit(1)
           }
