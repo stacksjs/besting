@@ -1,4 +1,4 @@
-import { pest, test, expect, describe, beforeEach, afterEach, testGroup } from '../test';
+import { best, test, expect, describe, beforeEach, afterEach, testGroup } from '../test';
 
 // Create a basic User class for testing
 class User {
@@ -25,7 +25,7 @@ class User {
 }
 
 // Example 1: Using Pest-style fluent API
-describe('User (using standard API with pest-like assertions)', () => {
+describe('User (using standard API with best-like assertions)', () => {
   let user: User;
 
   beforeEach(() => {
@@ -63,10 +63,10 @@ describe('User (using standard API with pest-like assertions)', () => {
   });
 });
 
-// Example 2: Using full Pest-style API with the pest() function
-const p = pest();
+// Example 2: Using full Pest-style API with the best() function
+const p = best();
 
-p.describe('User (using pest API)', () => {
+p.describe('User (using best API)', () => {
   let user: User;
 
   p.beforeEach(() => {

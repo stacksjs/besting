@@ -1,4 +1,4 @@
-import { test, expect, describe, it, pest } from '../test';
+import { test, expect, describe, it, best } from '../test';
 
 // Example 1: Using the basic Jest-like API
 test('basic addition using test', () => {
@@ -38,8 +38,8 @@ test('using Pest-like fluent assertions', () => {
   expect(throwingFn).toThrow();
 });
 
-// Example 4: Using the more Pest-like API with pest()
-const p = pest();
+// Example 4: Using the more Pest-like API with best()
+const p = best();
 
 p.test('using the full Pest-style API', () => {
   p.it(2 + 2)

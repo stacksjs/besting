@@ -607,7 +607,7 @@ export class PestSuite {
 }
 
 // Create a new Pest-style test suite
-export function pest(): PestSuite {
+export function best(): PestSuite {
   return new PestSuite();
 }
 

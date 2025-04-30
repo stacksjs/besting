@@ -8,7 +8,7 @@
 
 # Besting
 
-A Pest-inspired testing utility for Bun.
+A Pest & Jest inspired testing utilities for Bun.
 
 ## Overview
 
@@ -30,17 +30,17 @@ bun add -d besting
 ## Basic Usage
 
 ```typescript
-import { test, expect } from 'besting';
+import { expect, test } from 'besting'
 
 test('basic addition', () => {
-  expect(1 + 1).toBe(2);
-});
+  expect(1 + 1).toBe(2)
+})
 ```
 
 ## Chainable Assertions
 
 ```typescript
-import { test, expect } from 'besting';
+import { expect, test } from 'besting'
 
 test('multiple assertions on same value', () => {
   expect('Hello World')
@@ -48,67 +48,67 @@ test('multiple assertions on same value', () => {
     .toContain('World')
     .toHaveLength(11)
     .toStartWith('Hello')
-    .toEndWith('World');
-});
+    .toEndWith('World')
+})
 ```
 
 ## Pest-Style API
 
 ```typescript
-import { pest } from 'besting';
+import { best } from 'besting'
 
-const p = pest();
+const p = best()
 
 p.describe('Calculator', () => {
   p.test('addition works', () => {
-    p.it(1 + 1).toBe(2);
-  });
+    p.it(1 + 1).toBe(2)
+  })
 
   p.test('subtraction works', () => {
-    p.it(3 - 1).toBe(2);
-  });
-});
+    p.it(3 - 1).toBe(2)
+  })
+})
 ```
 
 ## Test Suites
 
 ```typescript
-import { describe, test, expect } from 'besting';
+import { describe, expect, test } from 'besting'
 
 describe('Math operations', () => {
   test('addition works', () => {
-    expect(1 + 1).toBe(2);
-  });
+    expect(1 + 1).toBe(2)
+  })
 
   test('subtraction works', () => {
-    expect(3 - 1).toBe(2);
-  });
-});
+    expect(3 - 1).toBe(2)
+  })
+})
 ```
 
 ## Lifecycle Hooks
 
 ```typescript
-import { describe, test, beforeEach, expect } from 'besting';
+import { beforeEach, describe, expect, test } from 'besting'
 
 describe('User', () => {
-  let user;
+  let user
 
   beforeEach(() => {
-    user = { name: 'John', email: 'john@example.com' };
-  });
+    user = { name: 'John', email: 'john@example.com' }
+  })
 
   test('has correct properties', () => {
-    expect(user.name).toBe('John');
-    expect(user.email).toBe('john@example.com');
-  });
-});
+    expect(user.name).toBe('John')
+    expect(user.email).toBe('john@example.com')
+  })
+})
 ```
 
 ## Test Groups
 
 ```typescript
-import { testGroup } from 'besting';
+import { testGroup } from 'besting'
 
 testGroup('Hello World', (str) => {
   // All assertions are against the string 'Hello World'
@@ -116,8 +116,9 @@ testGroup('Hello World', (str) => {
     .toContain('World')
     .toStartWith('Hello')
     .toEndWith('World')
-    .not.toBeEmpty();
-});
+    .not
+    .toBeEmpty()
+})
 ```
 
 ## Special Matchers

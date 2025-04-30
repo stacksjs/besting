@@ -1,7 +1,7 @@
 import { CAC } from 'cac'
 import { version } from '../package.json'
 
-const cli = new CAC('my-cli')
+const cli = new CAC('besting')
 
 interface CliOption {
   from: string
@@ -9,10 +9,9 @@ interface CliOption {
 }
 
 cli
-  .command('start', 'Start the Reverse Proxy Server')
-  .option('--from <from>', 'The URL to proxy from')
+  .command('start', 'some command')
   .option('--verbose', 'Enable verbose logging')
-  .example('reverse-proxy start --from localhost:5173 --to my-project.localhost')
+  .example('besting start --from localhost:5173 --to my-project.localhost')
   .action(async (options?: CliOption) => {
     if (!options?.from) {
       console.error('Missing --from option')
