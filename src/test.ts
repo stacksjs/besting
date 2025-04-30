@@ -1,61 +1,61 @@
-import { expect as bunExpect, test as bunTest, describe as bunDescribe, beforeAll as bunBeforeAll, afterAll as bunAfterAll, beforeEach as bunBeforeEach, afterEach as bunAfterEach, mock as bunMock, spyOn as bunSpyOn } from 'bun:test';
+import { afterAll as bunAfterAll, afterEach as bunAfterEach, beforeAll as bunBeforeAll, beforeEach as bunBeforeEach, describe as bunDescribe, expect as bunExpect, mock as bunMock, spyOn as bunSpyOn, test as bunTest } from 'bun:test'
 
 /**
  * Besting - A Pest-inspired testing utility for Bun
  */
 
-type TestCallback = () => void | Promise<void>;
-type ExpectCallback<T> = (value: T) => void;
+type TestCallback = () => void | Promise<void>
+type ExpectCallback<T> = (value: T) => void
 
 // Define test function types with their modifiers
 interface TestFn {
-  (description: string, callback: TestCallback): void;
-  skip: (description: string, callback: TestCallback) => void;
-  only: (description: string, callback: TestCallback) => void;
-  todo: (description: string, callback?: TestCallback) => void;
-  each: (cases: any[]) => (description: string, ...rest: any[]) => void;
-  if: (condition: any) => (description: string, callback: TestCallback, timeout?: number) => void;
-  skipIf: (condition: any) => (description: string, callback: TestCallback, timeout?: number) => void;
-  todoIf: (condition: any) => (description: string, callback: TestCallback, timeout?: number) => void;
+  (description: string, callback: TestCallback): void
+  skip: (description: string, callback: TestCallback) => void
+  only: (description: string, callback: TestCallback) => void
+  todo: (description: string, callback?: TestCallback) => void
+  each: (cases: any[]) => (description: string, ...rest: any[]) => void
+  if: (condition: any) => (description: string, callback: TestCallback, timeout?: number) => void
+  skipIf: (condition: any) => (description: string, callback: TestCallback, timeout?: number) => void
+  todoIf: (condition: any) => (description: string, callback: TestCallback, timeout?: number) => void
 }
 
 // Define describe function types with their modifiers
 interface DescribeFn {
-  (description: string, callback: () => void): void;
-  skip: (description: string, callback: () => void) => void;
-  only: (description: string, callback: () => void) => void;
-  each: (cases: any[]) => (description: string, ...rest: any[]) => void;
-  if: (condition: any) => (description: string, callback: () => void) => void;
-  skipIf: (condition: any) => (description: string, callback: () => void) => void;
-  todoIf: (condition: any) => (description: string, callback: () => void) => void;
+  (description: string, callback: () => void): void
+  skip: (description: string, callback: () => void) => void
+  only: (description: string, callback: () => void) => void
+  each: (cases: any[]) => (description: string, ...rest: any[]) => void
+  if: (condition: any) => (description: string, callback: () => void) => void
+  skipIf: (condition: any) => (description: string, callback: () => void) => void
+  todoIf: (condition: any) => (description: string, callback: () => void) => void
 }
 
 /**
  * Represents a test case with fluent assertions
  */
 class TestCase<T = any> {
-  private _value: T;
-  private _negated = false;
-  private _customMessage?: string;
+  private _value: T
+  private _negated = false
+  private _customMessage?: string
 
   constructor(value: T) {
-    this._value = value;
+    this._value = value
   }
 
   /**
    * Negates the next assertion
    */
   get not(): this {
-    this._negated = !this._negated;
-    return this;
+    this._negated = !this._negated
+    return this
   }
 
   /**
    * Add a custom message to the next assertion
    */
   withMessage(message: string): this {
-    this._customMessage = message;
-    return this;
+    this._customMessage = message
+    return this
   }
 
   /**
@@ -63,13 +63,14 @@ class TestCase<T = any> {
    */
   toBeTruthy(): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeTruthy();
-    } else {
-      bunExpect(this._value).toBeTruthy();
+      bunExpect(this._value).not.toBeTruthy()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeTruthy()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -77,13 +78,14 @@ class TestCase<T = any> {
    */
   toBeFalsy(): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeFalsy();
-    } else {
-      bunExpect(this._value).toBeFalsy();
+      bunExpect(this._value).not.toBeFalsy()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeFalsy()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -91,13 +93,14 @@ class TestCase<T = any> {
    */
   toEqual(expected: any): this {
     if (this._negated) {
-      bunExpect(this._value).not.toEqual(expected);
-    } else {
-      bunExpect(this._value).toEqual(expected);
+      bunExpect(this._value).not.toEqual(expected)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toEqual(expected)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -105,13 +108,14 @@ class TestCase<T = any> {
    */
   toBe(expected: any): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBe(expected);
-    } else {
-      bunExpect(this._value).toBe(expected);
+      bunExpect(this._value).not.toBe(expected)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBe(expected)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -119,13 +123,14 @@ class TestCase<T = any> {
    */
   toBeGreaterThan(expected: number): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeGreaterThan(expected);
-    } else {
-      bunExpect(this._value).toBeGreaterThan(expected);
+      bunExpect(this._value).not.toBeGreaterThan(expected)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeGreaterThan(expected)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -133,13 +138,14 @@ class TestCase<T = any> {
    */
   toBeGreaterThanOrEqual(expected: number): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeGreaterThanOrEqual(expected);
-    } else {
-      bunExpect(this._value).toBeGreaterThanOrEqual(expected);
+      bunExpect(this._value).not.toBeGreaterThanOrEqual(expected)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeGreaterThanOrEqual(expected)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -147,13 +153,14 @@ class TestCase<T = any> {
    */
   toBeLessThan(expected: number): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeLessThan(expected);
-    } else {
-      bunExpect(this._value).toBeLessThan(expected);
+      bunExpect(this._value).not.toBeLessThan(expected)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeLessThan(expected)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -161,13 +168,14 @@ class TestCase<T = any> {
    */
   toBeLessThanOrEqual(expected: number): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeLessThanOrEqual(expected);
-    } else {
-      bunExpect(this._value).toBeLessThanOrEqual(expected);
+      bunExpect(this._value).not.toBeLessThanOrEqual(expected)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeLessThanOrEqual(expected)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -175,13 +183,14 @@ class TestCase<T = any> {
    */
   toContain(expected: any): this {
     if (this._negated) {
-      bunExpect(this._value).not.toContain(expected);
-    } else {
-      bunExpect(this._value).toContain(expected);
+      bunExpect(this._value).not.toContain(expected)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toContain(expected)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -189,13 +198,14 @@ class TestCase<T = any> {
    */
   toMatch(pattern: RegExp | string): this {
     if (this._negated) {
-      bunExpect(this._value).not.toMatch(pattern);
-    } else {
-      bunExpect(this._value).toMatch(pattern);
+      bunExpect(this._value).not.toMatch(pattern)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toMatch(pattern)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -203,25 +213,28 @@ class TestCase<T = any> {
    */
   toThrow(expected?: any): this {
     if (typeof this._value !== 'function') {
-      throw new Error('toThrow() can only be used on functions');
+      throw new TypeError('toThrow() can only be used on functions')
     }
 
     if (this._negated) {
       if (expected !== undefined) {
-        bunExpect(this._value).not.toThrow(expected);
-      } else {
-        bunExpect(this._value).not.toThrow();
+        bunExpect(this._value).not.toThrow(expected)
       }
-    } else {
-      if (expected !== undefined) {
-        bunExpect(this._value).toThrow(expected);
-      } else {
-        bunExpect(this._value).toThrow();
+      else {
+        bunExpect(this._value).not.toThrow()
       }
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      if (expected !== undefined) {
+        bunExpect(this._value).toThrow(expected)
+      }
+      else {
+        bunExpect(this._value).toThrow()
+      }
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -229,13 +242,14 @@ class TestCase<T = any> {
    */
   toBeInstanceOf(constructor: any): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeInstanceOf(constructor);
-    } else {
-      bunExpect(this._value).toBeInstanceOf(constructor);
+      bunExpect(this._value).not.toBeInstanceOf(constructor)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeInstanceOf(constructor)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -244,20 +258,23 @@ class TestCase<T = any> {
   toHaveProperty(name: string, value?: any): this {
     if (this._negated) {
       if (value !== undefined) {
-        bunExpect(this._value).not.toHaveProperty(name, value);
-      } else {
-        bunExpect(this._value).not.toHaveProperty(name);
+        bunExpect(this._value).not.toHaveProperty(name, value)
       }
-    } else {
-      if (value !== undefined) {
-        bunExpect(this._value).toHaveProperty(name, value);
-      } else {
-        bunExpect(this._value).toHaveProperty(name);
+      else {
+        bunExpect(this._value).not.toHaveProperty(name)
       }
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      if (value !== undefined) {
+        bunExpect(this._value).toHaveProperty(name, value)
+      }
+      else {
+        bunExpect(this._value).toHaveProperty(name)
+      }
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -265,13 +282,14 @@ class TestCase<T = any> {
    */
   toHaveLength(length: number): this {
     if (this._negated) {
-      bunExpect(this._value).not.toHaveLength(length);
-    } else {
-      bunExpect(this._value).toHaveLength(length);
+      bunExpect(this._value).not.toHaveLength(length)
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toHaveLength(length)
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -279,13 +297,14 @@ class TestCase<T = any> {
    */
   toBeNull(): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeNull();
-    } else {
-      bunExpect(this._value).toBeNull();
+      bunExpect(this._value).not.toBeNull()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeNull()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -293,13 +312,14 @@ class TestCase<T = any> {
    */
   toBeUndefined(): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeUndefined();
-    } else {
-      bunExpect(this._value).toBeUndefined();
+      bunExpect(this._value).not.toBeUndefined()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeUndefined()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -307,13 +327,14 @@ class TestCase<T = any> {
    */
   toBeDefined(): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeDefined();
-    } else {
-      bunExpect(this._value).toBeDefined();
+      bunExpect(this._value).not.toBeDefined()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeDefined()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -321,13 +342,14 @@ class TestCase<T = any> {
    */
   toBeNaN(): this {
     if (this._negated) {
-      bunExpect(this._value).not.toBeNaN();
-    } else {
-      bunExpect(this._value).toBeNaN();
+      bunExpect(this._value).not.toBeNaN()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toBeNaN()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -336,35 +358,38 @@ class TestCase<T = any> {
   toBeCloseTo(expected: number, precision?: number): this {
     if (this._negated) {
       if (precision !== undefined) {
-        bunExpect(this._value).not.toBeCloseTo(expected, precision);
-      } else {
-        bunExpect(this._value).not.toBeCloseTo(expected);
+        bunExpect(this._value).not.toBeCloseTo(expected, precision)
       }
-    } else {
-      if (precision !== undefined) {
-        bunExpect(this._value).toBeCloseTo(expected, precision);
-      } else {
-        bunExpect(this._value).toBeCloseTo(expected);
+      else {
+        bunExpect(this._value).not.toBeCloseTo(expected)
       }
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      if (precision !== undefined) {
+        bunExpect(this._value).toBeCloseTo(expected, precision)
+      }
+      else {
+        bunExpect(this._value).toBeCloseTo(expected)
+      }
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
    * Add a custom assertion
    */
   assert(callback: ExpectCallback<T>): this {
-    callback(this._value);
-    return this;
+    callback(this._value)
+    return this
   }
 
   /**
    * Get the raw value
    */
   get value(): T {
-    return this._value;
+    return this._value
   }
 
   // Added Pest-style alias methods
@@ -374,17 +399,18 @@ class TestCase<T = any> {
    */
   toStartWith(prefix: string): this {
     if (typeof this._value !== 'string') {
-      throw new Error('toStartWith() can only be used on strings');
+      throw new TypeError('toStartWith() can only be used on strings')
     }
 
     if (this._negated) {
-      bunExpect(this._value).not.toMatch(new RegExp(`^${escapeRegExp(prefix)}`));
-    } else {
-      bunExpect(this._value).toMatch(new RegExp(`^${escapeRegExp(prefix)}`));
+      bunExpect(this._value).not.toMatch(new RegExp(`^${escapeRegExp(prefix)}`))
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toMatch(new RegExp(`^${escapeRegExp(prefix)}`))
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
@@ -392,59 +418,62 @@ class TestCase<T = any> {
    */
   toEndWith(suffix: string): this {
     if (typeof this._value !== 'string') {
-      throw new Error('toEndWith() can only be used on strings');
+      throw new TypeError('toEndWith() can only be used on strings')
     }
 
     if (this._negated) {
-      bunExpect(this._value).not.toMatch(new RegExp(`${escapeRegExp(suffix)}$`));
-    } else {
-      bunExpect(this._value).toMatch(new RegExp(`${escapeRegExp(suffix)}$`));
+      bunExpect(this._value).not.toMatch(new RegExp(`${escapeRegExp(suffix)}$`))
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(this._value).toMatch(new RegExp(`${escapeRegExp(suffix)}$`))
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
    * Assert that the value is empty (Pest-style alias)
    */
   toBeEmpty(): this {
-    const isEmpty =
-      (this._value === '') ||
-      (Array.isArray(this._value) && this._value.length === 0) ||
-      (typeof this._value === 'object' && this._value !== null && Object.keys(this._value).length === 0);
+    const isEmpty
+      = (this._value === '')
+        || (Array.isArray(this._value) && this._value.length === 0)
+        || (typeof this._value === 'object' && this._value !== null && Object.keys(this._value).length === 0)
 
     if (this._negated) {
-      bunExpect(isEmpty).toBeFalsy();
-    } else {
-      bunExpect(isEmpty).toBeTruthy();
+      bunExpect(isEmpty).toBeFalsy()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(isEmpty).toBeTruthy()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 
   /**
    * Assert that the value passes a custom validation function (Pest-style pass)
    */
   toPass(validator: (value: T) => boolean, message?: string): this {
-    const passes = validator(this._value);
-    const assertionMessage = message || 'Expected value to pass validation';
+    const passes = validator(this._value)
+    const assertionMessage = message || 'Expected value to pass validation'
 
     if (this._negated) {
-      bunExpect(passes).toBeFalsy();
-    } else {
-      bunExpect(passes).toBeTruthy();
+      bunExpect(passes).toBeFalsy()
     }
-    this._negated = false;
-    this._customMessage = undefined;
-    return this;
+    else {
+      bunExpect(passes).toBeTruthy()
+    }
+    this._negated = false
+    this._customMessage = undefined
+    return this
   }
 }
 
 // Helper function to escape special characters for RegExp
 function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 /**
@@ -452,7 +481,7 @@ function escapeRegExp(string: string): string {
  */
 export const test: TestFn = Object.assign(
   (description: string, callback: TestCallback): void => {
-    bunTest(description, callback);
+    bunTest(description, callback)
   },
   {
     skip: bunTest.skip,
@@ -462,8 +491,8 @@ export const test: TestFn = Object.assign(
     if: bunTest.if,
     skipIf: bunTest.skipIf,
     todoIf: bunTest.todoIf,
-  }
-);
+  },
+)
 
 /**
  * Create a test that focuses on a specific value
@@ -471,8 +500,8 @@ export const test: TestFn = Object.assign(
 export const it: TestFn = Object.assign(
   (description: string, callback: () => any): void => {
     bunTest(description, () => {
-      callback();
-    });
+      callback()
+    })
   },
   {
     skip: bunTest.skip,
@@ -482,15 +511,15 @@ export const it: TestFn = Object.assign(
     if: bunTest.if,
     skipIf: bunTest.skipIf,
     todoIf: bunTest.todoIf,
-  }
-);
+  },
+)
 
 /**
  * Create a test suite with a description
  */
 export const describe: DescribeFn = Object.assign(
   (description: string, callback: () => void): void => {
-    bunDescribe(description, callback);
+    bunDescribe(description, callback)
   },
   {
     skip: bunDescribe.skip,
@@ -499,25 +528,25 @@ export const describe: DescribeFn = Object.assign(
     if: bunDescribe.if,
     skipIf: bunDescribe.skipIf,
     todoIf: bunDescribe.todoIf,
-  }
-);
+  },
+)
 
 /**
  * Create a test case that focuses on a specific value
  */
 export function expect<T>(value: T): TestCase<T> {
-  return new TestCase(value);
+  return new TestCase(value)
 }
 
 // Lifecycle hooks
-export const beforeAll: typeof bunBeforeAll = bunBeforeAll;
-export const afterAll: typeof bunAfterAll = bunAfterAll;
-export const beforeEach: typeof bunBeforeEach = bunBeforeEach;
-export const afterEach: typeof bunAfterEach = bunAfterEach;
+export const beforeAll: typeof bunBeforeAll = bunBeforeAll
+export const afterAll: typeof bunAfterAll = bunAfterAll
+export const beforeEach: typeof bunBeforeEach = bunBeforeEach
+export const afterEach: typeof bunAfterEach = bunAfterEach
 
 // Mocking utilities
-export const mock: typeof bunMock = bunMock;
-export const spyOn: typeof bunSpyOn = bunSpyOn;
+export const mock: typeof bunMock = bunMock
+export const spyOn: typeof bunSpyOn = bunSpyOn
 
 /**
  * Pest-style assertion helpers
@@ -525,90 +554,90 @@ export const spyOn: typeof bunSpyOn = bunSpyOn;
 
 // Create a Pest-inspired "expect" function that wraps a value for testing
 export function expectValue<T>(value: T): TestCase<T> {
-  return new TestCase(value);
+  return new TestCase(value)
 }
 
-// Define types for PestSuite skip and only
-interface PestSkip {
-  test: (description: string, callback: TestCallback) => PestSuite;
+// Define types for BestSuite skip and only
+interface BestSkip {
+  test: (description: string, callback: TestCallback) => BestSuite
 }
 
-interface PestOnly {
-  test: (description: string, callback: TestCallback) => PestSuite;
+interface BestOnly {
+  test: (description: string, callback: TestCallback) => BestSuite
 }
 
-export class PestSuite {
+export class BestSuite {
   // Keep track of the "it" value to test
-  private currentValue: any = undefined;
+  private currentValue: any = undefined
 
   // Create a new test
   test(description: string, callback: TestCallback): this {
-    bunTest(description, callback);
-    return this;
+    bunTest(description, callback)
+    return this
   }
 
   // Test modifiers
-  get skip(): PestSkip {
+  get skip(): BestSkip {
     return {
-      test: (description: string, callback: TestCallback): PestSuite => {
-        bunTest.skip(description, callback);
-        return this;
-      }
-    };
+      test: (description: string, callback: TestCallback): BestSuite => {
+        bunTest.skip(description, callback)
+        return this
+      },
+    }
   }
 
-  get only(): PestOnly {
+  get only(): BestOnly {
     return {
-      test: (description: string, callback: TestCallback): PestSuite => {
-        bunTest.only(description, callback);
-        return this;
-      }
-    };
+      test: (description: string, callback: TestCallback): BestSuite => {
+        bunTest.only(description, callback)
+        return this
+      },
+    }
   }
 
   // Set a value for testing
   expect<T>(value: T): TestCase<T> {
-    this.currentValue = value;
-    return new TestCase(value);
+    this.currentValue = value
+    return new TestCase(value)
   }
 
   // Fluent "it" API like Pest
   it<T>(value: T): TestCase<T> {
-    this.currentValue = value;
-    return new TestCase(value);
+    this.currentValue = value
+    return new TestCase(value)
   }
 
   // Sugar for describing test suites
   describe(description: string, callback: () => void): this {
-    bunDescribe(description, callback);
-    return this;
+    bunDescribe(description, callback)
+    return this
   }
 
   // Lifecycle hooks
   beforeAll(callback: TestCallback): this {
-    bunBeforeAll(callback);
-    return this;
+    bunBeforeAll(callback)
+    return this
   }
 
   afterAll(callback: TestCallback): this {
-    bunAfterAll(callback);
-    return this;
+    bunAfterAll(callback)
+    return this
   }
 
   beforeEach(callback: TestCallback): this {
-    bunBeforeEach(callback);
-    return this;
+    bunBeforeEach(callback)
+    return this
   }
 
   afterEach(callback: TestCallback): this {
-    bunAfterEach(callback);
-    return this;
+    bunAfterEach(callback)
+    return this
   }
 }
 
 // Create a new Pest-style test suite
-export function best(): PestSuite {
-  return new PestSuite();
+export function best(): BestSuite {
+  return new BestSuite()
 }
 
 // Additional Pest-inspired features
@@ -617,6 +646,6 @@ export function best(): PestSuite {
  * Group related tests with a shared "it" value
  */
 export function testGroup<T>(value: T, callback: (tc: TestCase<T>) => void): void {
-  const testCase = new TestCase(value);
-  callback(testCase);
+  const testCase = new TestCase(value)
+  callback(testCase)
 }

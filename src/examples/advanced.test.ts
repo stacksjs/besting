@@ -1,107 +1,109 @@
-import { best, test, expect, describe, beforeEach, afterEach, testGroup } from '../test';
+import { afterEach, beforeEach, best, describe, expect, test, testGroup } from '../test'
 
 // Create a basic User class for testing
 class User {
-  name: string;
-  email: string;
-  verified: boolean = false;
+  name: string
+  email: string
+  verified: boolean = false
 
   constructor(name: string, email: string) {
-    this.name = name;
-    this.email = email;
+    this.name = name
+    this.email = email
   }
 
   verify(): void {
-    this.verified = true;
+    this.verified = true
   }
 
   getProfile(): Record<string, any> {
     return {
       name: this.name,
       email: this.email,
-      verified: this.verified
-    };
+      verified: this.verified,
+    }
   }
 }
 
 // Example 1: Using Pest-style fluent API
 describe('User (using standard API with best-like assertions)', () => {
-  let user: User;
+  let user: User
 
   beforeEach(() => {
-    user = new User('John Doe', 'john@example.com');
-  });
+    user = new User('John Doe', 'john@example.com')
+  })
 
   test('user has correct properties', () => {
-    expect(user.name).toBe('John Doe');
-    expect(user.email).toBe('john@example.com');
-    expect(user.verified).toBeFalsy();
-  });
+    expect(user.name).toBe('John Doe')
+    expect(user.email).toBe('john@example.com')
+    expect(user.verified).toBeFalsy()
+  })
 
   test('user can be verified', () => {
     // Fluent API for multiple assertions on the same subject
     expect(user.verified)
       .toBeFalsy()
-      .not.toBeTruthy();
+      .not
+      .toBeTruthy()
 
     // Verify the user
-    user.verify();
+    user.verify()
 
     // Chained assertions on the resulting state
     expect(user.verified)
       .toBeTruthy()
-      .not.toBeFalsy();
-  });
+      .not
+      .toBeFalsy()
+  })
 
   test('user profile contains correct information', () => {
-    const profile = user.getProfile();
+    const profile = user.getProfile()
 
     expect(profile)
       .toHaveProperty('name', 'John Doe')
       .toHaveProperty('email', 'john@example.com')
-      .toHaveProperty('verified', false);
-  });
-});
+      .toHaveProperty('verified', false)
+  })
+})
 
 // Example 2: Using full Pest-style API with the best() function
-const p = best();
+const p = best()
 
 p.describe('User (using best API)', () => {
-  let user: User;
+  let user: User
 
   p.beforeEach(() => {
-    user = new User('Jane Smith', 'jane@example.com');
-  });
+    user = new User('Jane Smith', 'jane@example.com')
+  })
 
   p.test('it has correct properties', () => {
     // Very Pest-like "it" syntax
-    p.it(user.name).toBe('Jane Smith');
-    p.it(user.email).toBe('jane@example.com');
-    p.it(user.verified).toBeFalsy();
-  });
+    p.it(user.name).toBe('Jane Smith')
+    p.it(user.email).toBe('jane@example.com')
+    p.it(user.verified).toBeFalsy()
+  })
 
   p.test('it can be verified', () => {
-    p.it(user.verified).toBeFalsy();
+    p.it(user.verified).toBeFalsy()
 
-    user.verify();
+    user.verify()
 
-    p.it(user.verified).toBeTruthy();
-  });
+    p.it(user.verified).toBeTruthy()
+  })
 
   p.test('profile contains expected data', () => {
-    const profile = user.getProfile();
+    const profile = user.getProfile()
 
     p.it(profile)
       .toHaveProperty('name')
       .toHaveProperty('email')
-      .toBeInstanceOf(Object);
-  });
+      .toBeInstanceOf(Object)
+  })
 
   p.skip.test('this test is skipped', () => {
     // This test will be skipped
-    p.it(true).toBeFalsy();
-  });
-});
+    p.it(true).toBeFalsy()
+  })
+})
 
 // Example 3: Using testGroup to group related tests on the same subject
 testGroup('Hello World', (str) => {
@@ -111,50 +113,51 @@ testGroup('Hello World', (str) => {
     .toStartWith('Hello')
     .toEndWith('World')
     .toHaveLength(11)
-    .not.toBeEmpty();
+    .not
+    .toBeEmpty()
 
   // Use custom validators
-  str.toPass(value => value.split(' ').length === 2, 'String should have exactly two words');
-});
+  str.toPass(value => value.split(' ').length === 2, 'String should have exactly two words')
+})
 
 // Example 4: Testing with Pest-style special string matchers
 test('string matchers', () => {
-  const email = 'test@example.com';
-  const url = 'https://bun.sh';
+  const email = 'test@example.com'
+  const url = 'https://bun.sh'
 
   expect(email)
     .toContain('@')
     .toEndWith('.com')
-    .toPass(value => /^[^@]+@[^@]+\.[^@]+$/.test(value), 'Should be a valid email');
+    .toPass(value => /^[^@]+@[^@][^.@]*\.[^@]+$/.test(value), 'Should be a valid email')
 
   expect(url)
     .toStartWith('https://')
     .toEndWith('.sh')
-    .toPass(value => value.includes('bun'), 'URL should contain bun');
-});
+    .toPass(value => value.includes('bun'), 'URL should contain bun')
+})
 
 // Example 5: Testing arrays and objects with Pest-style empty check
 test('collections', () => {
-  const emptyArray: string[] = [];
-  const fullArray = [1, 2, 3];
-  const emptyObject = {};
-  const fullObject = { name: 'test' };
+  const emptyArray: string[] = []
+  const fullArray = [1, 2, 3]
+  const emptyObject = {}
+  const fullObject = { name: 'test' }
 
   // Test emptiness
-  expect(emptyArray).toBeEmpty();
-  expect(emptyObject).toBeEmpty();
-  expect(fullArray).not.toBeEmpty();
-  expect(fullObject).not.toBeEmpty();
+  expect(emptyArray).toBeEmpty()
+  expect(emptyObject).toBeEmpty()
+  expect(fullArray).not.toBeEmpty()
+  expect(fullObject).not.toBeEmpty()
 
   // Array specific tests
   expect(fullArray)
     .toHaveLength(3)
     .toContain(1)
     .toContain(2)
-    .toContain(3);
+    .toContain(3)
 
   // Object specific tests
   expect(fullObject)
     .toHaveProperty('name')
-    .toHaveProperty('name', 'test');
-});
+    .toHaveProperty('name', 'test')
+})
