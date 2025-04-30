@@ -1,4 +1,4 @@
-import { best, describe, expect, it, test } from '../test'
+import { best, describe, expect, it, test } from 'besting'
 
 // Example 1: Using the basic Jest-like API
 test('basic addition using test', () => {

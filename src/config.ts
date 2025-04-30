@@ -1,17 +1,17 @@
 import type { BestingConfig } from './types'
+import { resolve } from 'node:path'
+import { loadConfig } from 'bunfig'
 
 /**
- * Simple configuration loader for Besting
+ * Default configuration for the router
  */
-export function loadConfig(userConfig?: Partial<BestingConfig>): BestingConfig {
-  return {
-    ...defaultConfig,
-    ...userConfig,
-  };
-}
-
 export const defaultConfig: BestingConfig = {
   verbose: true,
 }
 
-export const config: BestingConfig = loadConfig();
+// eslint-disable-next-line antfu/no-top-level-await
+export const config: BestingConfig = await loadConfig({
+  name: 'besting',
+  cwd: resolve(__dirname, '..'),
+  defaultConfig,
+})

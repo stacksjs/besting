@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, best, describe, expect, test, testGroup } from '../test'
+import { afterEach, beforeEach, best, describe, expect, test, testGroup } from 'besting'
 
 // Create a basic User class for testing
 class User {
