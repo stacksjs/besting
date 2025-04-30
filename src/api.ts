@@ -248,13 +248,13 @@ export function api(baseUrl?: string): ApiTestCase {
 }
 
 /**
- * Response assertions
+ * Enhanced API response assertion with Laravel-like methods
  */
 export class ApiResponseAssertion {
   constructor(private response: ApiResponse) {}
 
   /**
-   * Assert the response status is in the 2xx range
+   * Assert that the response has a successful status code
    */
   async assertOk(): Promise<this> {
     expect(this.response.status).toBeGreaterThanOrEqual(200)
@@ -263,7 +263,7 @@ export class ApiResponseAssertion {
   }
 
   /**
-   * Assert the response has a specific status code
+   * Assert that the response has a specific status code
    */
   async assertStatus(status: number): Promise<this> {
     expect(this.response.status).toBe(status)
@@ -271,7 +271,67 @@ export class ApiResponseAssertion {
   }
 
   /**
-   * Assert the response has a specific JSON structure
+   * Assert that the response has a created (201) status code
+   */
+  async assertCreated(): Promise<this> {
+    return this.assertStatus(201)
+  }
+
+  /**
+   * Assert that the response has a no content (204) status code
+   */
+  async assertNoContent(): Promise<this> {
+    return this.assertStatus(204)
+  }
+
+  /**
+   * Assert that the response has an OK (200) status code
+   */
+  async assertSuccessful(): Promise<this> {
+    expect(this.response.status).toBeGreaterThanOrEqual(200)
+    expect(this.response.status).toBeLessThan(300)
+    return this
+  }
+
+  /**
+   * Assert that the response has a redirect status code
+   */
+  async assertRedirect(): Promise<this> {
+    expect(this.response.status).toBeGreaterThanOrEqual(300)
+    expect(this.response.status).toBeLessThan(400)
+    return this
+  }
+
+  /**
+   * Assert that the response has a not found (404) status code
+   */
+  async assertNotFound(): Promise<this> {
+    return this.assertStatus(404)
+  }
+
+  /**
+   * Assert that the response has an unauthorized (401) status code
+   */
+  async assertUnauthorized(): Promise<this> {
+    return this.assertStatus(401)
+  }
+
+  /**
+   * Assert that the response has a forbidden (403) status code
+   */
+  async assertForbidden(): Promise<this> {
+    return this.assertStatus(403)
+  }
+
+  /**
+   * Assert that the response has a validation error (422) status code
+   */
+  async assertValidationError(): Promise<this> {
+    return this.assertStatus(422)
+  }
+
+  /**
+   * Assert that the response JSON matches the expected value
    */
   async assertJson(expected: any): Promise<this> {
     const json = await this.response.json()
@@ -280,19 +340,45 @@ export class ApiResponseAssertion {
   }
 
   /**
-   * Assert the response JSON contains specific values
+   * Assert that the response JSON contains the expected values (subset)
+   */
+  async assertJsonFragment(expected: any): Promise<this> {
+    const json = await this.response.json()
+    this._assertJsonContains(json, expected)
+    return this
+  }
+
+  /**
+   * Helper to check if an object contains all properties from another object
+   */
+  private _assertJsonContains(haystack: any, needle: any): void {
+    if (typeof needle !== 'object' || needle === null) {
+      expect(haystack).toEqual(needle)
+      return
+    }
+
+    for (const key in needle) {
+      if (Object.prototype.hasOwnProperty.call(needle, key)) {
+        expect(haystack).toHaveProperty(key)
+
+        if (typeof needle[key] === 'object' && needle[key] !== null) {
+          this._assertJsonContains(haystack[key], needle[key])
+        }
+        else {
+          expect(haystack[key]).toEqual(needle[key])
+        }
+      }
+    }
+  }
+
+  /**
+   * Assert that a JSON path exists
    */
   async assertJsonPath(path: string, expected?: any): Promise<this> {
     const json = await this.response.json()
-    const parts = path.split('.')
-    let value = json
+    const value = this._getJsonPathValue(json, path)
 
-    for (const part of parts) {
-      value = value[part]
-      if (value === undefined) {
-        throw new Error(`Path "${path}" not found in response JSON`)
-      }
-    }
+    expect(value).toBeDefined()
 
     if (expected !== undefined) {
       expect(value).toEqual(expected)
@@ -302,26 +388,79 @@ export class ApiResponseAssertion {
   }
 
   /**
-   * Assert the response has a specific header
+   * Assert that a JSON path does not exist
+   */
+  async assertJsonMissingPath(path: string): Promise<this> {
+    const json = await this.response.json()
+    const value = this._getJsonPathValue(json, path, true)
+
+    expect(value).toBeUndefined()
+
+    return this
+  }
+
+  /**
+   * Get a value from a JSON path
+   */
+  private _getJsonPathValue(obj: any, path: string, allowMissing: boolean = false): any {
+    const parts = path.split('.')
+    let current = obj
+
+    for (const part of parts) {
+      if (current === undefined || current === null) {
+        return allowMissing ? undefined : null
+      }
+
+      current = current[part]
+    }
+
+    return current
+  }
+
+  /**
+   * Assert that the response has a specific header
    */
   async assertHeader(name: string, value?: string): Promise<this> {
-    const headers = this.response.headers
-    const headerName = Object.keys(headers).find(key => key.toLowerCase() === name.toLowerCase())
+    const headerName = name.toLowerCase()
+    expect(this.response.headers).toHaveProperty(headerName)
 
-    expect(headerName).toBeDefined()
-
-    if (value !== undefined && headerName) {
-      expect(headers[headerName]).toBe(value)
+    if (value !== undefined) {
+      expect(this.response.headers[headerName]).toBe(value)
     }
 
     return this
   }
 
   /**
-   * Assert the response has a specific content type
+   * Assert that the response has a specific content type
    */
   async assertContentType(type: string): Promise<this> {
-    return this.assertHeader('Content-Type', type)
+    return this.assertHeader('content-type', type)
+  }
+
+  /**
+   * Assert that the response is JSON
+   */
+  async assertIsJson(): Promise<this> {
+    const contentType = this.response.headers['content-type'] || ''
+    expect(contentType).toMatch(/application\/json/)
+    return this
+  }
+
+  /**
+   * Assert that the response contains validation errors for specific fields
+   */
+  async assertValidationErrors(fields: string[]): Promise<this> {
+    await this.assertStatus(422)
+
+    const json = await this.response.json()
+    expect(json).toHaveProperty('errors')
+
+    for (const field of fields) {
+      expect(json.errors).toHaveProperty(field)
+    }
+
+    return this
   }
 
   /**
@@ -339,14 +478,14 @@ export class ApiResponseAssertion {
   }
 
   /**
-   * Get response status
+   * Get the response status
    */
   get status(): number {
     return this.response.status
   }
 
   /**
-   * Get response headers
+   * Get the response headers
    */
   get headers(): Record<string, string> {
     return this.response.headers

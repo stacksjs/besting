@@ -27,6 +27,10 @@ bun add -d besting
 - **Zero overhead** - Built directly on Bun's native test runner for maximum performance.
 - **Full compatibility** - Works with all of Bun's testing features including lifecycle hooks, snapshots, and more.
 - **API Testing** - Laravel-inspired API testing utilities for testing HTTP endpoints.
+- **Database Testing** - Laravel-inspired database testing with migrations, seeders, and factories.
+- **Authentication Testing** - Laravel-inspired authentication testing.
+- **Event Testing** - Laravel-inspired event testing with event dispatching and assertions.
+- **Command Testing** - Laravel-inspired command testing for terminal commands.
 - **Cache Testing** - Utilities for testing cache operations.
 - **Cookie Testing** - Utilities for testing cookies.
 - **URL Testing** - Utilities for testing URL components.
@@ -442,3 +446,260 @@ Made with 💙
 
 <!-- [codecov-src]: https://img.shields.io/codecov/c/gh/stacksjs/besting/main?style=flat-square
 [codecov-href]: https://codecov.io/gh/stacksjs/besting -->
+
+## Database Testing
+
+Besting includes Laravel-inspired database testing utilities with migrations, seeders, and factories.
+
+### Basic Database Testing
+
+```typescript
+import { db, migration, seeder, test } from 'besting'
+
+// Define a migration
+migration(async (connection) => {
+  await connection.raw('CREATE TABLE users (id INT, name TEXT, email TEXT)')
+})
+
+// Define a seeder
+seeder(async (connection) => {
+  await connection.table('users').insert([
+    { id: 1, name: 'John', email: 'john@example.com' },
+    { id: 2, name: 'Jane', email: 'jane@example.com' },
+  ])
+})
+
+test('Basic database operations', async () => {
+  const database = db().register(yourDatabaseConnection)
+
+  // Run migrations and seeders
+  await database.migrate()
+  await database.seed()
+
+  // Query data
+  const users = await database.select('users')
+  expect(users.length).toBe(2)
+
+  // Insert data
+  await database.insert('users', { id: 3, name: 'Alice', email: 'alice@example.com' })
+
+  // Make assertions
+  await database.assertExists('users', { id: 3 })
+  await database.assertSame('users', { id: 3 }, { name: 'Alice' })
+})
+```
+
+### Database Transactions
+
+```typescript
+import { db, test, useTransaction } from 'besting'
+
+test('Database transactions', async () => {
+  const database = db().register(yourDatabaseConnection)
+
+  // Use transactions to isolate tests
+  await database.beginTransaction()
+
+  // Make changes
+  await database.insert('users', { id: 3, name: 'Alice', email: 'alice@example.com' })
+
+  // Rollback changes
+  await database.rollbackTransaction()
+
+  // Use the transaction helper
+  const transactionTest = useTransaction(async (db) => {
+    // This code runs within a transaction
+    await db.insert('users', { id: 4, name: 'Bob', email: 'bob@example.com' })
+  })
+
+  await transactionTest()
+})
+```
+
+### Database Factories
+
+```typescript
+import { db, test } from 'besting'
+
+test('Database factories', async () => {
+  const database = db().register(yourDatabaseConnection)
+
+  // Create a user factory
+  const userFactory = database.factory('users')
+    .define({
+      name: 'Default User',
+      email: 'user@example.com',
+    })
+    .state('admin', user => ({
+      ...user,
+      name: 'Admin User',
+      email: 'admin@example.com',
+    }))
+
+  // Create a default user
+  await userFactory.create({ id: 10 })
+
+  // Create an admin user
+  await userFactory.has('admin').create({ id: 11 })
+
+  // Create multiple users
+  await userFactory.count(3).create()
+
+  // Make model instances without persisting
+  const user = userFactory.make()
+})
+```
+
+## Event Testing
+
+Besting includes Laravel-inspired event testing utilities for testing event dispatching.
+
+### Basic Event Testing
+
+```typescript
+import { defineEvent, events, fakeEvents, test } from 'besting'
+
+// Define event classes
+class UserCreated {
+  constructor(public id: number, public name: string) {}
+}
+
+// Define an event using the helper
+const OrderShipped = defineEvent({
+  id: 0,
+  trackingNumber: '',
+})
+
+test('Basic event testing', () => {
+  const fake = fakeEvents()
+
+  // Dispatch events
+  events().dispatch(new UserCreated(1, 'John'))
+  events().dispatch(new UserCreated(2, 'Jane'))
+
+  // Make assertions
+  fake.assertDispatched('UserCreated')
+  fake.assertDispatchedTimes('UserCreated', 2)
+  fake.assertNotDispatched('OrderShipped')
+
+  // Check specific events
+  fake.assertDispatched('UserCreated', event => event.id === 1)
+})
+```
+
+### Event Listeners
+
+```typescript
+import { events, listener, test } from 'besting'
+
+class UserCreated {
+  constructor(public id: number, public name: string) {}
+}
+
+class EventListener {
+  events: any[] = []
+
+  @listener(UserCreated.name)
+  handleUserCreated(event: UserCreated) {
+    this.events.push(event)
+  }
+}
+
+test('Event listeners', () => {
+  const listener = new EventListener()
+
+  // Dispatch an event
+  events().dispatch(new UserCreated(1, 'John'))
+
+  // Check that the listener received it
+  expect(listener.events.length).toBe(1)
+  expect(listener.events[0].name).toBe('John')
+})
+```
+
+## Authentication Testing
+
+Besting includes Laravel-inspired authentication testing utilities.
+
+### Basic Authentication Testing
+
+```typescript
+import { auth, test } from 'besting'
+
+test('Authentication testing', () => {
+  // Define a user
+  const user = {
+    id: 1,
+    name: 'Test User',
+    email: 'user@example.com',
+  }
+
+  // Set the authenticated user
+  auth().actingAs(user)
+
+  // Make assertions
+  auth().assertAuthenticated()
+  expect(auth().user().id).toBe(1)
+
+  // Act as guest
+  auth().actingAsGuest()
+  auth().assertGuest()
+})
+```
+
+### With Auth Helper
+
+```typescript
+import { auth, test, withAuth } from 'besting'
+
+test('With auth helper', () => {
+  const user = {
+    id: 1,
+    name: 'Test User',
+    email: 'user@example.com',
+  }
+
+  // Create request with auth context
+  const request = withAuth(user)
+
+  expect(request.user).toBe(user)
+  expect(request.auth.check()).toBe(true)
+})
+```
+
+## Command Testing
+
+Besting includes utilities for testing terminal commands, including Laravel-inspired Artisan command testing.
+
+### Basic Command Testing
+
+```typescript
+import { command, test } from 'besting'
+
+test('Command testing', async () => {
+  const cmd = command()
+
+  // Execute a command
+  const result = await cmd.execute('echo', ['Hello, World!'])
+
+  // Make assertions
+  cmd
+    .assertExitCode(0)
+    .assertOutputContains('Hello')
+    .assertOutputNotContains('error')
+})
+```
+
+### Artisan Command Testing
+
+```typescript
+import { artisan, test } from 'besting'
+
+test('Artisan command testing', async () => {
+  // This example shows how it would work in a Laravel project
+  const result = await artisan('migrate', ['--seed'])
+
+  expect(result.exitCode).toBe(0)
+  expect(result.output).toContain('Migration')
+})
+```

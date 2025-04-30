@@ -90,3 +90,71 @@ export interface CookieTestCase {
   clear: () => CookieTestCase
   getAll: () => Record<string, string>
 }
+
+// Database testing types
+export interface DatabaseConnection {
+  table: (name: string) => any
+  beginTransaction: () => Promise<any>
+  dropAllTables: () => Promise<void>
+  rollbackMigrations: () => Promise<void>
+  raw: (sql: string, params?: any[]) => Promise<any>
+}
+
+export interface DatabaseConfig {
+  host: string
+  port: number
+  user: string
+  password: string
+  database: string
+}
+
+export type MigrationFunction = (connection: DatabaseConnection) => Promise<void>
+export type SeederFunction = (connection: DatabaseConnection) => Promise<void>
+
+export interface DatabaseFactory<T = any> {
+  define: (attributes: Record<string, any>) => DatabaseFactory<T>
+  state: (name: string, callback: (data: Record<string, any>) => Record<string, any>) => DatabaseFactory<T>
+  has: (state: string) => DatabaseFactory<T>
+  count: (n: number) => DatabaseFactory<T>
+  create: (attributes?: Partial<T>) => Promise<T | T[]>
+  make: (attributes?: Partial<T>) => T | T[]
+}
+
+// Event testing types
+export interface EventDispatcher {
+  dispatch: (event: any) => void
+  listen: (eventName: string, callback: (event: any) => void) => void
+  fake: () => EventFake
+}
+
+export interface EventFake {
+  assertDispatched: (eventName: string, callback?: (event: any) => boolean) => EventFake
+  assertDispatchedTimes: (eventName: string, times: number) => EventFake
+  assertNotDispatched: (eventName: string) => EventFake
+  getDispatched: (eventName: string) => any[]
+}
+
+// Command testing types
+export interface CommandTester {
+  execute: (command: string, args?: string[]) => Promise<CommandResult>
+  assertExitCode: (exitCode: number) => CommandTester
+  assertOutputContains: (text: string) => CommandTester
+  assertOutputNotContains: (text: string) => CommandTester
+  getResult: () => CommandResult
+}
+
+export interface CommandResult {
+  exitCode: number
+  output: string
+  errorOutput: string
+}
+
+// Authentication testing types
+export interface AuthTester {
+  actingAs: (user: any) => AuthTester
+  actingAsGuest: () => AuthTester
+  assertAuthenticated: () => AuthTester
+  assertGuest: () => AuthTester
+  user: () => any
+  check: () => boolean
+}
