@@ -1,8 +1,2 @@
 [install]
-registry = "https://registry.npmjs.org/"
-
-[test]
-bail = false
-timeout = 10000
-# We default to showing all tests
-print-summary = true
+registry = { url = "https://registry.npmjs.org/", token = "$BUN_AUTH_TOKEN" }
