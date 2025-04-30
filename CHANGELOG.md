@@ -1,4 +1,16 @@
 
+## v0.0.2...main
+
+[compare changes](https://github.com/stacksjs/besting/compare/v0.0.2...main)
+
+### 🏡 Chore
+
+- Wip ([b829521](https://github.com/stacksjs/besting/commit/b829521))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](https://github.com/chrisbbreuer))
+
 ## v0.0.1...main
 
 [compare changes](https://github.com/stacksjs/besting/compare/v0.0.1...main)
