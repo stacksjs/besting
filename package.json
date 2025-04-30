@@ -1,5 +1,5 @@
 {
-  "name": "besting",
+  "name": "@stacksjs/besting",
   "type": "module",
   "version": "0.0.2",
   "description": "A Bun test framework.",
