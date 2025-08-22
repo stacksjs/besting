@@ -13,7 +13,12 @@
   "bugs": {
     "url": "https://github.com/stacksjs/besting/issues"
   },
-  "keywords": ["typescript", "bun", "test", "framework"],
+  "keywords": [
+    "typescript",
+    "bun",
+    "test",
+    "framework"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -28,7 +33,10 @@
   "bin": {
     "besting": "./dist/bin/cli.js"
   },
-  "files": ["README.md", "dist"],
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "scripts": {
     "build": "bun --bun build.ts && bun run compile",
     "compile": "bun build ./bin/cli.ts --compile --minify --outfile bin/besting",
@@ -45,12 +53,14 @@
     "zip:windows-x64": "zip -j bin/besting-windows-x64.zip bin/besting-windows-x64.exe",
     "zip:darwin-x64": "zip -j bin/besting-darwin-x64.zip bin/besting-darwin-x64",
     "zip:darwin-arm64": "zip -j bin/besting-darwin-arm64.zip bin/besting-darwin-arm64",
+    "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
+    "prepublishOnly": "bun --bun run build && bun run compile:all && bun run zip",
     "lint": "bunx --bun eslint .",
     "lint:fix": "bunx --bun eslint . --fix",
-    "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
-    "changelog": "bunx changelogen --output CHANGELOG.md",
-    "prepublishOnly": "bun --bun run build && bun run compile:all && bun run zip",
-    "release": "bun run changelog && bunx bumpp package.json --all",
+    "changelog": "bunx logsmith --verbose",
+    "changelog:generate": "bunx logsmith --output CHANGELOG.md",
+    "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
+    "postinstall": "bunx git-hooks",
     "test": "bun test",
     "test:custom": "bun run src/bin.ts",
     "test:standard": "bun test",
@@ -68,10 +78,15 @@
     "cac": "^6.7.14"
   },
   "devDependencies": {
+    "@stacksjs/bumpx": "^0.1.13",
     "@stacksjs/docs": "^0.70.23",
     "@stacksjs/eslint-config": "^4.10.2-beta.3",
+    "@stacksjs/gitlint": "^0.1.5",
+    "@stacksjs/logsmith": "^0.1.8",
     "@types/bun": "^1.2.11",
+    "buddy-bot": "^0.8.8",
     "bumpp": "^10.1.0",
+    "bun-git-hooks": "^0.2.19",
     "bun-plugin-dtsx": "^0.21.9",
     "bunfig": "^0.8.4",
     "changelogen": "^0.6.1",
@@ -82,7 +97,12 @@
   "overrides": {
     "unconfig": "0.3.10"
   },
-  "lint-staged": {
-    "*.{js,ts}": "bunx --bun eslint . --fix"
+  "git-hooks": {
+    "pre-commit": {
+      "staged-lint": {
+        "*.{js,ts,json,yaml,yml,md}": "bun lint:fix"
+      }
+    },
+    "commit-msg": "bunx gitlint --edit $1"
   }
 }
