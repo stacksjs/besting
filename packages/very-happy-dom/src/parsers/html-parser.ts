@@ -41,6 +41,16 @@ export function parseHTML(html: string): VirtualNode[] {
       return new VirtualCommentNode(commentText)
     }
 
+    // Check for DOCTYPE
+    if (html.slice(pos, pos + 8).toUpperCase() === '!DOCTYPE') {
+      const doctypeEnd = html.indexOf('>', pos)
+      if (doctypeEnd === -1) {
+        throw new Error('Unclosed DOCTYPE')
+      }
+      pos = doctypeEnd + 1
+      return null // Skip DOCTYPE
+    }
+
     // Check for closing tag
     if (peek() === '/') {
       consume()

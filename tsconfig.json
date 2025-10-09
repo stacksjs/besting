@@ -6,7 +6,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "besting": ["./packages/besting/src/index.ts"]
+      "besting": ["./packages/besting/src/index.ts"],
+      "very-happy-dom": ["./packages/very-happy-dom/src/index.ts"]
     },
     "resolveJsonModule": true,
     "types": ["bun"],

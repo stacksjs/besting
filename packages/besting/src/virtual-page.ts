@@ -6,8 +6,8 @@
  */
 
 import { expect } from 'bun:test'
-import type { VirtualDocument, VirtualElement } from './dom'
-import { createDocument, parseHTML, VirtualEvent } from './dom'
+import type { VirtualDocument, VirtualElement } from 'very-happy-dom'
+import { createDocument, parseHTML, VirtualEvent } from 'very-happy-dom'
 
 interface VirtualStorage {
   [key: string]: string

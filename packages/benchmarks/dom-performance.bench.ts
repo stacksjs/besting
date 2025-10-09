@@ -6,7 +6,7 @@
  */
 
 import { bench, group, run } from 'mitata'
-import { createDocument } from '../besting/src/dom'
+import { createDocument } from 'very-happy-dom'
 
 // Benchmark: Document Creation
 group('Document Creation', () => {
@@ -400,6 +400,54 @@ group('Memory Efficiency', () => {
         ${Array.from({ length: 50 }).map(() => '<div><span>Text</span></div>').join('')}
       </div>
     `
+  })
+})
+
+// Benchmark: Competitive Comparison (vs happy-dom & jsdom)
+// Based on https://github.com/capricorn86/happy-dom-performance-test
+group('🏆 Competitive Comparison (Real-World GitHub HTML)', () => {
+  // Load the large GitHub HTML page used in happy-dom benchmarks
+  const HTMLPage = require('./lib/data/HTMLPage')
+
+  bench('VeryHappyDOM: Parse GitHub HTML', () => {
+    const doc = createDocument()
+    doc.documentElement!.innerHTML = HTMLPage
+  })
+
+  bench('VeryHappyDOM: Parse + querySelector(li)', () => {
+    const doc = createDocument()
+    doc.documentElement!.innerHTML = HTMLPage
+    doc.querySelectorAll('li')
+  })
+
+  bench('VeryHappyDOM: Parse + querySelector(.flex-shrink-0)', () => {
+    const doc = createDocument()
+    doc.documentElement!.innerHTML = HTMLPage
+    doc.querySelectorAll('.flex-shrink-0')
+  })
+
+  bench('VeryHappyDOM: Parse + querySelector([aria-label])', () => {
+    const doc = createDocument()
+    doc.documentElement!.innerHTML = HTMLPage
+    doc.querySelectorAll('[aria-label]')
+  })
+
+  bench('VeryHappyDOM: Parse + querySelector([class~="flex-shrink-0"])', () => {
+    const doc = createDocument()
+    doc.documentElement!.innerHTML = HTMLPage
+    doc.querySelectorAll('[class~="flex-shrink-0"]')
+  })
+
+  bench('VeryHappyDOM: Parse + querySelector(:nth-child(2n+1))', () => {
+    const doc = createDocument()
+    doc.documentElement!.innerHTML = HTMLPage
+    doc.querySelectorAll(':nth-child(2n+1)')
+  })
+
+  bench('VeryHappyDOM: Serialize GitHub HTML', () => {
+    const doc = createDocument()
+    doc.documentElement!.innerHTML = HTMLPage
+    doc.documentElement!.outerHTML
   })
 })
 

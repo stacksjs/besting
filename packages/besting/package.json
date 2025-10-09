@@ -77,7 +77,8 @@
     "typecheck": "bun --bun tsc --noEmit"
   },
   "dependencies": {
-    "cac": "^6.7.14"
+    "cac": "^6.7.14",
+    "very-happy-dom": "workspace:*"
   },
   "devDependencies": {
     "@stacksjs/bumpx": "^0.1.86",

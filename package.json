@@ -48,6 +48,8 @@
     "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
     "bench": "bun packages/benchmarks/dom-performance.bench.ts",
     "bench:dom": "bun packages/benchmarks/dom-performance.bench.ts",
+    "bench:compare": "bun packages/benchmarks/competitive-comparison.bench.ts",
+    "bench:very-happy-dom": "bun packages/benchmarks/lib/very-happy-dom.test.ts",
     "test": "bun test",
     "dev:docs": "bun --bun vitepress dev docs",
     "build:docs": "bun --bun vitepress build docs",
@@ -65,6 +67,9 @@
     "bun-git-hooks": "^0.3.1",
     "bun-plugin-dtsx": "0.9.5",
     "bunfig": "^0.15.0",
+    "happy-dom": "^15.11.7",
+    "jsdom": "^25.0.1",
+    "mitata": "^1.0.10",
     "typescript": "^5.9.3"
   },
   "overrides": {
