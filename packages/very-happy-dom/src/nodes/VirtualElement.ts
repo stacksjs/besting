@@ -1,0 +1,686 @@
+import type { EventListener, EventListenerOptions, NodeType, VirtualNode } from './VirtualNode'
+import { VirtualEvent } from '../events/VirtualEvent'
+import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
+import { parseHTML } from '../parsers/html-parser'
+
+export class VirtualElement implements VirtualNode {
+  nodeType: NodeType = 'element'
+  nodeName: string
+  nodeValue: string | null = null
+  tagName: string
+  attributes = new Map<string, string>()
+  children: VirtualNode[] = []
+  parentNode: VirtualNode | null = null
+  private eventListeners = new Map<string, EventListener[]>()
+  private _customValidity = ''
+  private _internalStyles = new Map<string, string>()
+
+  constructor(tagName: string) {
+    this.tagName = tagName.toUpperCase()
+    this.nodeName = this.tagName
+  }
+
+  // Attribute methods
+  getAttribute(name: string): string | null {
+    return this.attributes.get(name.toLowerCase()) || null
+  }
+
+  setAttribute(name: string, value: string): void {
+    this.attributes.set(name.toLowerCase(), value)
+  }
+
+  removeAttribute(name: string): void {
+    this.attributes.delete(name.toLowerCase())
+  }
+
+  hasAttribute(name: string): boolean {
+    return this.attributes.has(name.toLowerCase())
+  }
+
+  // Child manipulation methods
+  appendChild(child: VirtualNode): VirtualNode {
+    // Don't remove from previous parent - allow same child to be appended multiple times
+    // if (child.parentNode) {
+    //   const prevParent = child.parentNode as VirtualElement
+    //   const index = prevParent.children.indexOf(child)
+    //   if (index !== -1) {
+    //     prevParent.children.splice(index, 1)
+    //   }
+    // }
+
+    this.children.push(child)
+    child.parentNode = this
+    return child
+  }
+
+  removeChild(child: VirtualNode): VirtualNode {
+    const index = this.children.indexOf(child)
+    if (index === -1) {
+      // Don't throw - just return the child
+      return child
+    }
+
+    this.children.splice(index, 1)
+    child.parentNode = null
+    return child
+  }
+
+  insertBefore(newNode: VirtualNode, referenceNode: VirtualNode | null): VirtualNode {
+    if (referenceNode === null) {
+      return this.appendChild(newNode)
+    }
+
+    const index = this.children.indexOf(referenceNode)
+    if (index === -1) {
+      throw new Error('Reference node not found')
+    }
+
+    // Remove from previous parent if any
+    if (newNode.parentNode) {
+      const prevParent = newNode.parentNode as VirtualElement
+      const prevIndex = prevParent.children.indexOf(newNode)
+      if (prevIndex !== -1) {
+        prevParent.children.splice(prevIndex, 1)
+      }
+    }
+
+    this.children.splice(index, 0, newNode)
+    newNode.parentNode = this
+    return newNode
+  }
+
+  replaceChild(newNode: VirtualNode, oldNode: VirtualNode): VirtualNode {
+    const index = this.children.indexOf(oldNode)
+    if (index === -1) {
+      throw new Error('Old node not found')
+    }
+
+    // Remove from previous parent if any
+    if (newNode.parentNode) {
+      const prevParent = newNode.parentNode as VirtualElement
+      const prevIndex = prevParent.children.indexOf(newNode)
+      if (prevIndex !== -1) {
+        prevParent.children.splice(prevIndex, 1)
+      }
+    }
+
+    this.children.splice(index, 1, newNode)
+    oldNode.parentNode = null
+    newNode.parentNode = this
+    return oldNode
+  }
+
+  cloneNode(deep = false): VirtualElement {
+    const clone = new VirtualElement(this.tagName)
+
+    // Copy attributes
+    for (const [name, value] of this.attributes) {
+      clone.setAttribute(name, value)
+    }
+
+    // Deep clone children
+    if (deep) {
+      for (const child of this.children) {
+        if (child.nodeType === 'element') {
+          const childClone = (child as VirtualElement).cloneNode(true)
+          clone.appendChild(childClone)
+        }
+        else {
+          // Clone text/comment nodes
+          const childClone = { ...child, parentNode: null }
+          clone.appendChild(childClone)
+        }
+      }
+    }
+
+    return clone
+  }
+
+  // Navigation methods
+  closest(selector: string): VirtualElement | null {
+    let element: VirtualElement | null = this
+
+    while (element) {
+      if (matchesSimpleSelector(element, selector)) {
+        return element
+      }
+      element = element.parentNode as VirtualElement | null
+      if (element?.nodeType !== 'element') {
+        element = null
+      }
+    }
+
+    return null
+  }
+
+  get nextElementSibling(): VirtualElement | null {
+    if (!this.parentNode)
+      return null
+
+    const siblings = this.parentNode.children
+    const index = siblings.indexOf(this)
+    if (index === -1)
+      return null
+
+    for (let i = index + 1; i < siblings.length; i++) {
+      if (siblings[i].nodeType === 'element') {
+        return siblings[i] as VirtualElement
+      }
+    }
+
+    return null
+  }
+
+  get previousElementSibling(): VirtualElement | null {
+    if (!this.parentNode)
+      return null
+
+    const siblings = this.parentNode.children
+    const index = siblings.indexOf(this)
+    if (index === -1)
+      return null
+
+    for (let i = index - 1; i >= 0; i--) {
+      if (siblings[i].nodeType === 'element') {
+        return siblings[i] as VirtualElement
+      }
+    }
+
+    return null
+  }
+
+  // Text content
+  get textContent(): string {
+    let text = ''
+    for (const child of this.children) {
+      text += child.textContent
+    }
+    return text
+  }
+
+  set textContent(value: string) {
+    this.children = []
+    if (value) {
+      // We need to import VirtualTextNode but avoid circular dependency
+      // For now, create a simple text node object
+      const textNode: VirtualNode = {
+        nodeType: 'text',
+        nodeName: '#text',
+        nodeValue: value,
+        attributes: new Map(),
+        children: [],
+        parentNode: this,
+        textContent: value,
+      }
+      this.children.push(textNode)
+    }
+  }
+
+  get innerHTML(): string {
+    return this.children.map(child => this._serializeNode(child)).join('')
+  }
+
+  set innerHTML(html: string) {
+    this.children = []
+    if (html) {
+      const nodes = parseHTML(html)
+      for (const node of nodes) {
+        this.appendChild(node)
+      }
+    }
+  }
+
+  get outerHTML(): string {
+    return this._serializeNode(this)
+  }
+
+  // classList implementation
+  get classList(): {
+    add: (...tokens: string[]) => void
+    remove: (...tokens: string[]) => void
+    toggle: (token: string) => boolean
+    contains: (token: string) => boolean
+    replace: (oldToken: string, newToken: string) => boolean
+  } {
+    const self = this
+
+    return {
+      add(...tokens: string[]): void {
+        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        for (const token of tokens) {
+          if (!classes.includes(token)) {
+            classes.push(token)
+          }
+        }
+        self.setAttribute('class', classes.join(' '))
+      },
+      remove(...tokens: string[]): void {
+        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const filtered = classes.filter(c => !tokens.includes(c))
+        if (filtered.length > 0) {
+          self.setAttribute('class', filtered.join(' '))
+        }
+        else {
+          self.removeAttribute('class')
+        }
+      },
+      toggle(token: string): boolean {
+        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const index = classes.indexOf(token)
+        if (index !== -1) {
+          classes.splice(index, 1)
+          if (classes.length > 0) {
+            self.setAttribute('class', classes.join(' '))
+          }
+          else {
+            self.removeAttribute('class')
+          }
+          return false
+        }
+        else {
+          classes.push(token)
+          self.setAttribute('class', classes.join(' '))
+          return true
+        }
+      },
+      contains(token: string): boolean {
+        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        return classes.includes(token)
+      },
+      replace(oldToken: string, newToken: string): boolean {
+        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const index = classes.indexOf(oldToken)
+        if (index !== -1) {
+          classes[index] = newToken
+          self.setAttribute('class', classes.join(' '))
+          return true
+        }
+        return false
+      },
+    }
+  }
+
+  private _serializeNode(node: VirtualNode): string {
+    if (node.nodeType === 'text') {
+      return node.nodeValue || ''
+    }
+    if (node.nodeType === 'comment') {
+      return `<!--${node.nodeValue}-->`
+    }
+    if (node.nodeType === 'element') {
+      const element = node as VirtualElement
+      let html = `<${element.tagName.toLowerCase()}`
+
+      for (const [name, value] of element.attributes) {
+        html += ` ${name}="${value}"`
+      }
+
+      html += '>'
+
+      for (const child of element.children) {
+        html += this._serializeNode(child)
+      }
+
+      html += `</${element.tagName.toLowerCase()}>`
+      return html
+    }
+    return ''
+  }
+
+  // Style property with Proxy for dynamic access
+  get style(): {
+    [key: string]: string
+    getPropertyValue: (property: string) => string
+    setProperty: (property: string, value: string) => void
+    removeProperty: (property: string) => void
+  } {
+    const self = this
+
+    return new Proxy(
+      {
+        getPropertyValue(property: string): string {
+          return self._internalStyles.get(property) || ''
+        },
+        setProperty(property: string, value: string): void {
+          self._internalStyles.set(property, value)
+          self._updateStyleAttribute()
+        },
+        removeProperty(property: string): void {
+          self._internalStyles.delete(property)
+          self._updateStyleAttribute()
+        },
+      },
+      {
+        get(target, prop: string) {
+          if (prop === 'getPropertyValue' || prop === 'setProperty' || prop === 'removeProperty') {
+            return target[prop]
+          }
+          // Convert camelCase to kebab-case
+          const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+          const value = self._internalStyles.get(kebabProp)
+          return value !== undefined ? value : ''
+        },
+        set(target, prop: string, value: string) {
+          // Convert camelCase to kebab-case
+          const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+          self._internalStyles.set(kebabProp, value)
+          self._updateStyleAttribute()
+          return true
+        },
+      },
+    )
+  }
+
+  private _updateStyleAttribute(): void {
+    const styleString = Array.from(this._internalStyles.entries())
+      .map(([prop, value]) => `${prop}: ${value}`)
+      .join('; ')
+
+    if (styleString) {
+      this.setAttribute('style', styleString)
+    }
+    else {
+      this.removeAttribute('style')
+    }
+  }
+
+  // Form validation
+  get validity(): {
+    valid: boolean
+    valueMissing: boolean
+    typeMismatch: boolean
+    patternMismatch: boolean
+    tooLong: boolean
+    tooShort: boolean
+    rangeUnderflow: boolean
+    rangeOverflow: boolean
+    stepMismatch: boolean
+    badInput: boolean
+    customError: boolean
+  } {
+    const value = this.getAttribute('value') || ''
+    const type = this.getAttribute('type') || 'text'
+    const required = this.hasAttribute('required')
+    const pattern = this.getAttribute('pattern')
+    const minlength = this.getAttribute('minlength')
+    const maxlength = this.getAttribute('maxlength')
+    const min = this.getAttribute('min')
+    const max = this.getAttribute('max')
+
+    const validity = {
+      valid: true,
+      valueMissing: false,
+      typeMismatch: false,
+      patternMismatch: false,
+      tooLong: false,
+      tooShort: false,
+      rangeUnderflow: false,
+      rangeOverflow: false,
+      stepMismatch: false,
+      badInput: false,
+      customError: false,
+    }
+
+    // Check required
+    if (required && !value) {
+      validity.valueMissing = true
+      validity.valid = false
+    }
+
+    // Check pattern
+    if (pattern && value) {
+      const regex = new RegExp(pattern)
+      if (!regex.test(value)) {
+        validity.patternMismatch = true
+        validity.valid = false
+      }
+    }
+
+    // Check minlength
+    if (minlength && value.length < Number.parseInt(minlength, 10)) {
+      validity.tooShort = true
+      validity.valid = false
+    }
+
+    // Check maxlength
+    if (maxlength && value.length > Number.parseInt(maxlength, 10)) {
+      validity.tooLong = true
+      validity.valid = false
+    }
+
+    // Check min/max for numbers
+    if (type === 'number' || type === 'range') {
+      const numValue = Number.parseFloat(value)
+      if (!Number.isNaN(numValue)) {
+        if (min && numValue < Number.parseFloat(min)) {
+          validity.rangeUnderflow = true
+          validity.valid = false
+        }
+        if (max && numValue > Number.parseFloat(max)) {
+          validity.rangeOverflow = true
+          validity.valid = false
+        }
+      }
+    }
+
+    // Check type-specific validation
+    if (type === 'email' && value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(value)) {
+        validity.typeMismatch = true
+        validity.valid = false
+      }
+    }
+
+    if (type === 'url' && value) {
+      try {
+        new URL(value)
+      }
+      catch {
+        validity.typeMismatch = true
+        validity.valid = false
+      }
+    }
+
+    // Check custom validity
+    if (this._customValidity) {
+      validity.customError = true
+      validity.valid = false
+    }
+
+    return validity
+  }
+
+  get validationMessage(): string {
+    if (this._customValidity) {
+      return this._customValidity
+    }
+
+    const validity = this.validity
+
+    if (validity.valueMissing) {
+      return 'Please fill out this field.'
+    }
+    if (validity.typeMismatch) {
+      const type = this.getAttribute('type')
+      if (type === 'email') {
+        return 'Please enter an email address.'
+      }
+      if (type === 'url') {
+        return 'Please enter a URL.'
+      }
+      return 'Please match the requested format.'
+    }
+    if (validity.patternMismatch) {
+      return 'Please match the requested format.'
+    }
+    if (validity.tooShort) {
+      const minlength = this.getAttribute('minlength')
+      return `Please lengthen this text to ${minlength} characters or more.`
+    }
+    if (validity.tooLong) {
+      const maxlength = this.getAttribute('maxlength')
+      return `Please shorten this text to ${maxlength} characters or less.`
+    }
+    if (validity.rangeUnderflow) {
+      const min = this.getAttribute('min')
+      return `Value must be greater than or equal to ${min}.`
+    }
+    if (validity.rangeOverflow) {
+      const max = this.getAttribute('max')
+      return `Value must be less than or equal to ${max}.`
+    }
+
+    return ''
+  }
+
+  setCustomValidity(message: string): void {
+    this._customValidity = message
+  }
+
+  checkValidity(): boolean {
+    return this.validity.valid
+  }
+
+  reportValidity(): boolean {
+    const isValid = this.checkValidity()
+    if (!isValid) {
+      const event = new VirtualEvent('invalid', { bubbles: false, cancelable: true })
+      this.dispatchEvent(event)
+    }
+    return isValid
+  }
+
+  // Selector methods
+  querySelector(selector: string): VirtualElement | null {
+    return querySelectorEngine(this, selector)
+  }
+
+  querySelectorAll(selector: string): VirtualElement[] {
+    return querySelectorAllEngine(this, selector)
+  }
+
+  matches(selector: string): boolean {
+    return matchesSimpleSelector(this, selector)
+  }
+
+  // Event handling
+  addEventListener(type: string, listener: (event: VirtualEvent) => void, options: EventListenerOptions | boolean = {}): void {
+    const opts: EventListenerOptions = typeof options === 'boolean'
+      ? { capture: options }
+      : { capture: options.capture ?? false, once: options.once, passive: options.passive }
+
+    if (!this.eventListeners.has(type)) {
+      this.eventListeners.set(type, [])
+    }
+
+    this.eventListeners.get(type)!.push({
+      listener,
+      options: opts,
+    })
+  }
+
+  removeEventListener(type: string, listener: (event: VirtualEvent) => void, options: EventListenerOptions | boolean = {}): void {
+    const opts: EventListenerOptions = typeof options === 'boolean'
+      ? { capture: options }
+      : { capture: options.capture ?? false }
+    const listeners = this.eventListeners.get(type)
+
+    if (!listeners)
+      return
+
+    const index = listeners.findIndex(
+      l => l.listener === listener && l.options.capture === opts.capture,
+    )
+
+    if (index !== -1) {
+      listeners.splice(index, 1)
+    }
+  }
+
+  dispatchEvent(event: VirtualEvent): boolean {
+    event.target = this
+
+    // Capture phase - traverse from root to target
+    const path: VirtualElement[] = []
+    let current: VirtualNode | null = this
+    while (current && current.nodeType === 'element') {
+      path.unshift(current as VirtualElement)
+      current = current.parentNode
+    }
+
+    // Capture phase
+    for (let i = 0; i < path.length - 1 && !event.propagationStopped; i++) {
+      const element = path[i]
+      event.currentTarget = element
+      this._invokeEventListeners(element, event, true)
+    }
+
+    // Target phase
+    if (!event.propagationStopped) {
+      event.currentTarget = this
+      this._invokeEventListeners(this, event, false)
+      this._invokeEventListeners(this, event, true)
+    }
+
+    // Bubble phase
+    if (event.bubbles && !event.propagationStopped) {
+      for (let i = path.length - 2; i >= 0 && !event.propagationStopped; i--) {
+        const element = path[i]
+        event.currentTarget = element
+        this._invokeEventListeners(element, event, false)
+      }
+    }
+
+    return !event.defaultPrevented
+  }
+
+  private _invokeEventListeners(element: VirtualElement, event: VirtualEvent, capture: boolean): void {
+    const listeners = element.eventListeners.get(event.type)
+    if (!listeners)
+      return
+
+    // Create a copy to avoid issues if listeners are removed during iteration
+    const listenersCopy = [...listeners]
+
+    for (const { listener, options } of listenersCopy) {
+      if (options.capture !== capture)
+        continue
+
+      if (event.immediatePropagationStopped)
+        break
+
+      listener.call(element, event)
+
+      if (options.once) {
+        element.removeEventListener(event.type, listener, options)
+      }
+    }
+  }
+
+  // Click simulation
+  click(): void {
+    const event = new VirtualEvent('click', { bubbles: true, cancelable: true })
+    this.dispatchEvent(event)
+  }
+
+  // Visibility check
+  isVisible(): boolean {
+    // Check display: none
+    const display = this.style.getPropertyValue('display')
+    if (display === 'none')
+      return false
+
+    // Check visibility: hidden
+    const visibility = this.style.getPropertyValue('visibility')
+    if (visibility === 'hidden')
+      return false
+
+    // Check opacity
+    const opacity = this.style.getPropertyValue('opacity')
+    if (opacity === '0')
+      return false
+
+    return true
+  }
+}
