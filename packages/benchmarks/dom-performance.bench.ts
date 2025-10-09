@@ -6,7 +6,7 @@
  */
 
 import { bench, group, run } from 'mitata'
-import { createDocument } from '../src/dom'
+import { createDocument } from '../besting/src/dom'
 
 // Benchmark: Document Creation
 group('Document Creation', () => {

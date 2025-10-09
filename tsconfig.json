@@ -6,7 +6,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "besting": ["./src/index.ts"]
+      "besting": ["./packages/besting/src/index.ts"]
     },
     "resolveJsonModule": true,
     "types": ["bun"],

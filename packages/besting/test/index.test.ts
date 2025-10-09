@@ -1,5 +1,6 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
+import { afterEach, beforeEach, describe, test } from 'bun:test'
 import { defaultConfig, loadConfig } from '../src/config'
+import { best, expect, testGroup } from '../src/test'
 
 // Test basic assertion functionality
 test('basic assertions work', () => {

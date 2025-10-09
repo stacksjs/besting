@@ -204,18 +204,6 @@ test('test with real browser', async () => {
 import { browse } from 'besting'
 ```
 
-### Real Browser Setup (Optional)
-
-Only needed if you want to use real browsers:
-
-```bash
-# Install Chromium (optional)
-besting setup-browser
-
-# Install Firefox (optional)
-besting setup-browser --browser firefox
-```
-
 ### Basic Browser Testing
 
 ```typescript
@@ -1010,32 +998,6 @@ Besting includes all matchers from Bun's test runner, plus additional Pest-inspi
 - `toBeEmpty()` - Assert that a string, array, or object is empty
 - `toPass(validator, message?)` - Assert that a value passes a custom validation function
 
-## Testing
-
-Besting uses Bun's native test runner, providing a seamless testing experience with all of Bun's built-in test features.
-
-```bash
-# Run all tests with Bun's standard test runner
-bun test
-
-# Run all tests with our custom runner (ensures all test files are executed)
-bun run test:custom
-
-# Run a specific test file
-bun test path/to/test.ts
-
-# Run tests with debugging enabled
-bun run test:debug
-```
-
-Besting seamlessly integrates with Bun's test runner, allowing you to:
-
-1. Use all of Bun's test features (snapshots, mocks, etc.)
-2. Get beautifully formatted test output
-3. Run tests in parallel for better performance
-
-> **Note:** Bun's test runner may sometimes have issues discovering or executing all test files (see [Bun issue #3506](https://github.com/oven-sh/bun/issues/3506)). If you notice that some test files are not being executed, you can use our custom test runner with `bun run test:custom`, which ensures all test files are discovered and executed individually.
-
 ## Performance
 
 Besting's virtual DOM is built to **outperform happy-dom** while maintaining zero dependencies.
@@ -1325,9 +1287,29 @@ test('Command testing', async () => {
 
 ## Testing
 
+Besting uses Bun's native test runner, providing a seamless testing experience with all of Bun's built-in test features.
+
 ```bash
+# Run all tests with Bun's standard test runner
 bun test
+
+# Run all tests with our custom runner (ensures all test files are executed)
+bun run test:custom
+
+# Run a specific test file
+bun test path/to/test.ts
+
+# Run tests with debugging enabled
+bun run test:debug
 ```
+
+Besting seamlessly integrates with Bun's test runner, allowing you to:
+
+1. Use all of Bun's test features (snapshots, mocks, etc.)
+2. Get beautifully formatted test output
+3. Run tests in parallel for better performance
+
+> **Note:** Bun's test runner may sometimes have issues discovering or executing all test files (see [Bun issue #3506](https://github.com/oven-sh/bun/issues/3506)). If you notice that some test files are not being executed, you can use our custom test runner with `bun run test:custom`, which ensures all test files are discovered and executed individually.
 
 ## Changelog
 

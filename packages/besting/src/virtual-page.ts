@@ -7,7 +7,7 @@
 
 import { expect } from 'bun:test'
 import type { VirtualDocument, VirtualElement } from './dom'
-import { createDocument, parseHTML } from './dom'
+import { createDocument, parseHTML, VirtualEvent } from './dom'
 
 interface VirtualStorage {
   [key: string]: string
@@ -88,8 +88,9 @@ export class VirtualPage {
       throw new Error(`Element not found: ${selector}`)
     }
 
-    // Simulate click event
-    // In a real implementation, this would trigger event handlers
+    // Dispatch click event
+    const clickEvent = new VirtualEvent('click', { bubbles: true, cancelable: true })
+    element.dispatchEvent(clickEvent)
   }
 
   async type(selector: string, text: string): Promise<void> {
@@ -207,9 +208,9 @@ export class VirtualPage {
     if (!element)
       return false
 
-    // Check for display: none or visibility: hidden
-    const style = element.getAttribute('style') || ''
-    if (style.includes('display: none') || style.includes('visibility: hidden')) {
+    // Check computed styles
+    const computed = this.document.getComputedStyle(element)
+    if (computed.display === 'none' || computed.visibility === 'hidden') {
       return false
     }
 
@@ -240,52 +241,57 @@ export class VirtualPage {
   // JavaScript Execution
   async evaluate<T>(fn: (...args: any[]) => T, ...args: any[]): Promise<T> {
     // Execute JavaScript in context with document
-    const context = {
-      document: this.document,
-      window: {
-        location: this.document.location,
-        localStorage: {
-          getItem: (key: string) => this.localStorage[key] || null,
-          setItem: (key: string, value: string) => { this.localStorage[key] = value },
-          removeItem: (key: string) => { delete this.localStorage[key] },
-          clear: () => { this.localStorage = {} },
-        },
-        sessionStorage: {
-          getItem: (key: string) => this.sessionStorage[key] || null,
-          setItem: (key: string, value: string) => { this.sessionStorage[key] = value },
-          removeItem: (key: string) => { delete this.sessionStorage[key] },
-          clear: () => { this.sessionStorage = {} },
-        },
-        scrollTo: () => {},
-        console: {
-          log: (...msgs: any[]) => {
-            this.consoleLogs.push({
-              type: 'log',
-              message: msgs.join(' '),
-              timestamp: Date.now(),
-            })
-          },
-          error: (...msgs: any[]) => {
-            this.consoleLogs.push({
-              type: 'error',
-              message: msgs.join(' '),
-              timestamp: Date.now(),
-            })
-          },
-          warn: (...msgs: any[]) => {
-            this.consoleLogs.push({
-              type: 'warn',
-              message: msgs.join(' '),
-              timestamp: Date.now(),
-            })
-          },
-        },
+    const document = this.document
+    const console = {
+      log: (...msgs: any[]) => {
+        this.consoleLogs.push({
+          type: 'log',
+          message: msgs.join(' '),
+          timestamp: Date.now(),
+        })
+      },
+      error: (...msgs: any[]) => {
+        this.consoleLogs.push({
+          type: 'error',
+          message: msgs.join(' '),
+          timestamp: Date.now(),
+        })
+      },
+      warn: (...msgs: any[]) => {
+        this.consoleLogs.push({
+          type: 'warn',
+          message: msgs.join(' '),
+          timestamp: Date.now(),
+        })
       },
     }
 
+    const window = {
+      document,
+      location: this.document.location,
+      localStorage: {
+        getItem: (key: string) => this.localStorage[key] || null,
+        setItem: (key: string, value: string) => { this.localStorage[key] = value },
+        removeItem: (key: string) => { delete this.localStorage[key] },
+        clear: () => { this.localStorage = {} },
+      },
+      sessionStorage: {
+        getItem: (key: string) => this.sessionStorage[key] || null,
+        setItem: (key: string, value: string) => { this.sessionStorage[key] = value },
+        removeItem: (key: string) => { delete this.sessionStorage[key] },
+        clear: () => { this.sessionStorage = {} },
+      },
+      scrollTo: () => {},
+      console,
+    }
+
     try {
-      // Bind the function to our context
-      return fn.call(context.window, ...args)
+      // Execute the function with document and window in scope
+      // Create a wrapper function that has access to our context variables
+      const wrapper = new Function('document', 'window', 'console', ...Object.keys(args), `
+        return (${fn.toString()})(...arguments);
+      `)
+      return wrapper(document, window, console, ...args)
     }
     catch (error) {
       throw new Error(`Evaluation error: ${error}`)

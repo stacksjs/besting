@@ -14,8 +14,8 @@ import * as fs from 'node:fs'
 import * as os from 'node:os'
 import * as path from 'node:path'
 import process from 'node:process'
-import type { BrowserType } from './browser-setup'
-import { findFirefox } from './browser-setup'
+
+export type BrowserType = 'chromium' | 'firefox'
 
 interface BrowserOptions {
   browser?: BrowserType
@@ -101,6 +101,32 @@ export function findChrome(): string | null {
   for (const chromePath of chromePaths) {
     if (fs.existsSync(chromePath)) {
       return chromePath
+    }
+  }
+
+  return null
+}
+
+/**
+ * Find Firefox executable
+ */
+export function findFirefox(): string | null {
+  // Common Firefox installation paths
+  const firefoxPaths = [
+    // macOS
+    '/Applications/Firefox.app/Contents/MacOS/firefox',
+    // Linux
+    '/usr/bin/firefox',
+    '/usr/bin/firefox-esr',
+    '/snap/bin/firefox',
+    // Windows
+    'C:\\Program Files\\Mozilla Firefox\\firefox.exe',
+    'C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe',
+  ]
+
+  for (const firefoxPath of firefoxPaths) {
+    if (fs.existsSync(firefoxPath)) {
+      return firefoxPath
     }
   }
 

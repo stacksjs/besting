@@ -1,7 +1,6 @@
 export * from './api'
 export * from './auth'
 export * from './browser'
-export * from './browser-setup'
 export * from './cache'
 export * from './command'
 export * from './config'
@@ -14,4 +13,5 @@ export * from './types'
 export * from './url'
 export * from './virtual-page'
 
-export { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, mock, spyOn, test } from 'bun:test'
+// Note: Import test utilities directly from 'bun:test' in your test files
+// export { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, mock, spyOn, test } from 'bun:test'

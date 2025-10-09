@@ -17,6 +17,10 @@ jobs:
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
+        # env:
+        #   BUN_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        with:
+          bun-version: latest
 
       - name: Use cached node_modules
         uses: actions/cache@v4
@@ -30,7 +34,7 @@ jobs:
         run: bun install
 
       - name: Publish to npm
-        run: bun publish --access public
+        run: ./scripts/publish.sh
         env:
           BUN_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
@@ -40,13 +44,13 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Attach Binaries
-        uses: stacksjs/action-releaser@v1.0.0
+        uses: stacksjs/action-releaser@v1.1.0
         with:
           files: |
-            bin/besting-linux-x64
-            bin/besting-linux-arm64
-            bin/besting-windows-x64.exe
-            bin/besting-darwin-x64
-            bin/besting-darwin-arm64
+            packages/besting/bin/besting-linux-x64.zip
+            packages/besting/bin/besting-linux-arm64.zip
+            packages/besting/bin/besting-windows-x64.zip
+            packages/besting/bin/besting-darwin-x64.zip
+            packages/besting/bin/besting-darwin-arm64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
