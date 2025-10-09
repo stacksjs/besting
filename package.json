@@ -60,7 +60,6 @@
     "changelog": "bunx logsmith --verbose",
     "changelog:generate": "bunx logsmith --output CHANGELOG.md",
     "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
-    "postinstall": "bunx git-hooks",
     "test": "bun test",
     "test:custom": "bun run src/bin.ts",
     "test:standard": "bun test",
@@ -78,21 +77,21 @@
     "cac": "^6.7.14"
   },
   "devDependencies": {
-    "@stacksjs/bumpx": "^0.1.17",
+    "@stacksjs/bumpx": "^0.1.86",
     "@stacksjs/docs": "^0.70.23",
-    "@stacksjs/eslint-config": "^4.10.2-beta.3",
+    "@stacksjs/eslint-config": "^4.14.0-beta.3",
     "@stacksjs/gitlint": "^0.1.5",
-    "@stacksjs/logsmith": "^0.1.8",
-    "@types/bun": "^1.2.11",
-    "buddy-bot": "^0.8.9",
-    "bumpp": "^10.1.0",
+    "@stacksjs/logsmith": "^0.1.18",
+    "@types/bun": "^1.2.23",
+    "buddy-bot": "^0.8.10",
+    "bumpp": "^10.3.1",
     "bun-git-hooks": "^0.2.19",
-    "bun-plugin-dtsx": "^0.21.9",
+    "bun-plugin-dtsx": "0.9.5",
     "bunfig": "^0.15.0",
-    "changelogen": "^0.6.1",
-    "lint-staged": "^15.5.1",
-    "simple-git-hooks": "^2.13.0",
-    "typescript": "^5.8.3"
+    "changelogen": "^0.6.2",
+    "lint-staged": "^15.5.2",
+    "simple-git-hooks": "^2.13.1",
+    "typescript": "^5.9.3"
   },
   "overrides": {
     "unconfig": "0.3.10"
