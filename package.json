@@ -60,6 +60,8 @@
     "changelog": "bunx logsmith --verbose",
     "changelog:generate": "bunx logsmith --output CHANGELOG.md",
     "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
+    "bench": "bun benchmarks/dom-performance.bench.ts",
+    "bench:dom": "bun benchmarks/dom-performance.bench.ts",
     "test": "bun test",
     "test:custom": "bun run src/bin.ts",
     "test:standard": "bun test",
@@ -68,6 +70,7 @@
     "test:stress": "bun test test/stress.test.ts",
     "test:errors": "bun test test/error-handling.test.ts",
     "test:all": "bun test:core && bun test:stress && bun test:errors",
+    "test:dom": "bun test test/dom.test.ts",
     "dev:docs": "bun --bun vitepress dev docs",
     "build:docs": "bun --bun vitepress build docs",
     "preview:docs": "bun --bun vitepress preview docs",
@@ -89,8 +92,7 @@
     "bun-plugin-dtsx": "0.9.5",
     "bunfig": "^0.8.5",
     "changelogen": "^0.6.2",
-    "lint-staged": "^15.5.2",
-    "simple-git-hooks": "^2.13.1",
+    "mitata": "^1.0.34",
     "typescript": "^5.9.3"
   },
   "overrides": {

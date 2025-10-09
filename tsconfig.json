@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["esnext"],
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
     "moduleDetection": "force",
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
       "besting": ["./src/index.ts"]
