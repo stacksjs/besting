@@ -24,7 +24,7 @@ export class VirtualElement implements VirtualNode {
 
   // Attribute methods
   getAttribute(name: string): string | null {
-    return this.attributes.get(name.toLowerCase()) || null
+    return this.attributes.get(name.toLowerCase()) ?? null
   }
 
   setAttribute(name: string, value: string): void {

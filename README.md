@@ -14,11 +14,10 @@ A Jest & Pest inspired testing framework for Bun with **zero external dependenci
 
 Besting is a comprehensive testing framework built exclusively for Bun. It provides a fluent, Pest-like API for writing tests with **NO external dependencies** - everything runs on pure Bun primitives.
 
-### 🚀 Key Features
+### Key Features
 
-- **Zero Dependencies** - Pure Bun implementation, no npm packages needed
+- **Zero Dependencies** - Lightweight & zero external dependencies
 - **Virtual DOM** - Lightning-fast DOM testing without downloading browsers (competing with happy-dom)
-- **Optional Real Browsers** - Use real Chrome/Firefox when you need visual testing
 - **Blazing Performance** - Optimized for Bun's runtime, faster than happy-dom
 - **Laravel-Inspired** - Familiar API from Laravel's testing ecosystem
 

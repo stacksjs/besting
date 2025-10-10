@@ -16,6 +16,7 @@ See [benchmarks](../benchmarks/README.md) for detailed performance comparisons.
 ## 🎯 Features
 
 ### Core DOM APIs
+
 - ✅ HTML parsing and serialization
 - ✅ DOM manipulation (createElement, appendChild, innerHTML, etc.)
 - ✅ CSS selectors (querySelector, querySelectorAll)
@@ -23,6 +24,7 @@ See [benchmarks](../benchmarks/README.md) for detailed performance comparisons.
 - ✅ Document API (getElementById, getElementsByClassName, etc.)
 
 ### Browser APIs
+
 - ✅ **Storage** - localStorage, sessionStorage with Proxy support
 - ✅ **Timers** - setTimeout, setInterval, requestAnimationFrame
 - ✅ **Network** - fetch, XMLHttpRequest, WebSocket, request interception
@@ -64,9 +66,9 @@ await window.happyDOM.close()
 
 ## 🧪 Test Coverage
 
-VeryHappyDOM has **610+ comprehensive tests** organized by functionality:
+VeryHappyDOM has **972+ comprehensive tests** organized by functionality:
 
-### Organized Test Suites (296 tests)
+### Organized Test Suites (586 tests)
 
 | Test Suite | Tests | Coverage |
 |-----------|-------|----------|
@@ -80,9 +82,15 @@ VeryHappyDOM has **610+ comprehensive tests** organized by functionality:
 | **webcomponents.test.ts** | 21 | Shadow DOM, Custom Elements, lifecycle |
 | **browser-apis.test.ts** | 31 | Performance, Clipboard, Geolocation, File API |
 | **integration.test.ts** | 24 | End-to-end scenarios combining features |
+| **security-sanitization.test.ts** | 52 | XSS prevention, script injection, content sanitization |
+| **attribute-property.test.ts** | 127 | Comprehensive attribute and property handling |
+| **selector-engine.test.ts** | 70 | CSS selectors, combinators, pseudo-classes |
+| **advanced-edge-cases.test.ts** | 41 | Complex scenarios and edge cases |
 
 ### Legacy Test Suites (287+ tests)
+
 All legacy tests have been organized in `tests/legacy/` folder:
+
 - ✅ Basic feature tests (43)
 - ✅ Advanced feature tests (35)
 - ✅ Final feature tests (32)
@@ -92,6 +100,7 @@ All legacy tests have been organized in `tests/legacy/` folder:
 - ✅ Pseudo-class selector tests
 
 Plus active stress tests:
+
 - ✅ 87 browser API stress tests
 
 ### Test Organization
@@ -139,6 +148,7 @@ bun test tests/*.test.ts
 ## 🏗️ Architecture
 
 ### Window API
+
 ```typescript
 import { Window } from 'very-happy-dom'
 
@@ -155,6 +165,7 @@ const window = new Window({
 ```
 
 ### Browser API
+
 ```typescript
 import { Browser } from 'very-happy-dom'
 
@@ -171,6 +182,7 @@ await browser.close()
 ## 🔧 Advanced Features
 
 ### Request Interception
+
 ```typescript
 await page.setRequestInterception(true, async (request) => {
   // Mock API responses
@@ -183,6 +195,7 @@ await page.setRequestInterception(true, async (request) => {
 ```
 
 ### XPath Support
+
 ```typescript
 const result = window.document.evaluate(
   '//div[@class="item"]',
@@ -198,6 +211,7 @@ for (let i = 0; i < result.snapshotLength; i++) {
 ```
 
 ### Shadow DOM
+
 ```typescript
 const host = window.document.createElement('div')
 const shadow = host.attachShadow({ mode: 'open' })
@@ -207,6 +221,7 @@ const p = shadow.querySelector('p')
 ```
 
 ### Custom Elements
+
 ```typescript
 class MyComponent extends window.HTMLElement {
   connectedCallback() {
@@ -222,6 +237,7 @@ window.customElements.define('my-component', MyComponent)
 See the [benchmarks package](../benchmarks) for detailed performance comparisons with HappyDOM and JSDOM.
 
 Key results on Apple M3 Pro:
+
 - HTML Parsing: **413 ns** (vs HappyDOM 14.20 ms, JSDOM 32.69 ms)
 - querySelector: **741 ns** (vs HappyDOM 14.27 ms, JSDOM 30.74 ms)
 - DOM Manipulation: **35.49 µs** (vs HappyDOM 1.06 ms, JSDOM 3.00 ms)

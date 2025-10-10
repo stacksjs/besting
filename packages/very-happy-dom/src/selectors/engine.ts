@@ -152,6 +152,16 @@ export function parseComplexSelector(selector: string): Array<{ selector: string
   let inPseudo = false
   let pseudoDepth = 0
 
+  // Helper to find next non-space character
+  function peekNextNonSpace(startIndex: number): string | null {
+    for (let j = startIndex; j < selector.length; j++) {
+      if (selector[j] !== ' ') {
+        return selector[j]
+      }
+    }
+    return null
+  }
+
   for (let i = 0; i < selector.length; i++) {
     const char = selector[i]
     const nextChar = selector[i + 1]
@@ -185,16 +195,34 @@ export function parseComplexSelector(selector: string): Array<{ selector: string
       }
       currentSelector += char
     }
-    else if (!inBrackets && !inPseudo && (char === '>' || char === '+' || char === '~' || (char === ' ' && currentSelector && nextChar && nextChar !== ' '))) {
+    else if (!inBrackets && !inPseudo && (char === '>' || char === '+' || char === '~')) {
+      // Direct combinator character
       if (currentSelector.trim()) {
-        parts.push({ selector: currentSelector.trim(), combinator: char === ' ' ? ' ' : char })
+        parts.push({ selector: currentSelector.trim(), combinator: char })
         currentSelector = ''
       }
-      if (char !== ' ') {
-        i++ // Skip whitespace after combinator
-        while (selector[i] === ' ')
-          i++
-        i-- // Back up one since loop will increment
+      // Skip whitespace after combinator
+      while (selector[i + 1] === ' ') {
+        i++
+      }
+    }
+    else if (!inBrackets && !inPseudo && char === ' ') {
+      // Space - check if next non-space is a combinator
+      const nextNonSpace = peekNextNonSpace(i + 1)
+      if (nextNonSpace && (nextNonSpace === '>' || nextNonSpace === '+' || nextNonSpace === '~')) {
+        // Skip this space, the combinator will be handled next
+        continue
+      }
+      else if (currentSelector && nextChar && nextChar !== ' ') {
+        // This space is a descendant combinator
+        if (currentSelector.trim()) {
+          parts.push({ selector: currentSelector.trim(), combinator: ' ' })
+          currentSelector = ''
+        }
+      }
+      else if (currentSelector) {
+        // Space within or after selector
+        currentSelector += char
       }
     }
     else if (char !== ' ' || currentSelector) {
