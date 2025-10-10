@@ -36,12 +36,16 @@ export class DetachedWindowAPI {
    * This includes loading resources, executing scripts, timers, etc.
    */
   async waitUntilComplete(): Promise<void> {
-    if (this._pendingOperations.size === 0) {
-      return
+    // Wait for pending operations
+    if (this._pendingOperations.size > 0) {
+      await Promise.all(Array.from(this._pendingOperations))
     }
 
-    // Wait for all pending operations
-    await Promise.all(Array.from(this._pendingOperations))
+    // Wait for pending timers
+    const timerManager = (this._window as any)._getTimerManager?.()
+    if (timerManager) {
+      await timerManager.waitForTimers()
+    }
   }
 
   /**
@@ -50,6 +54,12 @@ export class DetachedWindowAPI {
   async abort(): Promise<void> {
     this._aborted = true
     this._pendingOperations.clear()
+
+    // Abort timers
+    const timerManager = (this._window as any)._getTimerManager?.()
+    if (timerManager) {
+      timerManager.abort()
+    }
   }
 
   /**

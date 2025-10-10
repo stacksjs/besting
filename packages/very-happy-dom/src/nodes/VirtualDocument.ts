@@ -3,6 +3,8 @@ import { VirtualElement } from './VirtualElement'
 import { VirtualTextNode } from './VirtualTextNode'
 import { VirtualCommentNode } from './VirtualCommentNode'
 import { parseHTML } from '../parsers/html-parser'
+import { XPathEvaluator } from '../xpath/XPathEvaluator'
+import { XPathResult, XPathResultType } from '../xpath/XPathResult'
 
 export class VirtualDocument implements VirtualNode {
   nodeType: NodeType = 'document'
@@ -21,6 +23,8 @@ export class VirtualDocument implements VirtualNode {
 
   private _historyStack: HistoryState[] = []
   private _historyIndex = -1
+  private _eventListeners = new Map<string, Array<(event: any) => void>>()
+  private _xpathEvaluator = new XPathEvaluator()
 
   constructor() {
     // Initialize with basic structure
@@ -283,6 +287,57 @@ export class VirtualDocument implements VirtualNode {
         },
       },
     )
+  }
+
+  // Event listener methods
+  addEventListener(type: string, listener: (event: any) => void): void {
+    if (!this._eventListeners.has(type)) {
+      this._eventListeners.set(type, [])
+    }
+    this._eventListeners.get(type)!.push(listener)
+  }
+
+  removeEventListener(type: string, listener: (event: any) => void): void {
+    const listeners = this._eventListeners.get(type)
+    if (listeners) {
+      const index = listeners.indexOf(listener)
+      if (index !== -1) {
+        listeners.splice(index, 1)
+      }
+    }
+  }
+
+  dispatchEvent(event: any): boolean {
+    const listeners = this._eventListeners.get(event.type)
+    if (listeners) {
+      for (const listener of listeners) {
+        listener(event)
+      }
+    }
+    return true
+  }
+
+  // XPath support
+  evaluate(
+    expression: string,
+    contextNode: VirtualNode = this,
+    resolver: any = null,
+    type: XPathResultType = XPathResultType.ANY_TYPE,
+    result: XPathResult | null = null
+  ): XPathResult {
+    // If contextNode is the document, start from documentElement
+    const actualContext = contextNode === this ? (this.documentElement || this) : contextNode
+    return this._xpathEvaluator.evaluate(expression, actualContext, resolver, type, result)
+  }
+
+  createExpression(expression: string, resolver: any = null): any {
+    return {
+      evaluate: (contextNode: VirtualNode, type: XPathResultType = XPathResultType.ANY_TYPE) => {
+        // If contextNode is the document, start from documentElement
+        const actualContext = contextNode === this ? (this.documentElement || this) : contextNode
+        return this._xpathEvaluator.evaluate(expression, actualContext, resolver, type, null)
+      }
+    }
   }
 }
 

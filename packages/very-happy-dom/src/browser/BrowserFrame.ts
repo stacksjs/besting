@@ -1,4 +1,5 @@
 import { VirtualDocument } from '../nodes/VirtualDocument'
+import { VirtualEvent } from '../events/VirtualEvent'
 import type { BrowserPage } from './BrowserPage'
 
 /**
@@ -29,7 +30,8 @@ export class BrowserFrame {
       location: {
         href: this._url,
         toString: () => this._url
-      }
+      },
+      Event: VirtualEvent
     } as any
   }
 
@@ -106,9 +108,15 @@ export class BrowserFrame {
    */
   evaluate(code: string | Function): any {
     if (typeof code === 'function') {
-      return code.call(this.window)
+      // Create a wrapper that provides window as a variable in the function scope
+      const window = this.window
+      const document = this.document
+      // Use Function constructor to create a function with window in scope
+      const wrappedFn = new Function('window', 'document', `return (${code.toString()})()`).bind(null, window, document)
+      return wrappedFn()
     } else {
       // Simple eval in context - in a real implementation this would use VM
+      const window = this.window
       return eval(code)
     }
   }

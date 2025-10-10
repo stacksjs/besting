@@ -1,5 +1,12 @@
 import { VirtualDocument } from '../nodes/VirtualDocument'
 import type { DetachedWindowAPI } from './DetachedWindowAPI'
+import { createStorage, type Storage } from '../storage/Storage'
+import { TimerManager } from '../timers/TimerManager'
+import { CustomEvent as VeryHappyCustomEvent } from '../events/CustomEvent'
+import { MutationObserver as VeryHappyMutationObserver } from '../observers/MutationObserver'
+import { IntersectionObserver as VeryHappyIntersectionObserver } from '../observers/IntersectionObserver'
+import { ResizeObserver as VeryHappyResizeObserver } from '../observers/ResizeObserver'
+import { XMLHttpRequest as VeryHappyXMLHttpRequest } from '../http/XMLHttpRequest'
 
 export interface WindowOptions {
   url?: string
@@ -35,11 +42,32 @@ export class Window {
   public document: VirtualDocument
   public happyDOM: DetachedWindowAPI
   public console: Console
+  public localStorage: Storage
+  public sessionStorage: Storage
+
+  // Global APIs from Bun/Browser
+  public fetch = globalThis.fetch.bind(globalThis)
+  public Request = globalThis.Request
+  public Response = globalThis.Response
+  public Headers = globalThis.Headers
+  public FormData = globalThis.FormData
+  public URL = globalThis.URL
+  public URLSearchParams = globalThis.URLSearchParams
+
+  // Observer APIs
+  public CustomEvent = VeryHappyCustomEvent
+  public MutationObserver = VeryHappyMutationObserver
+  public IntersectionObserver = VeryHappyIntersectionObserver
+  public ResizeObserver = VeryHappyResizeObserver
+
+  // Legacy HTTP API
+  public XMLHttpRequest = VeryHappyXMLHttpRequest
 
   private _location: Location
   private _settings: IBrowserSettings
   private _width: number
   private _height: number
+  private _timerManager: TimerManager
 
   constructor(options: WindowOptions = {}) {
     const {
@@ -65,6 +93,13 @@ export class Window {
 
     // Use provided console or global console
     this.console = consoleInstance || globalThis.console
+
+    // Create storage
+    this.localStorage = createStorage()
+    this.sessionStorage = createStorage()
+
+    // Create timer manager
+    this._timerManager = new TimerManager()
 
     // Create document
     this.document = new VirtualDocument()
@@ -153,6 +188,39 @@ export class Window {
   // Getter for settings (through happyDOM API)
   get settings(): IBrowserSettings {
     return this._settings
+  }
+
+  // Timer methods
+  setTimeout(callback: (...args: any[]) => void, delay?: number, ...args: any[]): number {
+    return this._timerManager.setTimeout(callback, delay, ...args)
+  }
+
+  clearTimeout(id: number): void {
+    this._timerManager.clearTimeout(id)
+  }
+
+  setInterval(callback: (...args: any[]) => void, delay?: number, ...args: any[]): number {
+    return this._timerManager.setInterval(callback, delay, ...args)
+  }
+
+  clearInterval(id: number): void {
+    this._timerManager.clearInterval(id)
+  }
+
+  requestAnimationFrame(callback: (time: number) => void): number {
+    return this._timerManager.requestAnimationFrame(callback)
+  }
+
+  cancelAnimationFrame(id: number): void {
+    this._timerManager.cancelAnimationFrame(id)
+  }
+
+  /**
+   * Get timer manager for internal use
+   * @internal
+   */
+  _getTimerManager(): TimerManager {
+    return this._timerManager
   }
 }
 

@@ -85,12 +85,17 @@ bun run bench:very-happy-dom
    - querySelector now correctly finds elements in parsed HTML trees
    - Verified with GitHub HTML test page - successfully finding 78 `<li>` elements, 42 `.flex-shrink-0` elements, etc.
 
-### ⚠️ Known Limitations
-
-1. **Missing Features**:
-   - Custom Elements API (not yet implemented)
-   - XMLSerializer API (using `outerHTML` as workaround)
-   - Some advanced CSS selectors may have edge cases
+3. **✅ Implemented Full Browser API** (2024-10-09):
+   - **Storage APIs** - localStorage, sessionStorage
+   - **Timers** - setTimeout, setInterval, requestAnimationFrame + clear methods
+   - **Waiting Utilities** - waitForSelector, waitForFunction, waitForTimeout, waitUntilComplete
+   - **Network APIs** - fetch, Request, Response, Headers, FormData, XMLHttpRequest
+   - **Event APIs** - CustomEvent, Event Emitters (page.on), virtualConsolePrinter
+   - **Observer APIs** - MutationObserver, IntersectionObserver, ResizeObserver
+   - **XPath Support** - document.evaluate, XPathResult, createExpression
+   - **User Interaction** - click, type, focus, hover, keyboard.press, mouse.click
+   - **Rendering** - screenshot (SVG), PDF generation
+   - **URL & URLSearchParams**
 
 ### 🎯 Next Steps
 
