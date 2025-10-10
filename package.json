@@ -68,7 +68,7 @@
     "bun-plugin-dtsx": "0.9.5",
     "bunfig": "^0.15.0",
     "happy-dom": "^15.11.7",
-    "jsdom": "^25.0.1",
+    "jsdom": "^27.0.0",
     "mitata": "^1.0.10",
     "typescript": "^5.9.3"
   },
