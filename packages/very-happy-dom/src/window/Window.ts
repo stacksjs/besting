@@ -7,6 +7,11 @@ import { MutationObserver as VeryHappyMutationObserver } from '../observers/Muta
 import { IntersectionObserver as VeryHappyIntersectionObserver } from '../observers/IntersectionObserver'
 import { ResizeObserver as VeryHappyResizeObserver } from '../observers/ResizeObserver'
 import { XMLHttpRequest as VeryHappyXMLHttpRequest } from '../http/XMLHttpRequest'
+import { VeryHappyWebSocket } from '../network/WebSocket'
+import { Navigator as VeryHappyNavigator } from '../apis/Clipboard'
+import { VeryHappyFile, VeryHappyFileReader, VeryHappyFileList } from '../apis/FileAPI'
+import { CustomElementRegistry, HTMLElement } from '../webcomponents/CustomElementRegistry'
+import { Performance, Geolocation, Notification, EnhancedConsole, DataTransfer } from '../apis/BrowserAPIs'
 
 export interface WindowOptions {
   url?: string
@@ -42,6 +47,9 @@ export class Window {
   public document: VirtualDocument
   public happyDOM: DetachedWindowAPI
   public console: Console
+  public navigator: VeryHappyNavigator
+  public customElements = new CustomElementRegistry()
+  public HTMLElement = HTMLElement
   public localStorage: Storage
   public sessionStorage: Storage
 
@@ -62,6 +70,19 @@ export class Window {
 
   // Legacy HTTP API
   public XMLHttpRequest = VeryHappyXMLHttpRequest
+
+  // WebSocket API
+  public WebSocket = VeryHappyWebSocket
+
+  // File API
+  public File = VeryHappyFile
+  public FileReader = VeryHappyFileReader
+  public FileList = VeryHappyFileList
+
+  // Additional Browser APIs
+  public performance = new Performance()
+  public Notification = Notification
+  public DataTransfer = DataTransfer
 
   private _location: Location
   private _settings: IBrowserSettings
@@ -93,6 +114,9 @@ export class Window {
 
     // Use provided console or global console
     this.console = consoleInstance || globalThis.console
+
+    // Create navigator
+    this.navigator = new VeryHappyNavigator()
 
     // Create storage
     this.localStorage = createStorage()

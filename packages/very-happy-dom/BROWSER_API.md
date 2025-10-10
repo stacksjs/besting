@@ -72,6 +72,7 @@ await window.happyDOM.close()
 Represents a browser instance with contexts and pages.
 
 **Constructor:**
+
 ```typescript
 new Browser(options?: {
   settings?: IOptionalBrowserSettings
@@ -80,12 +81,14 @@ new Browser(options?: {
 ```
 
 **Properties:**
+
 - `contexts: BrowserContext[]` - All browser contexts
 - `defaultContext: BrowserContext` - The default context
 - `settings: IBrowserSettings` - Browser settings (modifiable at runtime)
 - `console: Console` - Console instance
 
 **Methods:**
+
 - `newPage(): BrowserPage` - Creates a new page in the default context
 - `newIncognitoContext(): BrowserContext` - Creates a new incognito context
 - `close(): Promise<void>` - Closes the browser and all contexts
@@ -97,6 +100,7 @@ new Browser(options?: {
 Represents a context where data (cookies, cache) is shared between pages.
 
 **Properties:**
+
 - `pages: BrowserPage[]` - Pages in this context
 - `browser: Browser` - Owner browser
 - `cookieContainer: CookieContainer` - Cookie storage
@@ -104,6 +108,7 @@ Represents a context where data (cookies, cache) is shared between pages.
 - `preflightResponseCache: Map<string, Response>` - Preflight response cache
 
 **Methods:**
+
 - `newPage(): BrowserPage` - Creates a new page
 - `close(): Promise<void>` - Closes the context and all pages
 - `waitUntilComplete(): Promise<void>` - Waits for all operations to complete
@@ -114,6 +119,7 @@ Represents a context where data (cookies, cache) is shared between pages.
 Represents a browser page (tab or popup).
 
 **Properties:**
+
 - `mainFrame: BrowserFrame` - Main frame
 - `frames: BrowserFrame[]` - All frames
 - `context: BrowserContext` - Owner context
@@ -123,6 +129,7 @@ Represents a browser page (tab or popup).
 - `url: string` - Page URL (get/set)
 
 **Methods:**
+
 - `goto(url: string): Promise<Response | null>` - Navigate to URL
 - `evaluate(code: string | Function): any` - Execute code in page context
 - `setViewport(viewport: IBrowserPageViewport): void` - Set viewport size
@@ -136,6 +143,7 @@ Represents a browser page (tab or popup).
 Represents a browser frame.
 
 **Properties:**
+
 - `window: Window` - Window instance
 - `document: VirtualDocument` - Document instance
 - `page: BrowserPage` - Owner page
@@ -145,6 +153,7 @@ Represents a browser frame.
 - `url: string` - Frame URL (get/set)
 
 **Methods:**
+
 - `goto(url: string): Promise<Response | null>` - Navigate frame
 - `evaluate(code: string | Function): any` - Execute code in frame context
 - `goBack(): Promise<Response | null>` - Navigate back in history
@@ -160,6 +169,7 @@ Represents a browser frame.
 Standalone window instance.
 
 **Constructor:**
+
 ```typescript
 new Window(options?: {
   url?: string            // Default: 'about:blank'
@@ -171,6 +181,7 @@ new Window(options?: {
 ```
 
 **Properties:**
+
 - `document: VirtualDocument` - Document instance
 - `happyDOM: DetachedWindowAPI` - API for window management
 - `console: Console` - Console instance
@@ -184,9 +195,11 @@ new Window(options?: {
 API for managing a detached Window instance.
 
 **Properties:**
+
 - `settings: IBrowserSettings` - Browser settings (modifiable)
 
 **Methods:**
+
 - `close(): Promise<void>` - Close the window
 - `waitUntilComplete(): Promise<void>` - Wait for all operations to complete
 - `abort(): Promise<void>` - Abort all operations
@@ -198,11 +211,13 @@ API for managing a detached Window instance.
 Cookie storage for a BrowserContext.
 
 **Methods:**
+
 - `addCookies(cookies: ICookie[]): void` - Add cookies
 - `getCookies(url: string, includeHttpOnly?: boolean): ICookie[]` - Get cookies for URL
 - `clearCookies(): void` - Clear all cookies
 
 **Cookie Interface:**
+
 ```typescript
 interface ICookie {
   key: string

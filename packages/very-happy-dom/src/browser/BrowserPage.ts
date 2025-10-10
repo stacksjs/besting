@@ -1,5 +1,6 @@
 import { BrowserFrame } from './BrowserFrame'
 import type { BrowserContext } from './BrowserContext'
+import { RequestInterceptor, type InterceptedRequest, type RequestInterceptionHandler } from '../network/RequestInterceptor'
 
 export interface IBrowserPageViewport {
   width: number
@@ -22,6 +23,7 @@ export class BrowserPage {
   private _viewport: IBrowserPageViewport
   private _frames: BrowserFrame[] = []
   private _eventListeners = new Map<PageEventType, Set<PageEventHandler>>()
+  private _requestInterceptor = new RequestInterceptor()
 
   constructor(context: BrowserContext) {
     this._context = context
@@ -404,6 +406,54 @@ export class BrowserPage {
    */
   _emitError(error: Error): void {
     this.emit('error', error)
+  }
+
+  /**
+   * Drag and drop simulation
+   */
+  async dragAndDrop(
+    source: string,
+    target: string,
+    options: { delay?: number } = {}
+  ): Promise<void> {
+    const sourceElement = this.mainFrame.document.querySelector(source)
+    const targetElement = this.mainFrame.document.querySelector(target)
+
+    if (!sourceElement || !targetElement) {
+      throw new Error('Source or target element not found')
+    }
+
+    // Dispatch drag events
+    const dragStartEvent = new (this.mainFrame.window as any).Event('dragstart', { bubbles: true })
+    ;(sourceElement as any).dispatchEvent?.(dragStartEvent)
+
+    if (options.delay) {
+      await this.waitForTimeout(options.delay)
+    }
+
+    const dropEvent = new (this.mainFrame.window as any).Event('drop', { bubbles: true })
+    ;(targetElement as any).dispatchEvent?.(dropEvent)
+
+    const dragEndEvent = new (this.mainFrame.window as any).Event('dragend', { bubbles: true })
+    ;(sourceElement as any).dispatchEvent?.(dragEndEvent)
+  }
+
+  /**
+   * Enable or disable request interception
+   */
+  async setRequestInterception(enabled: boolean): Promise<void> {
+    if (enabled) {
+      this._requestInterceptor.enable()
+
+      // Add default handler to emit events
+      const handler: RequestInterceptionHandler = (request) => {
+        this._emitRequest(request)
+      }
+      this._requestInterceptor.addHandler(handler)
+    } else {
+      this._requestInterceptor.disable()
+      this._requestInterceptor.clear()
+    }
   }
 
   /**

@@ -25,6 +25,7 @@ export class VirtualDocument implements VirtualNode {
   private _historyIndex = -1
   private _eventListeners = new Map<string, Array<(event: any) => void>>()
   private _xpathEvaluator = new XPathEvaluator()
+  private _cookies: Record<string, string> = {}
 
   constructor() {
     // Initialize with basic structure
@@ -336,6 +337,26 @@ export class VirtualDocument implements VirtualNode {
         // If contextNode is the document, start from documentElement
         const actualContext = contextNode === this ? (this.documentElement || this) : contextNode
         return this._xpathEvaluator.evaluate(expression, actualContext, resolver, type, null)
+      }
+    }
+  }
+
+  // Cookie API
+  get cookie(): string {
+    return Object.entries(this._cookies)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('; ')
+  }
+
+  set cookie(value: string) {
+    // Parse cookie string: "name=value; expires=...; path=..."
+    const parts = value.split(';').map(p => p.trim())
+    const [nameValue, ...attributes] = parts
+
+    if (nameValue) {
+      const [name, val] = nameValue.split('=').map(s => s.trim())
+      if (name) {
+        this._cookies[name] = val || ''
       }
     }
   }

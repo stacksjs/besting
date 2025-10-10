@@ -2,6 +2,7 @@ import type { EventListener, EventListenerOptions, NodeType, VirtualNode } from 
 import { VirtualEvent } from '../events/VirtualEvent'
 import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
 import { parseHTML } from '../parsers/html-parser'
+import { ShadowRoot, type ShadowRootInit } from '../webcomponents/ShadowRoot'
 
 export class VirtualElement implements VirtualNode {
   nodeType: NodeType = 'element'
@@ -11,6 +12,7 @@ export class VirtualElement implements VirtualNode {
   attributes = new Map<string, string>()
   children: VirtualNode[] = []
   parentNode: VirtualNode | null = null
+  shadowRoot: ShadowRoot | null = null
   private eventListeners = new Map<string, EventListener[]>()
   private _customValidity = ''
   private _internalStyles = new Map<string, string>()
@@ -827,5 +829,14 @@ export class VirtualElement implements VirtualNode {
       return false
 
     return true
+  }
+
+  // Shadow DOM
+  attachShadow(init: ShadowRootInit): ShadowRoot {
+    if (this.shadowRoot) {
+      throw new Error('Shadow root already exists')
+    }
+    this.shadowRoot = new ShadowRoot(this, init)
+    return this.shadowRoot
   }
 }

@@ -44,6 +44,19 @@ export { XPathEvaluator } from './xpath/XPathEvaluator'
 // Export HTTP APIs
 export { XMLHttpRequest } from './http/XMLHttpRequest'
 
+// Export Network APIs
+export { VeryHappyWebSocket as WebSocket } from './network/WebSocket'
+export { RequestInterceptor, type InterceptedRequest, type RequestInterceptionHandler } from './network/RequestInterceptor'
+
+// Export Web Components
+export { CustomElementRegistry, HTMLElement } from './webcomponents/CustomElementRegistry'
+export { ShadowRoot, type ShadowRootInit } from './webcomponents/ShadowRoot'
+
+// Export Browser APIs
+export { Performance, Geolocation, Notification, EnhancedConsole, DataTransfer } from './apis/BrowserAPIs'
+export { Navigator, Clipboard } from './apis/Clipboard'
+export { VeryHappyFile as File, VeryHappyFileReader as FileReader, VeryHappyFileList as FileList } from './apis/FileAPI'
+
 // Export utilities
 export { parseHTML } from './parsers/html-parser'
 export {
