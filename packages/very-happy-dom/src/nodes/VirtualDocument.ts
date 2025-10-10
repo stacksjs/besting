@@ -179,6 +179,15 @@ export class VirtualDocument implements VirtualNode {
     return new VirtualCommentNode(text)
   }
 
+  createDocumentFragment(): VirtualElement {
+    // DocumentFragment is similar to a VirtualElement but doesn't get serialized
+    // For simplicity, we use a VirtualElement with a special tag
+    const fragment = new VirtualElement('document-fragment')
+    // Mark it as a fragment internally
+    ;(fragment as any)._isFragment = true
+    return fragment
+  }
+
   querySelector(selector: string): VirtualElement | null {
     return this.documentElement?.querySelector(selector) || null
   }

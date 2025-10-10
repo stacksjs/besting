@@ -153,6 +153,47 @@ export class VirtualElement implements VirtualNode {
     return null
   }
 
+  // childNodes - returns all children including text and comment nodes
+  get childNodes(): VirtualNode[] {
+    return this.children
+  }
+
+  // firstChild - returns first child of any type
+  get firstChild(): VirtualNode | null {
+    return this.children.length > 0 ? this.children[0] : null
+  }
+
+  // lastChild - returns last child of any type
+  get lastChild(): VirtualNode | null {
+    return this.children.length > 0 ? this.children[this.children.length - 1] : null
+  }
+
+  // nextSibling - returns next sibling node of any type
+  get nextSibling(): VirtualNode | null {
+    if (!this.parentNode)
+      return null
+
+    const siblings = this.parentNode.children
+    const index = siblings.indexOf(this)
+    if (index === -1 || index >= siblings.length - 1)
+      return null
+
+    return siblings[index + 1]
+  }
+
+  // previousSibling - returns previous sibling node of any type
+  get previousSibling(): VirtualNode | null {
+    if (!this.parentNode)
+      return null
+
+    const siblings = this.parentNode.children
+    const index = siblings.indexOf(this)
+    if (index <= 0)
+      return null
+
+    return siblings[index - 1]
+  }
+
   get nextElementSibling(): VirtualElement | null {
     if (!this.parentNode)
       return null
@@ -224,8 +265,32 @@ export class VirtualElement implements VirtualNode {
     this.children = []
     if (html) {
       const nodes = parseHTML(html)
-      for (const node of nodes) {
-        this.appendChild(node)
+
+      // Special case: if we're the documentElement (<html>) and the parsed HTML
+      // contains an <html> element, extract its children instead of nesting
+      if (this.tagName === 'HTML' && nodes.length > 0) {
+        // Look for an <html> element in the parsed nodes
+        for (const node of nodes) {
+          if (node.nodeType === 'element') {
+            const element = node as VirtualElement
+            if (element.tagName === 'HTML') {
+              // Extract the <html> element's children (head, body, etc.)
+              for (const child of element.children) {
+                this.appendChild(child)
+              }
+              // Continue to process any remaining nodes
+              continue
+            }
+          }
+          // For non-html elements, append normally
+          this.appendChild(node)
+        }
+      }
+      else {
+        // Normal case: just append all parsed nodes
+        for (const node of nodes) {
+          this.appendChild(node)
+        }
       }
     }
   }
@@ -382,6 +447,58 @@ export class VirtualElement implements VirtualNode {
     else {
       this.removeAttribute('style')
     }
+  }
+
+  // Dataset property for data-* attributes
+  get dataset(): { [key: string]: string } {
+    const self = this
+
+    return new Proxy({}, {
+      get(target, prop: string): string {
+        // Convert camelCase to kebab-case
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        return self.getAttribute(`data-${kebabProp}`) || ''
+      },
+      set(target, prop: string, value: string): boolean {
+        // Convert camelCase to kebab-case
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        self.setAttribute(`data-${kebabProp}`, value)
+        return true
+      },
+      deleteProperty(target, prop: string): boolean {
+        // Convert camelCase to kebab-case
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        self.removeAttribute(`data-${kebabProp}`)
+        return true
+      },
+      has(target, prop: string): boolean {
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        return self.hasAttribute(`data-${kebabProp}`)
+      },
+      ownKeys(target): string[] {
+        const dataAttrs: string[] = []
+        for (const [key] of self.attributes) {
+          if (key.startsWith('data-')) {
+            // Convert data-kebab-case to camelCase
+            const camelKey = key.slice(5).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+            dataAttrs.push(camelKey)
+          }
+        }
+        return dataAttrs
+      },
+      getOwnPropertyDescriptor(target, prop: string) {
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        if (self.hasAttribute(`data-${kebabProp}`)) {
+          return {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: self.getAttribute(`data-${kebabProp}`),
+          }
+        }
+        return undefined
+      },
+    })
   }
 
   // Form validation
@@ -598,8 +715,16 @@ export class VirtualElement implements VirtualNode {
     }
   }
 
-  dispatchEvent(event: VirtualEvent): boolean {
-    event.target = this
+  dispatchEvent(event: any): boolean {
+    // Try to set target and currentTarget if they're writable
+    // Native Event objects have readonly properties, so we need to handle that
+    try {
+      event.target = this
+      event.currentTarget = this
+    }
+    catch {
+      // If properties are readonly, that's okay - native Events set these automatically
+    }
 
     // Capture phase - traverse from root to target
     const path: VirtualElement[] = []
@@ -609,30 +734,50 @@ export class VirtualElement implements VirtualNode {
       current = current.parentNode
     }
 
+    // Get event properties safely
+    const isPropagationStopped = () => event.propagationStopped || event._propagationStopped || false
+    const isImmediatePropagationStopped = () => event.immediatePropagationStopped || event._immediatePropagationStopped || false
+
     // Capture phase
-    for (let i = 0; i < path.length - 1 && !event.propagationStopped; i++) {
+    for (let i = 0; i < path.length - 1 && !isPropagationStopped(); i++) {
       const element = path[i]
-      event.currentTarget = element
+      try {
+        event.currentTarget = element
+      }
+      catch {
+        // Ignore if readonly
+      }
       this._invokeEventListeners(element, event, true)
     }
 
     // Target phase
-    if (!event.propagationStopped) {
-      event.currentTarget = this
+    if (!isPropagationStopped()) {
+      try {
+        event.currentTarget = this
+      }
+      catch {
+        // Ignore if readonly
+      }
       this._invokeEventListeners(this, event, false)
       this._invokeEventListeners(this, event, true)
     }
 
     // Bubble phase
-    if (event.bubbles && !event.propagationStopped) {
-      for (let i = path.length - 2; i >= 0 && !event.propagationStopped; i--) {
+    const bubbles = event.bubbles ?? true
+    if (bubbles && !isPropagationStopped()) {
+      for (let i = path.length - 2; i >= 0 && !isPropagationStopped(); i--) {
         const element = path[i]
-        event.currentTarget = element
+        try {
+          event.currentTarget = element
+        }
+        catch {
+          // Ignore if readonly
+        }
         this._invokeEventListeners(element, event, false)
       }
     }
 
-    return !event.defaultPrevented
+    return !(event.defaultPrevented ?? false)
   }
 
   private _invokeEventListeners(element: VirtualElement, event: VirtualEvent, capture: boolean): void {

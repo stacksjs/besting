@@ -168,8 +168,9 @@ export function parseHTML(html: string): VirtualNode[] {
       if (peek() === '<') {
         const node = parseTag()
         if (node === null) {
-          // Closing tag encountered
-          break
+          // DOCTYPE or closing tag - skip it and continue
+          // (expected closing tags are already handled above)
+          continue
         }
         children.push(node)
       }

@@ -84,19 +84,18 @@ group('🎯 querySelectorAll(".flex-shrink-0")', () => {
     doc.querySelectorAll('.flex-shrink-0')
   })
 
-  // Uncomment when dependencies are installed:
-  // bench('HappyDOM', () => {
-  //   const { Window } = require('happy-dom')
-  //   const window = new Window()
-  //   window.document.write(HTMLPage)
-  //   window.document.querySelectorAll('.flex-shrink-0')
-  // })
+  bench('HappyDOM', () => {
+    const { Window } = require('happy-dom')
+    const window = new Window()
+    window.document.write(HTMLPage)
+    window.document.querySelectorAll('.flex-shrink-0')
+  })
 
-  // bench('JSDOM', () => {
-  //   const { JSDOM } = require('jsdom')
-  //   const dom = new JSDOM(HTMLPage)
-  //   dom.window.document.querySelectorAll('.flex-shrink-0')
-  // })
+  bench('JSDOM', () => {
+    const { JSDOM } = require('jsdom')
+    const dom = new JSDOM(HTMLPage)
+    dom.window.document.querySelectorAll('.flex-shrink-0')
+  })
 })
 
 // Benchmark Group 5: querySelector (Attribute)
@@ -107,19 +106,18 @@ group('🏷️  querySelectorAll("[aria-label]")', () => {
     doc.querySelectorAll('[aria-label]')
   })
 
-  // Uncomment when dependencies are installed:
-  // bench('HappyDOM', () => {
-  //   const { Window } = require('happy-dom')
-  //   const window = new Window()
-  //   window.document.write(HTMLPage)
-  //   window.document.querySelectorAll('[aria-label]')
-  // })
+  bench('HappyDOM', () => {
+    const { Window } = require('happy-dom')
+    const window = new Window()
+    window.document.write(HTMLPage)
+    window.document.querySelectorAll('[aria-label]')
+  })
 
-  // bench('JSDOM', () => {
-  //   const { JSDOM } = require('jsdom')
-  //   const dom = new JSDOM(HTMLPage)
-  //   dom.window.document.querySelectorAll('[aria-label]')
-  // })
+  bench('JSDOM', () => {
+    const { JSDOM } = require('jsdom')
+    const dom = new JSDOM(HTMLPage)
+    dom.window.document.querySelectorAll('[aria-label]')
+  })
 })
 
 // Benchmark Group 6: querySelector (Attribute Contains)
@@ -130,19 +128,18 @@ group('🔎 querySelectorAll(\'[class~="flex-shrink-0"]\')', () => {
     doc.querySelectorAll('[class~="flex-shrink-0"]')
   })
 
-  // Uncomment when dependencies are installed:
-  // bench('HappyDOM', () => {
-  //   const { Window } = require('happy-dom')
-  //   const window = new Window()
-  //   window.document.write(HTMLPage)
-  //   window.document.querySelectorAll('[class~="flex-shrink-0"]')
-  // })
+  bench('HappyDOM', () => {
+    const { Window } = require('happy-dom')
+    const window = new Window()
+    window.document.write(HTMLPage)
+    window.document.querySelectorAll('[class~="flex-shrink-0"]')
+  })
 
-  // bench('JSDOM', () => {
-  //   const { JSDOM } = require('jsdom')
-  //   const dom = new JSDOM(HTMLPage)
-  //   dom.window.document.querySelectorAll('[class~="flex-shrink-0"]')
-  // })
+  bench('JSDOM', () => {
+    const { JSDOM } = require('jsdom')
+    const dom = new JSDOM(HTMLPage)
+    dom.window.document.querySelectorAll('[class~="flex-shrink-0"]')
+  })
 })
 
 // Benchmark Group 7: querySelector (Pseudo-class)
@@ -153,19 +150,156 @@ group('🎭 querySelectorAll(":nth-child(2n+1)")', () => {
     doc.querySelectorAll(':nth-child(2n+1)')
   })
 
-  // Uncomment when dependencies are installed:
-  // bench('HappyDOM', () => {
-  //   const { Window } = require('happy-dom')
-  //   const window = new Window()
-  //   window.document.write(HTMLPage)
-  //   window.document.querySelectorAll(':nth-child(2n+1)')
-  // })
+  bench('HappyDOM', () => {
+    const { Window } = require('happy-dom')
+    const window = new Window()
+    window.document.write(HTMLPage)
+    window.document.querySelectorAll(':nth-child(2n+1)')
+  })
 
-  // bench('JSDOM', () => {
-  //   const { JSDOM } = require('jsdom')
-  //   const dom = new JSDOM(HTMLPage)
-  //   dom.window.document.querySelectorAll(':nth-child(2n+1)')
-  // })
+  bench('JSDOM', () => {
+    const { JSDOM } = require('jsdom')
+    const dom = new JSDOM(HTMLPage)
+    dom.window.document.querySelectorAll(':nth-child(2n+1)')
+  })
+})
+
+// Benchmark Group 8: DOM Manipulation
+group('⚡ DOM Manipulation (Build 100-item list)', () => {
+  bench('VeryHappyDOM', () => {
+    const doc = createVeryHappyDocument()
+    const ul = doc.createElement('ul')
+
+    for (let i = 0; i < 100; i++) {
+      const li = doc.createElement('li')
+      li.textContent = `Item ${i}`
+      li.setAttribute('data-id', i.toString())
+      ul.appendChild(li)
+    }
+
+    doc.body!.appendChild(ul)
+  })
+
+  bench('HappyDOM', () => {
+    const { Window } = require('happy-dom')
+    const window = new Window()
+    const ul = window.document.createElement('ul')
+
+    for (let i = 0; i < 100; i++) {
+      const li = window.document.createElement('li')
+      li.textContent = `Item ${i}`
+      li.setAttribute('data-id', i.toString())
+      ul.appendChild(li)
+    }
+
+    window.document.body.appendChild(ul)
+  })
+
+  bench('JSDOM', () => {
+    const { JSDOM } = require('jsdom')
+    const dom = new JSDOM()
+    const ul = dom.window.document.createElement('ul')
+
+    for (let i = 0; i < 100; i++) {
+      const li = dom.window.document.createElement('li')
+      li.textContent = `Item ${i}`
+      li.setAttribute('data-id', i.toString())
+      ul.appendChild(li)
+    }
+
+    dom.window.document.body.appendChild(ul)
+  })
+})
+
+// Benchmark Group 9: Attribute Operations
+group('📋 Attribute Operations (100 get/set)', () => {
+  bench('VeryHappyDOM', () => {
+    const doc = createVeryHappyDocument()
+    const el = doc.createElement('div')
+
+    for (let i = 0; i < 100; i++) {
+      el.setAttribute(`attr-${i}`, `value-${i}`)
+      el.getAttribute(`attr-${i}`)
+    }
+  })
+
+  bench('HappyDOM', () => {
+    const { Window } = require('happy-dom')
+    const window = new Window()
+    const el = window.document.createElement('div')
+
+    for (let i = 0; i < 100; i++) {
+      el.setAttribute(`attr-${i}`, `value-${i}`)
+      el.getAttribute(`attr-${i}`)
+    }
+  })
+
+  bench('JSDOM', () => {
+    const { JSDOM } = require('jsdom')
+    const dom = new JSDOM()
+    const el = dom.window.document.createElement('div')
+
+    for (let i = 0; i < 100; i++) {
+      el.setAttribute(`attr-${i}`, `value-${i}`)
+      el.getAttribute(`attr-${i}`)
+    }
+  })
+})
+
+// Benchmark Group 10: Real-World Scenario - Data Table
+group('🌍 Real-World: Build Data Table (20×5)', () => {
+  bench('VeryHappyDOM', () => {
+    const doc = createVeryHappyDocument()
+    const table = doc.createElement('table')
+
+    for (let i = 0; i < 20; i++) {
+      const row = doc.createElement('tr')
+      for (let j = 0; j < 5; j++) {
+        const cell = doc.createElement('td')
+        cell.textContent = `Cell ${i},${j}`
+        row.appendChild(cell)
+      }
+      table.appendChild(row)
+    }
+
+    doc.body!.appendChild(table)
+  })
+
+  bench('HappyDOM', () => {
+    const { Window } = require('happy-dom')
+    const window = new Window()
+    const table = window.document.createElement('table')
+
+    for (let i = 0; i < 20; i++) {
+      const row = window.document.createElement('tr')
+      for (let j = 0; j < 5; j++) {
+        const cell = window.document.createElement('td')
+        cell.textContent = `Cell ${i},${j}`
+        row.appendChild(cell)
+      }
+      table.appendChild(row)
+    }
+
+    window.document.body.appendChild(table)
+  })
+
+  bench('JSDOM', () => {
+    const { JSDOM } = require('jsdom')
+    const dom = new JSDOM()
+    const table = dom.window.document.createElement('table')
+
+    for (let i = 0; i < 20; i++) {
+      const row = dom.window.document.createElement('tr')
+      for (let j = 0; j < 5; j++) {
+        const cell = dom.window.document.createElement('td')
+        cell.textContent = `Cell ${i},${j}`
+        row.appendChild(cell)
+      }
+      table.appendChild(row)
+    }
+
+    dom.window.document.body.appendChild(table)
+  })
 })
 
 // Run benchmarks
@@ -177,6 +311,4 @@ await run({
   colors: true,
 })
 
-console.log('\n💡 To enable HappyDOM and JSDOM comparisons:')
-console.log('   bun add -d happy-dom jsdom')
-console.log('   Then uncomment the benchmark code in competitive-comparison.bench.ts\n')
+console.log('\n✅ All competitive benchmarks completed!')
