@@ -3,7 +3,7 @@
  * Storage, Timers, Waiting Utilities, Network APIs, Events, etc.
  */
 
-import { Browser, Window, MutationObserver, CustomEvent } from '../src/index'
+import { Browser, Window, MutationObserver, CustomEvent } from '../../src/index'
 
 let passed = 0
 let failed = 0

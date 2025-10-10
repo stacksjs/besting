@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { createDocument, parseHTML, VirtualElement } from '../src'
+import { createDocument, parseHTML, VirtualElement } from '../../src'
 
 describe('DOM Edge Cases', () => {
   describe('Element Creation and Manipulation', () => {

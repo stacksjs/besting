@@ -3,7 +3,7 @@
  * Event Emitters, XPath, Observers, XMLHttpRequest, Screenshot/PDF
  */
 
-import { Browser, Window, IntersectionObserver, ResizeObserver, XMLHttpRequest, XPathResultType } from '../src/index'
+import { Browser, Window, IntersectionObserver, ResizeObserver, XMLHttpRequest, XPathResultType } from '../../src/index'
 
 let passed = 0
 let failed = 0

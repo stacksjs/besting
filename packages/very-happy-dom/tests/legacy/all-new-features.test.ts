@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { createDocument } from '../src'
+import { createDocument } from '../../src'
 
 describe('DOM Manipulation Methods', () => {
   test('insertBefore should insert node before reference', () => {

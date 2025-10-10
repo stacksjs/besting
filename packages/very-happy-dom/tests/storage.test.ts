@@ -58,12 +58,12 @@ console.log('\nTest Group 2: localStorage - Bracket Notation')
   window.localStorage['bracket2'] = 123
   assert(window.localStorage['bracket2'] === '123', 'Bracket notation auto-converts to string')
 
-  // Mixed access methods
-  window.localStorage.setItem('key', 'method')
-  assert(window.localStorage['key'] === 'method', 'setItem accessible via bracket')
+  // Mixed access methods (avoid 'key' name which is a method)
+  window.localStorage.setItem('mixed1', 'method')
+  assert(window.localStorage['mixed1'] === 'method', 'setItem accessible via bracket')
 
-  window.localStorage['key2'] = 'bracket'
-  assert(window.localStorage.getItem('key2') === 'bracket', 'Bracket accessible via getItem')
+  window.localStorage['mixed2'] = 'bracket'
+  assert(window.localStorage.getItem('mixed2') === 'bracket', 'Bracket accessible via getItem')
 
   await window.happyDOM.close()
 }

@@ -376,10 +376,18 @@ export class VirtualElement implements VirtualNode {
     }
     if (node.nodeType === 'element') {
       const element = node as VirtualElement
-      let html = `<${element.tagName.toLowerCase()}`
+      const tagName = element.tagName.toLowerCase()
+      let html = `<${tagName}`
 
       for (const [name, value] of element.attributes) {
         html += ` ${name}="${value}"`
+      }
+
+      // Check if this is a void element (self-closing tag)
+      const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']
+      if (voidElements.includes(tagName)) {
+        html += '/>'
+        return html
       }
 
       html += '>'
@@ -388,7 +396,7 @@ export class VirtualElement implements VirtualNode {
         html += this._serializeNode(child)
       }
 
-      html += `</${element.tagName.toLowerCase()}>`
+      html += `</${tagName}>`
       return html
     }
     return ''
@@ -425,7 +433,7 @@ export class VirtualElement implements VirtualNode {
           // Convert camelCase to kebab-case
           const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
           const value = self._internalStyles.get(kebabProp)
-          return value !== undefined ? value : ''
+          return value
         },
         set(target, prop: string, value: string) {
           // Convert camelCase to kebab-case

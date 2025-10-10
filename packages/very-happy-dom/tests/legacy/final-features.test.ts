@@ -3,7 +3,7 @@
  * Tests all 15 newly implemented features
  */
 
-import { Browser, Window } from '../src/index'
+import { Browser, Window } from '../../src/index'
 
 let passed = 0
 let failed = 0

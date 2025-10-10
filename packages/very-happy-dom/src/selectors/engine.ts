@@ -218,11 +218,14 @@ export function matchesSimpleSelector(element: VirtualElement, selector: string)
     return true
   }
 
+  // Remove pseudo-class content before parsing other parts to avoid matching inside pseudo-classes
+  const selectorWithoutPseudo = selector.replace(/:([a-zA-Z-]+)\([^)]*\)/g, ':$1')
+
   // Parse selector parts (tag, id, classes, attributes, pseudo-classes)
-  const tagMatch = selector.match(/^([a-zA-Z0-9-]+)/)
-  const idMatch = selector.match(/#([a-zA-Z0-9-_]+)/)
-  const classMatches = selector.match(/\.([a-zA-Z0-9-_]+)/g)
-  const attrMatches = selector.match(/\[([^\]]+)\]/g)
+  const tagMatch = selectorWithoutPseudo.match(/^([a-zA-Z0-9-]+)/)
+  const idMatch = selectorWithoutPseudo.match(/#([a-zA-Z0-9-_]+)/)
+  const classMatches = selectorWithoutPseudo.match(/\.([a-zA-Z0-9-_]+)/g)
+  const attrMatches = selectorWithoutPseudo.match(/\[([^\]]+)\]/g)
   const pseudoMatches = selector.match(/:([a-zA-Z-]+)(\([^)]*\))?/g)
 
   // Check tag name
@@ -281,11 +284,16 @@ export function matchesPseudoClass(element: VirtualElement, pseudo: string): boo
 
   switch (pseudoName) {
     case 'first-child':
-      return element.parentNode?.children[0] === element
+      {
+        // Only consider element children (not text nodes)
+        const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
+        return siblings[0] === element
+      }
 
     case 'last-child':
       {
-        const siblings = element.parentNode?.children || []
+        // Only consider element children (not text nodes)
+        const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
         return siblings[siblings.length - 1] === element
       }
 

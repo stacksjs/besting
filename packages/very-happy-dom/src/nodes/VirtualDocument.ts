@@ -268,13 +268,45 @@ export class VirtualDocument implements VirtualNode {
 
   // Get computed styles
   getComputedStyle(element: VirtualElement): any {
-    // For now, just return the inline styles with direct property access
-    // In a full implementation, this would include default styles and cascaded styles
+    // Define default display values for common elements
+    const defaultDisplay: Record<string, string> = {
+      'DIV': 'block',
+      'P': 'block',
+      'H1': 'block',
+      'H2': 'block',
+      'H3': 'block',
+      'H4': 'block',
+      'H5': 'block',
+      'H6': 'block',
+      'UL': 'block',
+      'OL': 'block',
+      'LI': 'list-item',
+      'TABLE': 'table',
+      'TR': 'table-row',
+      'TD': 'table-cell',
+      'TH': 'table-cell',
+      'SPAN': 'inline',
+      'A': 'inline',
+      'EM': 'inline',
+      'STRONG': 'inline',
+      'SCRIPT': 'none',
+      'STYLE': 'none',
+      'HEAD': 'none',
+    }
+
     const self = element
     return new Proxy(
       {
         getPropertyValue(property: string): string {
-          return self.style.getPropertyValue(property)
+          const value = self.style.getPropertyValue(property)
+          if (value) return value
+
+          // Return default display value for the element type
+          if (property === 'display' && !value) {
+            return defaultDisplay[self.tagName] || 'block'
+          }
+
+          return value || ''
         },
       },
       {
@@ -284,7 +316,15 @@ export class VirtualDocument implements VirtualNode {
           }
           // Convert camelCase to kebab-case
           const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
-          return self.style.getPropertyValue(kebabProp)
+          const value = self.style.getPropertyValue(kebabProp)
+          if (value) return value
+
+          // Return default display value for the element type
+          if (kebabProp === 'display' && !value) {
+            return defaultDisplay[self.tagName] || 'block'
+          }
+
+          return value || ''
         },
       },
     )

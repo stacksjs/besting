@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { createDocument, parseHTML } from '../src'
+import { createDocument, parseHTML } from '../../src'
 
 describe('Virtual DOM', () => {
   test('should create a document', () => {
