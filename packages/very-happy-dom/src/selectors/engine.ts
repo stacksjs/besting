@@ -2,17 +2,79 @@ import type { VirtualElement } from '../nodes/VirtualElement'
 import type { VirtualNode } from '../nodes/VirtualNode'
 
 /**
- * Main querySelector engine that finds the first matching element
+ * Finds the first element matching the CSS selector starting from the given root node.
+ *
+ * @param root - The root node to search from (inclusive)
+ * @param selector - CSS selector string (supports tags, classes, IDs, attributes, pseudo-classes, and combinators)
+ * @returns The first matching VirtualElement, or null if no match is found
+ * @throws {Error} If selector syntax is invalid
+ *
+ * @example
+ * ```typescript
+ * const element = querySelectorEngine(document, 'div.container > p#intro')
+ * ```
  */
 export function querySelectorEngine(root: VirtualNode, selector: string): VirtualElement | null {
+  if (!selector || typeof selector !== 'string') {
+    throw new TypeError('Selector must be a non-empty string')
+  }
+
+  if (!selector.trim()) {
+    throw new Error('Failed to execute \'querySelector\': The provided selector is empty')
+  }
+
   const results = querySelectorAllEngine(root, selector)
   return results.length > 0 ? results[0] : null
 }
 
 /**
- * Main querySelectorAll engine that finds all matching elements
+ * Finds all elements matching the CSS selector starting from the given root node.
+ * Traverses the DOM tree depth-first and returns matching elements in document order.
+ *
+ * @param root - The root node to search from (inclusive)
+ * @param selector - CSS selector string supporting:
+ *   - Tag selectors: `div`, `span`
+ *   - Class selectors: `.class-name`
+ *   - ID selectors: `#element-id`
+ *   - Attribute selectors: `[attr]`, `[attr="value"]`, `[attr^="value"]`, `[attr$="value"]`, `[attr*="value"]`, `[attr~="word"]`
+ *   - Pseudo-classes: `:first-child`, `:last-child`, `:first-of-type`, `:last-of-type`, `:only-child`, `:only-of-type`, `:nth-child()`, `:nth-last-child()`, `:nth-of-type()`, `:nth-last-of-type()`, `:not()`, `:disabled`, `:enabled`, `:checked`, `:empty`
+ *   - Combinators: ` ` (descendant), `>` (child), `+` (adjacent sibling), `~` (general sibling)
+ * @returns Array of all matching VirtualElements in document order
+ * @throws {Error} If selector syntax is invalid
+ *
+ * @example
+ * ```typescript
+ * const buttons = querySelectorAllEngine(document, 'button[type="submit"]:not(:disabled)')
+ * ```
  */
 export function querySelectorAllEngine(root: VirtualNode, selector: string): VirtualElement[] {
+  if (!selector || typeof selector !== 'string') {
+    throw new TypeError('Selector must be a non-empty string')
+  }
+
+  if (!selector.trim()) {
+    throw new Error('Failed to execute \'querySelectorAll\': The provided selector is empty')
+  }
+
+  // Handle comma-separated selectors
+  if (selector.includes(',')) {
+    const selectors = selector.split(',').map(s => s.trim()).filter(Boolean)
+    const allResults: VirtualElement[] = []
+    const seen = new Set<VirtualElement>()
+
+    for (const individualSelector of selectors) {
+      const selectorResults = querySelectorAllEngine(root, individualSelector)
+      for (const element of selectorResults) {
+        if (!seen.has(element)) {
+          seen.add(element)
+          allResults.push(element)
+        }
+      }
+    }
+
+    return allResults
+  }
+
   const results: VirtualElement[] = []
 
   // Check if we have combinators in the selector
@@ -45,7 +107,12 @@ export function querySelectorAllEngine(root: VirtualNode, selector: string): Vir
 }
 
 /**
- * Check if selector contains combinators (>, +, ~, or space for descendant)
+ * Checks if a CSS selector contains any combinators (>, +, ~, or space).
+ * This helps optimize selector matching by using simpler logic for simple selectors.
+ *
+ * @param selector - CSS selector string to analyze
+ * @returns True if the selector contains any combinator characters
+ * @internal
  */
 export function hasCombinators(selector: string): boolean {
   // Remove content within brackets and pseudo-classes to avoid false positives
@@ -58,7 +125,14 @@ export function hasCombinators(selector: string): boolean {
 }
 
 /**
- * Match complex selectors with combinators
+ * Tests if an element matches a complex selector containing combinators.
+ * Uses right-to-left matching (starting from the element itself) for efficiency.
+ *
+ * @param element - The element to test
+ * @param selector - Complex CSS selector with combinators
+ * @param root - Root node to limit ancestor traversal
+ * @returns True if the element matches the complex selector
+ * @internal
  */
 export function matchesComplexSelector(element: VirtualElement, selector: string, root: VirtualNode): boolean {
   const parts = parseComplexSelector(selector)
@@ -83,23 +157,25 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
 
     const nextPart = parts[partIndex]
 
-    // Apply combinator
+    // Apply combinator to navigate to the next element to check
     switch (nextPart.combinator) {
-      case '>': // Child combinator
+      case '>': // Child combinator - move to direct parent
         currentElement = currentElement.parentNode as VirtualElement | null
         if (!currentElement || currentElement.nodeType !== 'element') {
           return false
         }
+        // Loop will check if parent matches nextPart.selector
         break
 
-      case '+': // Adjacent sibling combinator
+      case '+': // Adjacent sibling combinator - move to previous sibling
         currentElement = currentElement.previousElementSibling
         if (!currentElement) {
           return false
         }
+        // Loop will check if sibling matches nextPart.selector
         break
 
-      case '~': // General sibling combinator
+      case '~': // General sibling combinator - find any previous sibling
         {
           let found = false
           let sibling: VirtualElement | null = currentElement.previousElementSibling
@@ -114,10 +190,12 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
           if (!found) {
             return false
           }
+          // We already checked the match, so skip the check in next iteration
+          partIndex--
         }
         break
 
-      case ' ': // Descendant combinator
+      case ' ': // Descendant combinator - find any ancestor
         {
           let found = false
           let ancestor = currentElement.parentNode as VirtualElement | null
@@ -132,18 +210,29 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
           if (!found) {
             return false
           }
+          // We already checked the match, so skip the check in next iteration
+          partIndex--
         }
         break
     }
-
-    partIndex--
   }
 
   return true
 }
 
 /**
- * Parse complex selector into parts with combinators
+ * Parses a complex CSS selector into individual selector parts and their combinators.
+ * Handles nested pseudo-classes and attribute selectors correctly.
+ *
+ * @param selector - Complex CSS selector to parse
+ * @returns Array of selector parts with their following combinators
+ * @internal
+ *
+ * @example
+ * ```typescript
+ * parseComplexSelector('div > p.intro')
+ * // Returns: [{ selector: 'div', combinator: '>' }, { selector: 'p.intro', combinator: null }]
+ * ```
  */
 export function parseComplexSelector(selector: string): Array<{ selector: string, combinator: string | null }> {
   const parts: Array<{ selector: string, combinator: string | null }> = []
@@ -238,7 +327,17 @@ export function parseComplexSelector(selector: string): Array<{ selector: string
 }
 
 /**
- * Match simple selector (no combinators)
+ * Tests if an element matches a simple selector (without combinators).
+ * Supports tag names, IDs, classes, attributes, and pseudo-classes.
+ *
+ * @param element - The element to test
+ * @param selector - Simple CSS selector (no combinators)
+ * @returns True if the element matches all parts of the selector
+ *
+ * @example
+ * ```typescript
+ * matchesSimpleSelector(element, 'button.primary[disabled]')
+ * ```
  */
 export function matchesSimpleSelector(element: VirtualElement, selector: string): boolean {
   // Handle universal selector
@@ -300,12 +399,34 @@ export function matchesSimpleSelector(element: VirtualElement, selector: string)
 }
 
 /**
- * Match pseudo-class selectors
+ * Tests if an element matches a pseudo-class selector.
+ *
+ * Supported pseudo-classes:
+ * - `:first-child` - First element child of parent
+ * - `:last-child` - Last element child of parent
+ * - `:first-of-type` - First element of its type among siblings
+ * - `:last-of-type` - Last element of its type among siblings
+ * - `:only-child` - Only element child of parent
+ * - `:only-of-type` - Only element of its type among siblings
+ * - `:nth-child(n)` - Nth element child (supports 'odd', 'even', numbers, and An+B notation like '2n+1')
+ * - `:nth-last-child(n)` - Nth element child from the end
+ * - `:nth-of-type(n)` - Nth element of its type (supports An+B notation)
+ * - `:nth-last-of-type(n)` - Nth element of its type from the end
+ * - `:not(selector)` - Elements that don't match the selector
+ * - `:disabled` - Elements with disabled attribute
+ * - `:enabled` - Elements without disabled attribute
+ * - `:checked` - Elements with checked attribute
+ * - `:empty` - Elements with no children
+ *
+ * @param element - The element to test
+ * @param pseudo - Pseudo-class selector (e.g., ':first-child', ':nth-child(2n+1)')
+ * @returns True if the element matches the pseudo-class
  */
 export function matchesPseudoClass(element: VirtualElement, pseudo: string): boolean {
   const pseudoMatch = pseudo.match(/:([a-zA-Z-]+)(\(([^)]*)\))?/)
-  if (!pseudoMatch)
-    return false
+  if (!pseudoMatch) {
+    throw new Error(`Invalid pseudo-class selector: "${pseudo}"`)
+  }
 
   const pseudoName = pseudoMatch[1]
   const pseudoArg = pseudoMatch[3]
@@ -368,13 +489,155 @@ export function matchesPseudoClass(element: VirtualElement, pseudo: string): boo
     case 'empty':
       return element.children.length === 0
 
+    case 'first-of-type':
+      {
+        if (!element.parentNode)
+          return false
+        const siblings = element.parentNode.children.filter(
+          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+        )
+        return siblings[0] === element
+      }
+
+    case 'last-of-type':
+      {
+        if (!element.parentNode)
+          return false
+        const siblings = element.parentNode.children.filter(
+          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+        )
+        return siblings[siblings.length - 1] === element
+      }
+
+    case 'only-child':
+      {
+        if (!element.parentNode)
+          return false
+        const siblings = element.parentNode.children.filter(child => child.nodeType === 'element')
+        return siblings.length === 1 && siblings[0] === element
+      }
+
+    case 'only-of-type':
+      {
+        if (!element.parentNode)
+          return false
+        const siblings = element.parentNode.children.filter(
+          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+        )
+        return siblings.length === 1 && siblings[0] === element
+      }
+
+    case 'nth-of-type':
+      {
+        if (!pseudoArg || !element.parentNode)
+          return false
+        const siblings = element.parentNode.children.filter(
+          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+        )
+        const index = siblings.indexOf(element)
+        if (index === -1)
+          return false
+
+        const position = index + 1 // 1-indexed
+
+        if (pseudoArg === 'odd')
+          return position % 2 === 1
+        if (pseudoArg === 'even')
+          return position % 2 === 0
+
+        // Handle An+B notation (e.g., 2n+1, 3n, -n+6)
+        const anPlusBMatch = pseudoArg.match(/^(-?\d*)n([+-]\d+)?$/)
+        if (anPlusBMatch) {
+          const a = anPlusBMatch[1] === '' ? 1 : anPlusBMatch[1] === '-' ? -1 : Number.parseInt(anPlusBMatch[1], 10)
+          const b = anPlusBMatch[2] ? Number.parseInt(anPlusBMatch[2], 10) : 0
+
+          // Position must satisfy: position = a*n + b for some non-negative integer n
+          if (a === 0)
+            return position === b
+
+          const n = (position - b) / a
+          return n >= 0 && Number.isInteger(n)
+        }
+
+        const n = Number.parseInt(pseudoArg, 10)
+        if (!Number.isNaN(n))
+          return position === n
+
+        return false
+      }
+
+    case 'nth-last-child':
+      {
+        if (!pseudoArg || !element.parentNode)
+          return false
+        const siblings = element.parentNode.children.filter(child => child.nodeType === 'element')
+        const index = siblings.indexOf(element)
+        if (index === -1)
+          return false
+
+        const position = siblings.length - index // Position from the end (1-indexed)
+
+        if (pseudoArg === 'odd')
+          return position % 2 === 1
+        if (pseudoArg === 'even')
+          return position % 2 === 0
+
+        const n = Number.parseInt(pseudoArg, 10)
+        if (!Number.isNaN(n))
+          return position === n
+
+        return false
+      }
+
+    case 'nth-last-of-type':
+      {
+        if (!pseudoArg || !element.parentNode)
+          return false
+        const siblings = element.parentNode.children.filter(
+          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+        )
+        const index = siblings.indexOf(element)
+        if (index === -1)
+          return false
+
+        const position = siblings.length - index // Position from the end (1-indexed)
+
+        if (pseudoArg === 'odd')
+          return position % 2 === 1
+        if (pseudoArg === 'even')
+          return position % 2 === 0
+
+        const n = Number.parseInt(pseudoArg, 10)
+        if (!Number.isNaN(n))
+          return position === n
+
+        return false
+      }
+
     default:
-      return false
+      throw new Error(`Unsupported pseudo-class: ":${pseudoName}". Supported pseudo-classes are: :first-child, :last-child, :first-of-type, :last-of-type, :only-child, :only-of-type, :nth-child(), :nth-last-child(), :nth-of-type(), :nth-last-of-type(), :not(), :disabled, :enabled, :checked, :empty`)
   }
 }
 
 /**
- * Match attribute selectors with all operators
+ * Tests if an element matches an attribute selector.
+ *
+ * Supported attribute selectors:
+ * - `[attr]` - Has attribute
+ * - `[attr="value"]` - Exact match
+ * - `[attr^="value"]` - Starts with
+ * - `[attr$="value"]` - Ends with
+ * - `[attr*="value"]` - Contains substring
+ * - `[attr~="word"]` - Contains word (space-separated)
+ *
+ * @param element - The element to test
+ * @param attrSelector - Attribute selector content (without the brackets)
+ * @returns True if the element's attribute matches the selector
+ *
+ * @example
+ * ```typescript
+ * matchesAttributeSelector(element, 'href^="https"')  // Tests [href^="https"]
+ * ```
  */
 export function matchesAttributeSelector(element: VirtualElement, attrSelector: string): boolean {
   // [attr] - has attribute

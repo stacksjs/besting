@@ -56,7 +56,6 @@ console.log('\nTest Group 3: Boolean Attributes')
 {
   const window = createTestWindow()
   const input = window.document.createElement('input')
-  const button = window.document.createElement('button')
   const select = window.document.createElement('select')
 
   // disabled attribute

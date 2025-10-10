@@ -5,7 +5,9 @@
       "bun"
     ],
     "noEmit": true,
-    "isolatedDeclarations": true
+    "isolatedDeclarations": true,
+    "sourceMap": true,
+    "declarationMap": true
   },
   "include": [
     "src",
