@@ -220,6 +220,47 @@ export class VirtualDocument implements VirtualNode {
     }
   }
 
+  /**
+   * Writes HTML to the document
+   * Compatible with Happy DOM's document.write()
+   */
+  write(html: string): void {
+    // Parse the HTML
+    const nodes = parseHTML(html)
+
+    // If the HTML contains a full document structure, replace documentElement
+    for (const node of nodes) {
+      if (node.nodeType === 'element') {
+        const element = node as VirtualElement
+        if (element.tagName === 'HTML') {
+          // Replace the entire document structure
+          this.documentElement = element
+          element.parentNode = this
+
+          // Update head and body references
+          for (const child of element.children) {
+            if (child.nodeType === 'element') {
+              const childEl = child as VirtualElement
+              if (childEl.tagName === 'HEAD') {
+                this.head = childEl
+              } else if (childEl.tagName === 'BODY') {
+                this.body = childEl
+              }
+            }
+          }
+          return
+        }
+      }
+    }
+
+    // Otherwise, append to body
+    if (this.body) {
+      for (const node of nodes) {
+        this.body.appendChild(node)
+      }
+    }
+  }
+
   // Get computed styles
   getComputedStyle(element: VirtualElement): any {
     // For now, just return the inline styles with direct property access
