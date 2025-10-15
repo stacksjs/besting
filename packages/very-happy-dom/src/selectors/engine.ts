@@ -139,90 +139,103 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
 
   // Start from the rightmost part (the element itself)
   let currentElement: VirtualElement | null = element
-  let partIndex = parts.length - 1
+  let skipCheck = false
 
-  while (partIndex >= 0 && currentElement) {
-    const part = parts[partIndex]
+  // Process parts from right to left
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const part = parts[i]
 
-    // Check if current element matches the selector part
-    if (!matchesSimpleSelector(currentElement, part.selector)) {
+    // Check if current element matches this part's selector (unless we already verified it)
+    if (!skipCheck && !matchesSimpleSelector(currentElement, part.selector)) {
       return false
     }
+    skipCheck = false
 
-    // Move to next part
-    partIndex--
-    if (partIndex < 0) {
-      return true // All parts matched
+    // If this is the last part (leftmost), we're done
+    if (i === 0) {
+      return true
     }
 
-    const previousPart = parts[partIndex]
+    // Get the previous part (to the left) to determine how to navigate
+    // The combinator in the previous part describes the relationship TO the current part
+    const previousPart = parts[i - 1]
 
-    // Apply combinator to navigate to the next element to check
-    // The combinator in previousPart describes the relationship TO the current part
+    // Apply the combinator to find the next element to check
     switch (previousPart.combinator) {
-      case '>': // Child combinator - move to direct parent
+      case '>': {
+        // Child combinator - current element must be direct parent of what we just matched
         currentElement = currentElement.parentNode as VirtualElement | null
         if (!currentElement || currentElement.nodeType !== 'element') {
           return false
         }
-        // Loop will check if parent matches previousPart.selector
         break
+      }
 
-      case '+': // Adjacent sibling combinator - move to previous sibling
+      case '+': {
+        // Adjacent sibling - current element must be immediately before what we just matched
         currentElement = currentElement.previousElementSibling
         if (!currentElement) {
           return false
         }
-        // Loop will check if sibling matches previousPart.selector
         break
+      }
 
-      case '~': // General sibling combinator - find any previous sibling that matches
-        {
-          let found = false
-          let sibling: VirtualElement | null = currentElement.previousElementSibling
-          while (sibling) {
-            if (matchesSimpleSelector(sibling, previousPart.selector)) {
-              currentElement = sibling
-              found = true
-              break
-            }
-            sibling = sibling.previousElementSibling
-          }
-          if (!found) {
-            return false
-          }
-          // We found and verified the match, so decrement to skip the loop's check
-          partIndex--
-        }
-        break
+      case '~': {
+        // General sibling - find any previous sibling that matches the previous part
+        let found = false
+        let sibling: VirtualElement | null = currentElement.previousElementSibling
 
-      case ' ': // Descendant combinator - find any ancestor that matches
-        {
-          let found = false
-          let ancestor = currentElement.parentNode as VirtualElement | null
-          while (ancestor && ancestor.nodeType !== 'document') {
-            if (ancestor === root) {
-              // Check if root itself matches before stopping
-              if (root.nodeType === 'element' && matchesSimpleSelector(root as VirtualElement, previousPart.selector)) {
-                currentElement = root as VirtualElement
-                found = true
-              }
-              break
-            }
-            if (ancestor.nodeType === 'element' && matchesSimpleSelector(ancestor, previousPart.selector)) {
-              currentElement = ancestor
-              found = true
-              break
-            }
-            ancestor = ancestor.parentNode as VirtualElement | null
+        while (sibling) {
+          if (matchesSimpleSelector(sibling, previousPart.selector)) {
+            currentElement = sibling
+            found = true
+            break
           }
-          if (!found) {
-            return false
-          }
-          // We found and verified the match, so decrement to skip the loop's check
-          partIndex--
+          sibling = sibling.previousElementSibling
         }
+
+        if (!found) {
+          return false
+        }
+        // Found and verified match, skip checking in next iteration
+        i--
+        skipCheck = true
         break
+      }
+
+      case ' ': {
+        // Descendant combinator - find any ancestor that matches the previous part
+        let found = false
+        let ancestor = currentElement.parentNode as VirtualElement | null
+
+        while (ancestor && ancestor.nodeType !== 'document') {
+          // Stop if we've reached the root
+          if (ancestor === root) {
+            if (root.nodeType === 'element' && matchesSimpleSelector(root as VirtualElement, previousPart.selector)) {
+              currentElement = root as VirtualElement
+              found = true
+            }
+            break
+          }
+
+          if (ancestor.nodeType === 'element' && matchesSimpleSelector(ancestor, previousPart.selector)) {
+            currentElement = ancestor
+            found = true
+            break
+          }
+
+          ancestor = ancestor.parentNode as VirtualElement | null
+        }
+
+        if (!found) {
+          return false
+        }
+
+        // Found and verified match, skip checking in next iteration
+        i--
+        skipCheck = true
+        break
+      }
     }
   }
 
