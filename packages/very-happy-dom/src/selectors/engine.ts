@@ -155,16 +155,17 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
       return true // All parts matched
     }
 
-    const nextPart = parts[partIndex]
+    const previousPart = parts[partIndex]
 
     // Apply combinator to navigate to the next element to check
-    switch (nextPart.combinator) {
+    // The combinator in previousPart describes the relationship TO the current part
+    switch (previousPart.combinator) {
       case '>': // Child combinator - move to direct parent
         currentElement = currentElement.parentNode as VirtualElement | null
         if (!currentElement || currentElement.nodeType !== 'element') {
           return false
         }
-        // Loop will check if parent matches nextPart.selector
+        // Loop will check if parent matches previousPart.selector
         break
 
       case '+': // Adjacent sibling combinator - move to previous sibling
@@ -172,15 +173,15 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
         if (!currentElement) {
           return false
         }
-        // Loop will check if sibling matches nextPart.selector
+        // Loop will check if sibling matches previousPart.selector
         break
 
-      case '~': // General sibling combinator - find any previous sibling
+      case '~': // General sibling combinator - find any previous sibling that matches
         {
           let found = false
           let sibling: VirtualElement | null = currentElement.previousElementSibling
           while (sibling) {
-            if (matchesSimpleSelector(sibling, nextPart.selector)) {
+            if (matchesSimpleSelector(sibling, previousPart.selector)) {
               currentElement = sibling
               found = true
               break
@@ -190,17 +191,25 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
           if (!found) {
             return false
           }
-          // We already checked the match, so skip the check in next iteration
+          // We found and verified the match, so decrement to skip the loop's check
           partIndex--
         }
         break
 
-      case ' ': // Descendant combinator - find any ancestor
+      case ' ': // Descendant combinator - find any ancestor that matches
         {
           let found = false
           let ancestor = currentElement.parentNode as VirtualElement | null
-          while (ancestor && ancestor !== root) {
-            if (ancestor.nodeType === 'element' && matchesSimpleSelector(ancestor, nextPart.selector)) {
+          while (ancestor && ancestor.nodeType !== 'document') {
+            if (ancestor === root) {
+              // Check if root itself matches before stopping
+              if (root.nodeType === 'element' && matchesSimpleSelector(root as VirtualElement, previousPart.selector)) {
+                currentElement = root as VirtualElement
+                found = true
+              }
+              break
+            }
+            if (ancestor.nodeType === 'element' && matchesSimpleSelector(ancestor, previousPart.selector)) {
               currentElement = ancestor
               found = true
               break
@@ -210,7 +219,7 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
           if (!found) {
             return false
           }
-          // We already checked the match, so skip the check in next iteration
+          // We found and verified the match, so decrement to skip the loop's check
           partIndex--
         }
         break
