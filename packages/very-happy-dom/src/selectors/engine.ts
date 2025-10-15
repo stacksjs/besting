@@ -88,7 +88,10 @@ export function querySelectorAllEngine(root: VirtualNode, selector: string): Vir
         traverse(child)
       }
     }
-    traverse(root)
+    // Start from children, not root (querySelectorAll should only return descendants)
+    for (const child of root.children) {
+      traverse(child)
+    }
   }
   else {
     // Simple selector - no combinators
@@ -100,7 +103,10 @@ export function querySelectorAllEngine(root: VirtualNode, selector: string): Vir
         traverse(child)
       }
     }
-    traverse(root)
+    // Start from children, not root (querySelectorAll should only return descendants)
+    for (const child of root.children) {
+      traverse(child)
+    }
   }
 
   return results

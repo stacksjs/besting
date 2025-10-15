@@ -10,12 +10,17 @@ export class VirtualElement implements VirtualNode {
   nodeValue: string | null = null
   tagName: string
   attributes = new Map<string, string>()
-  children: VirtualNode[] = []
+  childNodes: VirtualNode[] = []
   parentNode: VirtualNode | null = null
   shadowRoot: ShadowRoot | null = null
   private eventListeners = new Map<string, EventListener[]>()
   private _customValidity = ''
   private _internalStyles = new Map<string, string>()
+
+  // children should only contain element nodes, per DOM spec
+  get children(): VirtualNode[] {
+    return this.childNodes.filter(node => node.nodeType === 'element')
+  }
 
   constructor(tagName: string) {
     this.tagName = tagName.toUpperCase()
@@ -44,25 +49,25 @@ export class VirtualElement implements VirtualNode {
     // Don't remove from previous parent - allow same child to be appended multiple times
     // if (child.parentNode) {
     //   const prevParent = child.parentNode as VirtualElement
-    //   const index = prevParent.children.indexOf(child)
+    //   const index = prevParent.childNodes.indexOf(child)
     //   if (index !== -1) {
-    //     prevParent.children.splice(index, 1)
+    //     prevParent.childNodes.splice(index, 1)
     //   }
     // }
 
-    this.children.push(child)
+    this.childNodes.push(child)
     child.parentNode = this
     return child
   }
 
   removeChild(child: VirtualNode): VirtualNode {
-    const index = this.children.indexOf(child)
+    const index = this.childNodes.indexOf(child)
     if (index === -1) {
       // Don't throw - just return the child
       return child
     }
 
-    this.children.splice(index, 1)
+    this.childNodes.splice(index, 1)
     child.parentNode = null
     return child
   }
@@ -72,7 +77,7 @@ export class VirtualElement implements VirtualNode {
       return this.appendChild(newNode)
     }
 
-    const index = this.children.indexOf(referenceNode)
+    const index = this.childNodes.indexOf(referenceNode)
     if (index === -1) {
       throw new Error('Reference node not found')
     }
@@ -80,19 +85,19 @@ export class VirtualElement implements VirtualNode {
     // Remove from previous parent if any
     if (newNode.parentNode) {
       const prevParent = newNode.parentNode as VirtualElement
-      const prevIndex = prevParent.children.indexOf(newNode)
+      const prevIndex = prevParent.childNodes.indexOf(newNode)
       if (prevIndex !== -1) {
-        prevParent.children.splice(prevIndex, 1)
+        prevParent.childNodes.splice(prevIndex, 1)
       }
     }
 
-    this.children.splice(index, 0, newNode)
+    this.childNodes.splice(index, 0, newNode)
     newNode.parentNode = this
     return newNode
   }
 
   replaceChild(newNode: VirtualNode, oldNode: VirtualNode): VirtualNode {
-    const index = this.children.indexOf(oldNode)
+    const index = this.childNodes.indexOf(oldNode)
     if (index === -1) {
       throw new Error('Old node not found')
     }
@@ -100,13 +105,13 @@ export class VirtualElement implements VirtualNode {
     // Remove from previous parent if any
     if (newNode.parentNode) {
       const prevParent = newNode.parentNode as VirtualElement
-      const prevIndex = prevParent.children.indexOf(newNode)
+      const prevIndex = prevParent.childNodes.indexOf(newNode)
       if (prevIndex !== -1) {
-        prevParent.children.splice(prevIndex, 1)
+        prevParent.childNodes.splice(prevIndex, 1)
       }
     }
 
-    this.children.splice(index, 1, newNode)
+    this.childNodes.splice(index, 1, newNode)
     oldNode.parentNode = null
     newNode.parentNode = this
     return oldNode
@@ -122,7 +127,7 @@ export class VirtualElement implements VirtualNode {
 
     // Deep clone children
     if (deep) {
-      for (const child of this.children) {
+      for (const child of this.childNodes) {
         if (child.nodeType === 'element') {
           const childClone = (child as VirtualElement).cloneNode(true)
           clone.appendChild(childClone)
@@ -157,17 +162,17 @@ export class VirtualElement implements VirtualNode {
 
   // childNodes - returns all children including text and comment nodes
   get childNodes(): VirtualNode[] {
-    return this.children
+    return this.childNodes
   }
 
   // firstChild - returns first child of any type
   get firstChild(): VirtualNode | null {
-    return this.children.length > 0 ? this.children[0] : null
+    return this.childNodes.length > 0 ? this.childNodes[0] : null
   }
 
   // lastChild - returns last child of any type
   get lastChild(): VirtualNode | null {
-    return this.children.length > 0 ? this.children[this.children.length - 1] : null
+    return this.childNodes.length > 0 ? this.childNodes[this.childNodes.length - 1] : null
   }
 
   // nextSibling - returns next sibling node of any type
@@ -175,7 +180,7 @@ export class VirtualElement implements VirtualNode {
     if (!this.parentNode)
       return null
 
-    const siblings = this.parentNode.children
+    const siblings = (this.parentNode as VirtualElement).childNodes
     const index = siblings.indexOf(this)
     if (index === -1 || index >= siblings.length - 1)
       return null
@@ -188,7 +193,7 @@ export class VirtualElement implements VirtualNode {
     if (!this.parentNode)
       return null
 
-    const siblings = this.parentNode.children
+    const siblings = (this.parentNode as VirtualElement).childNodes
     const index = siblings.indexOf(this)
     if (index <= 0)
       return null
@@ -235,14 +240,14 @@ export class VirtualElement implements VirtualNode {
   // Text content
   get textContent(): string {
     let text = ''
-    for (const child of this.children) {
+    for (const child of this.childNodes) {
       text += child.textContent
     }
     return text
   }
 
   set textContent(value: string) {
-    this.children = []
+    this.childNodes = []
     if (value) {
       // We need to import VirtualTextNode but avoid circular dependency
       // For now, create a simple text node object
@@ -255,16 +260,16 @@ export class VirtualElement implements VirtualNode {
         parentNode: this,
         textContent: value,
       }
-      this.children.push(textNode)
+      this.childNodes.push(textNode)
     }
   }
 
   get innerHTML(): string {
-    return this.children.map(child => this._serializeNode(child)).join('')
+    return this.childNodes.map(child => this._serializeNode(child)).join('')
   }
 
   set innerHTML(html: string) {
-    this.children = []
+    this.childNodes = []
     if (html) {
       const nodes = parseHTML(html)
 

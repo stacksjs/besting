@@ -94,7 +94,9 @@ export function parseHTML(html: string): VirtualNode[] {
 
       // Check for attribute value
       let attrValue = ''
+      let hasValue = false
       if (peek() === '=') {
+        hasValue = true
         consume() // =
         consumeWhitespace()
 
@@ -115,7 +117,9 @@ export function parseHTML(html: string): VirtualNode[] {
         }
       }
 
-      element.setAttribute(attrName, attrValue || attrName)
+      // If attribute has value (with =), use it even if empty string
+      // Otherwise use attribute name as value (boolean attribute)
+      element.setAttribute(attrName, hasValue ? attrValue : attrName)
     }
 
     // Check for self-closing tag
