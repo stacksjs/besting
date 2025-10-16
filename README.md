@@ -139,11 +139,7 @@ testGroup('Hello World', (str) => {
 
 ## Browser Testing
 
-Besting offers **two modes** for browser testing - choose the right tool for the job:
-
-### 🎯 Virtual DOM Mode (Default) - **ZERO Setup Required**
-
-Uses our pure Bun virtual DOM implementation - **NO browser downloads needed**!
+Besting uses a pure Bun virtual DOM implementation - **NO browser downloads needed**!
 
 ```typescript
 import { browse, test } from 'besting'
@@ -164,36 +160,6 @@ test('test with virtual DOM', async () => {
 - 🎯 Zero setup (no downloads)
 - 💪 Pure Bun (no dependencies)
 - 🏆 Faster than happy-dom
-
-### 🌐 Real Browser Mode (Optional) - When You Need It
-
-For visual testing, screenshots, PDFs, or cross-browser validation:
-
-```typescript
-import { browser, test } from 'besting'
-
-test('test with real browser', async () => {
-  const br = browser({ browser: 'chromium' }) // or 'firefox'
-
-  try {
-    await br.launch()
-    const page = await br.newPage()
-
-    await page.goto('https://example.com')
-    await page.screenshot({ path: 'screenshot.png' })
-  }
-  finally {
-    await br.close()
-  }
-})
-```
-
-**Use real browsers when you need:**
-
-- Screenshots & PDFs
-- Visual regression testing
-- Cross-browser compatibility
-- Browser-specific features
 
 ### Virtual DOM Setup
 
@@ -741,24 +707,6 @@ test('mobile emulation', async () => {
     await page.setTouchEmulation(true)
   })
 })
-```
-
-### CLI Commands
-
-```bash
-# Install Chromium for browser testing
-besting setup-browser
-
-# Install Firefox for browser testing
-besting setup-browser --browser firefox
-
-# Force reinstall
-besting setup-browser --force
-besting setup-browser --browser firefox --force
-
-# Remove installed browsers
-besting remove-browser
-besting remove-browser --browser firefox
 ```
 
 ## API Testing
