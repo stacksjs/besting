@@ -2,7 +2,7 @@ import type { ShadowRootInit } from '../webcomponents/ShadowRoot'
 import type { EventListener, EventListenerOptions, NodeType, VirtualNode } from './VirtualNode'
 import { VirtualEvent } from '../events/VirtualEvent'
 import { parseHTML } from '../parsers/html-parser'
-import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
+import { hasCombinators, matchesComplexSelector, matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
 import { ShadowRoot } from '../webcomponents/ShadowRoot'
 
 export class VirtualElement implements VirtualNode {
@@ -10,13 +10,13 @@ export class VirtualElement implements VirtualNode {
   nodeName: string
   nodeValue: string | null = null
   tagName: string
-  attributes = new Map<string, string>()
+  attributes: Map<string, string> = new Map<string, string>()
   childNodes: VirtualNode[] = []
   parentNode: VirtualNode | null = null
   shadowRoot: ShadowRoot | null = null
-  private eventListeners = new Map<string, EventListener[]>()
-  private _customValidity = ''
-  private _internalStyles = new Map<string, string>()
+  private eventListeners: Map<string, EventListener[]> = new Map<string, EventListener[]>()
+  private _customValidity: string = ''
+  private _internalStyles: Map<string, string> = new Map<string, string>()
 
   // children should only contain element nodes, per DOM spec
   get children(): VirtualNode[] {
@@ -146,6 +146,7 @@ export class VirtualElement implements VirtualNode {
 
   // Navigation methods
   closest(selector: string): VirtualElement | null {
+    // eslint-disable-next-line ts/no-this-alias
     let element: VirtualElement | null = this
 
     while (element) {
@@ -159,11 +160,6 @@ export class VirtualElement implements VirtualNode {
     }
 
     return null
-  }
-
-  // childNodes - returns all children including text and comment nodes
-  get childNodes(): VirtualNode[] {
-    return this.childNodes
   }
 
   // firstChild - returns first child of any type
@@ -315,57 +311,58 @@ export class VirtualElement implements VirtualNode {
     contains: (token: string) => boolean
     replace: (oldToken: string, newToken: string) => boolean
   } {
-    const self = this
+    // eslint-disable-next-line ts/no-this-alias
+    const element = this
 
     return {
       add(...tokens: string[]): void {
-        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const classes = element.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
         for (const token of tokens) {
           if (!classes.includes(token)) {
             classes.push(token)
           }
         }
-        self.setAttribute('class', classes.join(' '))
+        element.setAttribute('class', classes.join(' '))
       },
       remove(...tokens: string[]): void {
-        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const classes = element.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
         const filtered = classes.filter(c => !tokens.includes(c))
         if (filtered.length > 0) {
-          self.setAttribute('class', filtered.join(' '))
+          element.setAttribute('class', filtered.join(' '))
         }
         else {
-          self.removeAttribute('class')
+          element.removeAttribute('class')
         }
       },
       toggle(token: string): boolean {
-        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const classes = element.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
         const index = classes.indexOf(token)
         if (index !== -1) {
           classes.splice(index, 1)
           if (classes.length > 0) {
-            self.setAttribute('class', classes.join(' '))
+            element.setAttribute('class', classes.join(' '))
           }
           else {
-            self.removeAttribute('class')
+            element.removeAttribute('class')
           }
           return false
         }
         else {
           classes.push(token)
-          self.setAttribute('class', classes.join(' '))
+          element.setAttribute('class', classes.join(' '))
           return true
         }
       },
       contains(token: string): boolean {
-        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const classes = element.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
         return classes.includes(token)
       },
       replace(oldToken: string, newToken: string): boolean {
-        const classes = self.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
+        const classes = element.getAttribute('class')?.split(/\s+/).filter(Boolean) || []
         const index = classes.indexOf(oldToken)
         if (index !== -1) {
           classes[index] = newToken
-          self.setAttribute('class', classes.join(' '))
+          element.setAttribute('class', classes.join(' '))
           return true
         }
         return false
@@ -398,7 +395,7 @@ export class VirtualElement implements VirtualNode {
 
       html += '>'
 
-      for (const child of element.children) {
+      for (const child of element.childNodes) {
         html += this._serializeNode(child)
       }
 
@@ -409,28 +406,24 @@ export class VirtualElement implements VirtualNode {
   }
 
   // Style property with Proxy for dynamic access
-  get style(): {
-    [key: string]: string
-    getPropertyValue: (property: string) => string
-    setProperty: (property: string, value: string) => void
-    removeProperty: (property: string) => void
-  } {
-    const self = this
+  get style(): CSSStyleDeclaration & { [key: string]: any } {
+    // eslint-disable-next-line ts/no-this-alias
+    const element = this
 
     return new Proxy(
       {
         getPropertyValue(property: string): string {
-          return self._internalStyles.get(property) || ''
+          return element._internalStyles.get(property) || ''
         },
         setProperty(property: string, value: string): void {
-          self._internalStyles.set(property, value)
-          self._updateStyleAttribute()
+          element._internalStyles.set(property, value)
+          element._updateStyleAttribute()
         },
         removeProperty(property: string): void {
-          self._internalStyles.delete(property)
-          self._updateStyleAttribute()
+          element._internalStyles.delete(property)
+          element._updateStyleAttribute()
         },
-      },
+      } as any,
       {
         get(target, prop: string) {
           if (prop === 'getPropertyValue' || prop === 'setProperty' || prop === 'removeProperty') {
@@ -438,14 +431,14 @@ export class VirtualElement implements VirtualNode {
           }
           // Convert camelCase to kebab-case
           const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
-          const value = self._internalStyles.get(kebabProp)
+          const value = element._internalStyles.get(kebabProp)
           return value
         },
-        set(target, prop: string, value: string) {
+        set(_target, prop: string, value: string) {
           // Convert camelCase to kebab-case
           const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
-          self._internalStyles.set(kebabProp, value)
-          self._updateStyleAttribute()
+          element._internalStyles.set(kebabProp, value)
+          element._updateStyleAttribute()
           return true
         },
       },
@@ -467,31 +460,32 @@ export class VirtualElement implements VirtualNode {
 
   // Dataset property for data-* attributes
   get dataset(): { [key: string]: string } {
+    // eslint-disable-next-line ts/no-this-alias
     const self = this
 
     return new Proxy({}, {
-      get(target, prop: string): string {
+      get(_target, prop: string): string {
         // Convert camelCase to kebab-case
         const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
         return self.getAttribute(`data-${kebabProp}`) || ''
       },
-      set(target, prop: string, value: string): boolean {
+      set(_target, prop: string, value: string): boolean {
         // Convert camelCase to kebab-case
         const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
         self.setAttribute(`data-${kebabProp}`, value)
         return true
       },
-      deleteProperty(target, prop: string): boolean {
+      deleteProperty(_target, prop: string): boolean {
         // Convert camelCase to kebab-case
         const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
         self.removeAttribute(`data-${kebabProp}`)
         return true
       },
-      has(target, prop: string): boolean {
+      has(_target, prop: string): boolean {
         const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
         return self.hasAttribute(`data-${kebabProp}`)
       },
-      ownKeys(target): string[] {
+      ownKeys(_target): string[] {
         const dataAttrs: string[] = []
         for (const [key] of self.attributes) {
           if (key.startsWith('data-')) {
@@ -502,7 +496,7 @@ export class VirtualElement implements VirtualNode {
         }
         return dataAttrs
       },
-      getOwnPropertyDescriptor(target, prop: string) {
+      getOwnPropertyDescriptor(_target, prop: string) {
         const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
         if (self.hasAttribute(`data-${kebabProp}`)) {
           return {
@@ -607,6 +601,7 @@ export class VirtualElement implements VirtualNode {
 
     if (type === 'url' && value) {
       try {
+        // eslint-disable-next-line no-new
         new URL(value)
       }
       catch {
@@ -694,7 +689,26 @@ export class VirtualElement implements VirtualNode {
   }
 
   matches(selector: string): boolean {
-    return matchesSimpleSelector(this, selector)
+    // Check if selector has combinators
+    if (hasCombinators(selector)) {
+      // For complex selectors with combinators, we need to find a root to search from
+      // Navigate to the document root or highest ancestor
+      // eslint-disable-next-line ts/no-this-alias
+      let root: VirtualNode = this
+      while (root.parentNode && root.parentNode.nodeType !== 'document') {
+        root = root.parentNode
+      }
+      // If we have a document parent, use the document as root
+      if (root.parentNode && root.parentNode.nodeType === 'document') {
+        root = root.parentNode
+      }
+
+      return matchesComplexSelector(this, selector, root)
+    }
+    else {
+      // Simple selector without combinators
+      return matchesSimpleSelector(this, selector)
+    }
   }
 
   // Event handling
@@ -707,10 +721,19 @@ export class VirtualElement implements VirtualNode {
       this.eventListeners.set(type, [])
     }
 
-    this.eventListeners.get(type)!.push({
-      listener,
-      options: opts,
-    })
+    const listeners = this.eventListeners.get(type)!
+
+    // Don't add duplicate listeners - check if same listener with same capture option already exists
+    const isDuplicate = listeners.some(
+      l => l.listener === listener && l.options.capture === opts.capture,
+    )
+
+    if (!isDuplicate) {
+      listeners.push({
+        listener,
+        options: opts,
+      })
+    }
   }
 
   removeEventListener(type: string, listener: (event: VirtualEvent) => void, options: EventListenerOptions | boolean = {}): void {
@@ -744,6 +767,7 @@ export class VirtualElement implements VirtualNode {
 
     // Capture phase - traverse from root to target
     const path: VirtualElement[] = []
+    // eslint-disable-next-line ts/no-this-alias
     let current: VirtualNode | null = this
     while (current && current.nodeType === 'element') {
       path.unshift(current as VirtualElement)
@@ -752,7 +776,6 @@ export class VirtualElement implements VirtualNode {
 
     // Get event properties safely
     const isPropagationStopped = () => event.propagationStopped || event._propagationStopped || false
-    const isImmediatePropagationStopped = () => event.immediatePropagationStopped || event._immediatePropagationStopped || false
 
     // Capture phase
     for (let i = 0; i < path.length - 1 && !isPropagationStopped(); i++) {
@@ -811,7 +834,13 @@ export class VirtualElement implements VirtualNode {
       if (event.immediatePropagationStopped)
         break
 
-      listener.call(element, event)
+      try {
+        listener.call(element, event)
+      }
+      catch (error) {
+        // Log error but continue executing other listeners
+        console.error('Error in event listener:', error)
+      }
 
       if (options.once) {
         element.removeEventListener(event.type, listener, options)

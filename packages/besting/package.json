@@ -1,7 +1,7 @@
 {
   "name": "besting",
   "type": "module",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "description": "A Bun test framework.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
@@ -34,7 +34,6 @@
     "besting": "./dist/bin/cli.js"
   },
   "files": [
-    "README.md",
     "dist"
   ],
   "scripts": {
@@ -80,6 +79,7 @@
     "very-happy-dom": "workspace:*"
   },
   "devDependencies": {
+    "@stacksjs/clapp": "^0.2.0",
     "bunfig": "^0.15.0"
   }
 }

@@ -11,17 +11,17 @@ export class XMLHttpRequest {
   static readonly DONE = 4
 
   // Instance properties
-  public readyState = XMLHttpRequest.UNSENT
+  public readyState: number = XMLHttpRequest.UNSENT
   public response: any = null
-  public responseText = ''
+  public responseText: string = ''
   public responseType: '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' = ''
-  public responseURL = ''
+  public responseURL: string = ''
   public responseXML: Document | null = null
-  public status = 0
-  public statusText = ''
-  public timeout = 0
-  public upload = new XMLHttpRequestUpload()
-  public withCredentials = false
+  public status: number = 0
+  public statusText: string = ''
+  public timeout: number = 0
+  public upload: XMLHttpRequestUpload = new XMLHttpRequestUpload()
+  public withCredentials: boolean = false
 
   // Event handlers
   public onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null = null
@@ -42,7 +42,7 @@ export class XMLHttpRequest {
 
   constructor() {}
 
-  open(method: string, url: string, async = true, username?: string | null, password?: string | null): void {
+  open(method: string, url: string, _async = true, _username?: string | null, _password?: string | null): void {
     this._method = method.toUpperCase()
     this._url = url
     this.readyState = XMLHttpRequest.OPENED
@@ -165,7 +165,7 @@ export class XMLHttpRequest {
     return headers.join('\r\n')
   }
 
-  overrideMimeType(mime: string): void {
+  overrideMimeType(_mime: string): void {
     // No-op in this implementation
   }
 
@@ -217,9 +217,11 @@ class XMLHttpRequestUpload {
   public onload: ((this: XMLHttpRequestUpload, ev: ProgressEvent) => any) | null = null
   public onerror: ((this: XMLHttpRequestUpload, ev: ProgressEvent) => any) | null = null
 
-  addEventListener(type: string, listener: EventListener): void {}
-  removeEventListener(type: string, listener: EventListener): void {}
-  dispatchEvent(event: Event): boolean { return true }
+  addEventListener(_type: string, _listener: EventListener): void {}
+  removeEventListener(_type: string, _listener: EventListener): void {}
+  dispatchEvent(_event: Event): boolean {
+    return true
+  }
 }
 
 type XMLHttpRequestBodyInit = Blob | BufferSource | FormData | URLSearchParams | string

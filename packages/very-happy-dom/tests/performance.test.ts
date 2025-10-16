@@ -30,7 +30,7 @@ console.log('Test Group 1: HTML Parsing Performance')
   const html = `<div>${'<p>Test</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
-    window.document.body.innerHTML = html
+    window.document.body!.innerHTML = html
   })
 
   assert(duration < THRESHOLDS.htmlParsing, `HTML parsing < ${THRESHOLDS.htmlParsing}ms (${duration.toFixed(3)}ms)`)
@@ -43,7 +43,7 @@ console.log('Test Group 1: HTML Parsing Performance')
 console.log('\nTest Group 2: querySelector Performance')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `<div>${'<p class="test">Item</p>'.repeat(100)}</div>`
+  window.document.body!.innerHTML = `<div>${'<p class="test">Item</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
     window.document.querySelector('.test')
@@ -59,7 +59,7 @@ console.log('\nTest Group 2: querySelector Performance')
 console.log('\nTest Group 3: querySelectorAll Performance')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `<div>${'<p class="test">Item</p>'.repeat(100)}</div>`
+  window.document.body!.innerHTML = `<div>${'<p class="test">Item</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
     const results = window.document.querySelectorAll('.test')
@@ -199,7 +199,7 @@ console.log('\nTest Group 9: Memory Efficiency')
   for (let i = 0; i < 1000; i++) {
     const div = window.document.createElement('div')
     div.innerHTML = '<p>Test</p><span>Content</span>'
-    window.document.body.appendChild(div)
+    window.document.body!.appendChild(div)
   }
 
   const peakMemory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)
@@ -226,10 +226,10 @@ console.log('\nTest Group 10: DOM Tree Traversal Performance')
   const window = createTestWindow()
 
   // Create deep tree
-  let current = window.document.body
+  let current = window.document.body!
   for (let i = 0; i < 50; i++) {
     const div = window.document.createElement('div')
-    div.className = `level-${i}`
+    div.setAttribute('class', `level-${i}`)
     current.appendChild(div)
     current = div
   }
@@ -248,7 +248,7 @@ console.log('\nTest Group 10: DOM Tree Traversal Performance')
 console.log('\nTest Group 11: XPath Performance')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `<div>${'<p class="item">Item</p>'.repeat(100)}</div>`
+  window.document.body!.innerHTML = `<div>${'<p class="item">Item</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
     window.document.evaluate(
@@ -278,7 +278,7 @@ console.log('\nTest Group 12: Batch Operations Performance')
       div.textContent = `Item ${i}`
       fragment.appendChild(div)
     }
-    window.document.body.appendChild(fragment)
+    window.document.body!.appendChild(fragment)
   })
 
   assert(duration < 5, `Batch appendChild < 5ms (${duration.toFixed(3)}ms)`)

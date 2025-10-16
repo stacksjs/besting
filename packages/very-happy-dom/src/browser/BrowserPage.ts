@@ -113,7 +113,7 @@ export class BrowserPage {
   /**
    * Evaluates code in the page's context
    */
-  evaluate(code: string | Function): any {
+  evaluate(code: string | ((...args: any[]) => any)): any {
     return this.mainFrame.evaluate(code)
   }
 
@@ -189,7 +189,7 @@ export class BrowserPage {
    * Waits for a function to return a truthy value
    */
   async waitForFunction(
-    fn: Function | string,
+    fn: ((...args: any[]) => any) | string,
     options: { timeout?: number, polling?: number | 'raf' } = {},
   ): Promise<any> {
     const { timeout = 30000, polling = 100 } = options
@@ -295,9 +295,12 @@ export class BrowserPage {
   /**
    * Keyboard actions
    */
-  get keyboard() {
+  get keyboard(): {
+    press: (key: string, options?: { delay?: number }) => Promise<void>
+    type: (text: string, options?: { delay?: number }) => Promise<void>
+  } {
     return {
-      press: async (key: string, options: { delay?: number } = {}) => {
+      press: async (key: string, options: { delay?: number } = {}): Promise<void> => {
         const { delay = 0 } = options
 
         const keydownEvent = new (this.mainFrame.window as any).Event('keydown', { bubbles: true })
@@ -313,7 +316,7 @@ export class BrowserPage {
         this.mainFrame.document.dispatchEvent?.(keyupEvent)
       },
 
-      type: async (text: string, options: { delay?: number } = {}) => {
+      type: async (text: string, options: { delay?: number } = {}): Promise<void> => {
         for (const char of text) {
           await this.keyboard.press(char, options)
         }
@@ -324,9 +327,12 @@ export class BrowserPage {
   /**
    * Mouse actions
    */
-  get mouse() {
+  get mouse(): {
+    click: (x: number, y: number, options?: { button?: 'left' | 'right' | 'middle', delay?: number }) => Promise<void>
+    move: (x: number, y: number) => Promise<void>
+  } {
     return {
-      click: async (x: number, y: number, options: { button?: 'left' | 'right' | 'middle', delay?: number } = {}) => {
+      click: async (x: number, y: number, options: { button?: 'left' | 'right' | 'middle', delay?: number } = {}): Promise<void> => {
         const { delay = 0 } = options
 
         const clickEvent = new (this.mainFrame.window as any).Event('click', { bubbles: true })
@@ -339,7 +345,7 @@ export class BrowserPage {
         }
       },
 
-      move: async (x: number, y: number) => {
+      move: async (x: number, y: number): Promise<void> => {
         const moveEvent = new (this.mainFrame.window as any).Event('mousemove', { bubbles: true })
         ;(moveEvent as any).clientX = x
         ;(moveEvent as any).clientY = y
@@ -473,9 +479,9 @@ export class BrowserPage {
     encoding?: 'base64' | 'binary'
   } = {}): Promise<string | Buffer> {
     const {
-      type = 'png',
-      quality = 100,
-      fullPage = false,
+      type: _type = 'png',
+      quality: _quality = 100,
+      fullPage: _fullPage = false,
       encoding = 'binary',
     } = options
 
@@ -517,16 +523,16 @@ export class BrowserPage {
     preferCSSPageSize?: boolean
   } = {}): Promise<Buffer> {
     const {
-      scale = 1,
-      displayHeaderFooter = false,
-      printBackground = false,
-      landscape = false,
-      format = 'A4',
+      scale: _scale = 1,
+      displayHeaderFooter: _displayHeaderFooter = false,
+      printBackground: _printBackground = false,
+      landscape: _landscape = false,
+      format: _format = 'A4',
     } = options
 
     // Generate a simple PDF representation
     const html = this.content
-    const pdf = this._generatePDF(html, options)
+    const pdf = this._generatePDF(html)
 
     return Buffer.from(pdf)
   }
@@ -547,8 +553,8 @@ export class BrowserPage {
 </svg>`
   }
 
-  private _generatePDF(html: string, options: any): string {
-    const title = this.mainFrame.document.title || 'Document'
+  private _generatePDF(html: string): string {
+    const _title = this.mainFrame.document.title || 'Document'
 
     // Simple PDF-like text representation
     return `%PDF-1.4

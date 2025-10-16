@@ -230,6 +230,7 @@ describe('Console Log Capture', () => {
       await page.goto('https://example.com')
 
       await page.evaluate(() => {
+        // eslint-disable-next-line no-console
         console.log('Test log')
         console.warn('Test warning')
         console.error('Test error')

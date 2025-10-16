@@ -511,7 +511,7 @@ class StressTest implements StressTestBuilder {
               // Slight delay to prevent overwhelming the target
               await Bun.sleep(1)
             }
-            catch (error) {
+            catch {
               failedCount++
             }
           }

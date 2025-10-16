@@ -33,6 +33,11 @@ export class ShadowRoot {
     for (const child of this.children) {
       if (child.nodeType === 'element') {
         const element = child as VirtualElement
+        // Check if this element matches first
+        if (element.matches?.(selector)) {
+          return element
+        }
+        // Then check descendants
         const result = element.querySelector(selector)
         if (result)
           return result
@@ -46,6 +51,11 @@ export class ShadowRoot {
     for (const child of this.children) {
       if (child.nodeType === 'element') {
         const element = child as VirtualElement
+        // Check if this element matches first
+        if (element.matches?.(selector)) {
+          results.push(element)
+        }
+        // Then check descendants
         results.push(...element.querySelectorAll(selector))
       }
     }

@@ -11,10 +11,10 @@ export enum WebSocketReadyState {
 }
 
 export class VeryHappyWebSocket {
-  static readonly CONNECTING = WebSocketReadyState.CONNECTING
-  static readonly OPEN = WebSocketReadyState.OPEN
-  static readonly CLOSING = WebSocketReadyState.CLOSING
-  static readonly CLOSED = WebSocketReadyState.CLOSED
+  static readonly CONNECTING: number = WebSocketReadyState.CONNECTING
+  static readonly OPEN: number = WebSocketReadyState.OPEN
+  static readonly CLOSING: number = WebSocketReadyState.CLOSING
+  static readonly CLOSED: number = WebSocketReadyState.CLOSED
 
   public readyState: WebSocketReadyState = WebSocketReadyState.CONNECTING
   public url: string
@@ -39,7 +39,7 @@ export class VeryHappyWebSocket {
     try {
       this._ws = new WebSocket(url, protocols)
 
-      this._ws.addEventListener('open', (event) => {
+      this._ws.addEventListener('open', (_event) => {
         this.readyState = WebSocketReadyState.OPEN
         this.dispatchEvent({ type: 'open' } as Event)
       })
@@ -52,11 +52,11 @@ export class VeryHappyWebSocket {
           lastEventId: '',
           source: null,
           ports: [],
-        } as MessageEvent
+        } as unknown as MessageEvent
         this.dispatchEvent(messageEvent)
       })
 
-      this._ws.addEventListener('error', (event) => {
+      this._ws.addEventListener('error', (_event) => {
         this.dispatchEvent({ type: 'error' } as Event)
       })
 

@@ -7,7 +7,7 @@
 
 import type { VirtualDocument, VirtualElement } from 'very-happy-dom'
 import { expect } from 'bun:test'
-import { createDocument, parseHTML, VirtualEvent } from 'very-happy-dom'
+import { createDocument, VirtualEvent } from 'very-happy-dom'
 
 interface VirtualStorage {
   [key: string]: string
@@ -42,29 +42,32 @@ export class VirtualPage {
       pathname: urlObj.pathname,
       search: urlObj.search,
       hash: urlObj.hash,
+      origin: urlObj.origin,
+      assign: (newUrl: string) => {
+        this.goto(newUrl)
+      },
+      replace: (newUrl: string) => {
+        this.goto(newUrl)
+      },
+      reload: () => {
+        // No-op in virtual DOM
+      },
     }
 
     // Fetch the page
     try {
-      const response = await fetch(url)
+      // Add timeout to fetch with AbortController
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), this._timeout)
+
+      const response = await fetch(url, { signal: controller.signal })
+      clearTimeout(timeoutId)
+
       const html = await response.text()
 
-      // Parse and set HTML
-      const nodes = parseHTML(html)
-      const htmlNode = nodes.find(n => n.nodeName === 'HTML')
-
-      if (htmlNode) {
-        this.document.children = [htmlNode]
-        htmlNode.parentNode = this.document
-      }
-      else {
-        // Create basic structure and add nodes to body
-        const body = this.document.body
-        if (body) {
-          body.children = nodes
-          nodes.forEach(node => node.parentNode = body)
-        }
-      }
+      // Use document.write() to properly handle the HTML
+      // This will update documentElement, head, body references correctly
+      this.document.write(html)
 
       // Extract title
       const titleElement = this.document.querySelector('title')
@@ -73,6 +76,10 @@ export class VirtualPage {
       }
     }
     catch (error) {
+      // If it's an abort error, throw a more specific message
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error(`Navigation failed: Request timeout after ${this._timeout}ms`)
+      }
       throw new Error(`Navigation failed: ${error}`)
     }
   }
@@ -288,6 +295,7 @@ export class VirtualPage {
     try {
       // Execute the function with document and window in scope
       // Create a wrapper function that has access to our context variables
+      // eslint-disable-next-line no-new-func
       const wrapper = new Function('document', 'window', 'console', ...Object.keys(args), `
         return (${fn.toString()})(...arguments);
       `)

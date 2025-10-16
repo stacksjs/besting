@@ -42,6 +42,7 @@ export class TestStats {
 
   exit(): void {
     if (this.hasFailures) {
+      // eslint-disable-next-line node/prefer-global/process
       process.exit(1)
     }
   }
@@ -130,7 +131,7 @@ export function wait(ms: number): Promise<void> {
  */
 export function createHTMLFixture(html: string): (window: Window) => void {
   return (window: Window) => {
-    window.document.body.innerHTML = html
+    window.document.body!.innerHTML = html
   }
 }
 
@@ -176,7 +177,8 @@ export const assertHelpers = {
   /**
    * Assert type
    */
-  typeOf(assert: ReturnType<typeof createAssert>, value: any, expectedType: string, message: string): void {
+  typeOf(assert: ReturnType<typeof createAssert>, value: any, expectedType: 'string' | 'number' | 'boolean' | 'object' | 'function' | 'undefined' | 'symbol' | 'bigint', message: string): void {
+    // eslint-disable-next-line valid-typeof
     assert(typeof value === expectedType, message)
   },
 

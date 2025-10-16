@@ -43,10 +43,12 @@ console.log('\nTest Group 2: Request Interception - Setup')
   const page = browser.newPage()
   let interceptorCalled = false
 
-  await page.setRequestInterception(true, async (request: InterceptedRequest) => {
+  page.on('request', async (request: InterceptedRequest) => {
     interceptorCalled = true
     request.continue()
   })
+
+  await page.setRequestInterception(true)
 
   assert(true, 'Request interception enabled without error')
   assert(interceptorCalled === false, 'Interceptor not called until fetch')
@@ -61,7 +63,7 @@ console.log('\nTest Group 3: Request Interception - InterceptedRequest API')
   const page = browser.newPage()
   let interceptorCalledWithRequest = false
 
-  await page.setRequestInterception(true, async (request: InterceptedRequest) => {
+  page.on('request', async (request: InterceptedRequest) => {
     // Test that request has expected properties
     interceptorCalledWithRequest = (
       typeof request.url === 'string'
@@ -73,6 +75,8 @@ console.log('\nTest Group 3: Request Interception - InterceptedRequest API')
     )
     request.continue()
   })
+
+  await page.setRequestInterception(true)
 
   assert(interceptorCalledWithRequest === false, 'Interceptor not called before fetch')
 
@@ -99,11 +103,15 @@ console.log('\nTest Group 5: XMLHttpRequest - Event Handlers')
   const window = new Window()
 
   const xhr = new window.XMLHttpRequest()
-  let loadCalled = false
-  let errorCalled = false
+  let _loadCalled = false
+  let _errorCalled = false
 
-  xhr.onload = () => { loadCalled = true }
-  xhr.onerror = () => { errorCalled = true }
+  xhr.onload = () => {
+    _loadCalled = true
+  }
+  xhr.onerror = () => {
+    _errorCalled = true
+  }
 
   assert(typeof xhr.onload === 'function', 'onload handler can be set')
   assert(typeof xhr.onerror === 'function', 'onerror handler can be set')
@@ -169,14 +177,14 @@ console.log('\nTest Group 9: WebSocket - Event Handlers')
   // Note: We can't actually connect without a real WebSocket server
   // Just test the API surface
   let ws: any = null
-  let error: any = null
+  let _error: any = null
 
   try {
     ws = new window.WebSocket('wss://echo.websocket.org/')
     assert(ws.readyState === 0, 'Initial readyState is CONNECTING')
   }
-  catch {
-    error = e
+  catch (e) {
+    _error = e
   }
 
   if (ws) {

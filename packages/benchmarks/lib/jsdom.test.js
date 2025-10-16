@@ -13,7 +13,8 @@ function testImportJSDOM() {
 
 function parseHTML() {
   const time1 = performance.now()
-  new JSDOM(HTMLPage)
+  // eslint-disable-next-line no-unused-vars
+  const _dom = new JSDOM(HTMLPage)
   const time2 = performance.now()
   console.log(`JSDOM -> Parse HTML: ${time2 - time1}ms`)
 }
@@ -71,12 +72,12 @@ function renderCustomElement() {
   const time1 = performance.now()
   const dom = new JSDOM(HTMLPage)
   const window = dom.window
-  global.HTMLElement = window.HTMLElement
+  globalThis.HTMLElement = window.HTMLElement
   window.customElements.define('custom-element', require('./data/CustomElement'))
   window.document.write(HTMLPage)
   const customElement = window.document.querySelector('custom-element')
   customElement.shadowRoot.innerHTML
-  delete global.HTMLElement
+  delete globalThis.HTMLElement
   const time2 = performance.now()
   console.log(`JSDOM -> Render custom element': ${time2 - time1}ms`)
 }

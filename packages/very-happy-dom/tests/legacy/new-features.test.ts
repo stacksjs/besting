@@ -68,7 +68,7 @@ console.log('\nTest 3: setTimeout')
   }, 10)
 
   await new Promise(resolve => setTimeout(resolve, 50))
-  assert(executed === true, 'setTimeout executes callback')
+  assert((executed as boolean) === true, 'setTimeout executes callback')
 
   await window.happyDOM.close()
 }
@@ -104,7 +104,7 @@ console.log('\nTest 5: requestAnimationFrame')
   })
 
   await new Promise(resolve => setTimeout(resolve, 50))
-  assert(executed === true, 'requestAnimationFrame executes callback')
+  assert((executed as boolean) === true, 'requestAnimationFrame executes callback')
   assert(timestamp > 0, 'requestAnimationFrame provides timestamp')
 
   await window.happyDOM.close()
@@ -138,7 +138,7 @@ console.log('\nTest 7: waitUntilComplete with timers')
 
   await window.happyDOM.waitUntilComplete()
 
-  assert(executed === true, 'waitUntilComplete waits for timers')
+  assert((executed as boolean) === true, 'waitUntilComplete waits for timers')
 
   await window.happyDOM.close()
 }
@@ -159,7 +159,7 @@ console.log('\nTest 8: BrowserPage.waitForSelector')
   const element = await page.waitForSelector('.dynamic', { timeout: 200 })
 
   assert(element !== null, 'waitForSelector found element')
-  assert((element as any).getAttribute?.('class') === 'dynamic', 'waitForSelector found correct element')
+  assert(element?.getAttribute('class') === 'dynamic', 'waitForSelector found correct element')
 
   await browser.close()
 }
@@ -270,9 +270,9 @@ console.log('\nTest 15: MutationObserver')
 
   assert(typeof window.MutationObserver === 'function', 'window.MutationObserver exists')
 
-  let callbackCalled = false
-  const observer = new window.MutationObserver((mutations) => {
-    callbackCalled = true
+  let _callbackCalled = false
+  const observer = new window.MutationObserver((_mutations) => {
+    _callbackCalled = true
   })
 
   observer.observe(window.document.body!, { childList: true })
@@ -293,13 +293,13 @@ console.log('\nTest 16: BrowserPage.click')
 
   let clicked = false
   const button = page.mainFrame.document.getElementById('btn')
-  ;(button as any).addEventListener('click', () => {
+  button?.addEventListener('click', () => {
     clicked = true
   })
 
   await page.click('#btn')
 
-  assert(clicked === true, 'click() triggers click event')
+  assert((clicked as boolean) === true, 'click() triggers click event')
 
   await browser.close()
 }
@@ -315,7 +315,7 @@ console.log('\nTest 17: BrowserPage.type')
   await page.type('#input', 'Hello World')
 
   const input = page.mainFrame.document.getElementById('input')
-  const value = (input as any).getAttribute('value')
+  const value = input?.getAttribute('value')
 
   assert(value === 'Hello World', `type() sets input value (got: "${value}")`)
 
@@ -332,13 +332,13 @@ console.log('\nTest 18: BrowserPage.focus')
 
   let focused = false
   const input = page.mainFrame.document.getElementById('input')
-  ;(input as any).addEventListener('focus', () => {
+  input?.addEventListener('focus', () => {
     focused = true
   })
 
   await page.focus('#input')
 
-  assert(focused === true, 'focus() triggers focus event')
+  assert((focused as boolean) === true, 'focus() triggers focus event')
 
   await browser.close()
 }

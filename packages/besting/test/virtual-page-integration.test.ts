@@ -13,12 +13,13 @@ describe('Virtual Page Integration Tests', () => {
     })
 
     test('should update location on navigation', async () => {
-      const page = createVirtualPage()
-      await page.goto('https://example.com/test?query=1#hash')
+      const page = createVirtualPage(10000) // 10s timeout for CI
+      await page.goto('https://example.com')
 
       const url = await page.url()
       expect(url).toContain('example.com')
-    })
+      expect(await page.title()).toBeTruthy()
+    }, 15000) // 15s test timeout
 
     test('should fetch and parse HTML content', async () => {
       const page = createVirtualPage()

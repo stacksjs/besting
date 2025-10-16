@@ -139,8 +139,8 @@ export function findFirefox(): string | null {
 class CDPClient {
   private ws: WebSocket | null = null
   private messageId = 0
-  private callbacks = new Map<number, { resolve: Function, reject: Function }>()
-  private eventHandlers = new Map<string, Function[]>()
+  private callbacks = new Map<number, { resolve: (...args: any[]) => any, reject: (...args: any[]) => any }>()
+  private eventHandlers = new Map<string, ((...args: any[]) => any)[]>()
 
   constructor(private wsUrl: string) {}
 
@@ -194,7 +194,7 @@ class CDPClient {
     })
   }
 
-  on(event: string, handler: Function): void {
+  on(event: string, handler: (...args: any[]) => any): void {
     if (!this.eventHandlers.has(event)) {
       this.eventHandlers.set(event, [])
     }
@@ -375,7 +375,7 @@ class Page {
     return result
   }
 
-  async evaluate(fn: Function, ...args: any[]): Promise<any> {
+  async evaluate(fn: (...args: any[]) => any, ...args: any[]): Promise<any> {
     const fnString = fn.toString()
     const expression = `(${fnString})(${args.map(arg => JSON.stringify(arg)).join(',')})`
 
@@ -1357,7 +1357,7 @@ export function browser(options?: BrowserOptions): Browser {
 /**
  * Helper for running browser tests with automatic cleanup
  */
-export async function browseTest(
+export async function browse(
   callback: (page: Page) => Promise<void>,
   options?: BrowserOptions,
 ): Promise<void> {

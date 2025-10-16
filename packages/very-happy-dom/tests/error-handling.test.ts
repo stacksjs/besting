@@ -15,14 +15,18 @@ console.log('=== 🚨 Error Handling Test Suite ===\n')
 console.log('Test Group 1: Invalid Selectors')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = '<div>Test</div>'
+  window.document.body!.innerHTML = '<div>Test</div>'
 
-  // querySelector with empty selector matches first element (HTML)
+  // querySelector with empty selector returns null gracefully
   let result = window.document.querySelector('')
-  assert(result !== null, 'Empty selector matches first element')
+  assert(result === null, 'Empty selector returns null')
 
   result = window.document.querySelector('   ')
-  assert(result !== null, 'Whitespace selector matches first element')
+  assert(result === null, 'Whitespace selector returns null')
+
+  // querySelectorAll with empty selector returns empty array
+  const results = window.document.querySelectorAll('')
+  assert(results.length === 0, 'Empty selector returns empty array')
 
   await cleanupWindow(window)
 }
@@ -55,7 +59,7 @@ console.log('\nTest Group 3: Type Mismatch Handling')
 
   // Setting non-string attributes - implementation stores as-is
   element.setAttribute('test', 123 as any)
-  assert(element.getAttribute('test') === 123, 'Attribute stored as number')
+  assert(element.getAttribute('test') as any === 123, 'Attribute stored as number')
 
   // Setting null/undefined - both return null
   element.setAttribute('nullable', null as any)
@@ -161,7 +165,7 @@ console.log('\nTest Group 7: Event Handler Edge Cases')
 console.log('\nTest Group 8: XPath Error Handling')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = '<div>Test</div>'
+  window.document.body!.innerHTML = '<div>Test</div>'
 
   // Invalid XPath expressions (should not crash)
   let errorThrown = false
@@ -217,7 +221,7 @@ console.log('\nTest Group 10: Custom Elements Error Handling')
   // Invalid name (no hyphen)
   let errorThrown = false
   try {
-    window.customElements.define('testelement', TestElement)
+    window.customElements.define('testelement', TestElement as any)
   }
   catch {
     errorThrown = true
@@ -291,12 +295,12 @@ console.log('\nTest Group 14: Empty Content Handling')
 {
   const window = createTestWindow()
 
-  window.document.body.innerHTML = ''
-  assert(window.document.body.children.length === 0, 'Empty innerHTML clears children')
+  window.document.body!.innerHTML = ''
+  assert(window.document.body!.children.length === 0, 'Empty innerHTML clears children')
 
-  window.document.body.innerHTML = '   \n\t   '
+  window.document.body!.innerHTML = '   \n\t   '
   // Whitespace creates text node, which shows up in children
-  assert(window.document.body.children.length >= 0, 'Whitespace innerHTML handled')
+  assert(window.document.body!.children.length >= 0, 'Whitespace innerHTML handled')
 
   await cleanupWindow(window)
 }

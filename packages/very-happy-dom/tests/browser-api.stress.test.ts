@@ -20,18 +20,6 @@ function assert(condition: boolean, message: string) {
   }
 }
 
-function assertThrows(fn: () => void, message: string) {
-  try {
-    fn()
-    console.log(`❌ FAILED: ${message} (should have thrown)`)
-    failed++
-  }
-  catch {
-    console.log(`✅ ${message}`)
-    passed++
-  }
-}
-
 console.log('=== 🔥 Browser API Stress Tests 🔥 ===\n')
 
 // Test 1: Creating and destroying multiple browsers
@@ -293,7 +281,7 @@ console.log('\nTest 15: Context Close Clears Resources')
   ])
   context.responseCache.set('key', {} as Response)
 
-  const page = context.newPage()
+  const _page = context.newPage()
 
   await context.close()
 
@@ -387,7 +375,7 @@ console.log('\nTest 19: Document.write() with Complex HTML')
   const app = window.document.getElementById('app')
   assert(app !== null, 'Element found after document.write()')
   // Count only element children (not text nodes)
-  const elementChildren = app.children.filter((n: any) => n.nodeType === 'element')
+  const elementChildren = Array.from(app?.children || []).filter((n: any) => n.nodeType === 'element')
   assert(elementChildren.length === 2, 'Nested structure preserved (2 element children)')
   assert(window.document.head !== null, 'Head created')
   assert(window.document.body !== null, 'Body created')
@@ -612,7 +600,7 @@ console.log('\nTest 31: Window with Custom Console')
     log: (...args: any[]) => logs.push(args.join(' ')),
     error: (...args: any[]) => logs.push(`ERROR: ${args.join(' ')}`),
     warn: (...args: any[]) => logs.push(`WARN: ${args.join(' ')}`),
-  } as Console
+  } as unknown as Console
 
   const window = new Window({ console: customConsole })
 
@@ -628,10 +616,10 @@ console.log('\nTest 31: Window with Custom Console')
 console.log('\nTest 32: Browser Abort Cascades')
 {
   const browser = new Browser()
-  const page1 = browser.newPage()
-  const page2 = browser.newPage()
+  const _page1 = browser.newPage()
+  const _page2 = browser.newPage()
   const incognito = browser.newIncognitoContext()
-  const page3 = incognito.newPage()
+  const _page3 = incognito.newPage()
 
   await browser.abort()
 
@@ -650,7 +638,7 @@ console.log('\nTest 33: Frame Document Operations')
 
   const elem = page.mainFrame.document.getElementById('test')
   assert(elem !== null, 'Frame document querySelector works')
-  assert(elem.textContent === 'Content', 'Frame document content accessible')
+  assert(elem?.textContent === 'Content', 'Frame document content accessible')
 
   await browser.close()
 }

@@ -9,9 +9,9 @@ import { VirtualTextNode } from './VirtualTextNode'
 
 export class VirtualDocument implements VirtualNode {
   nodeType: NodeType = 'document'
-  nodeName = '#document'
+  nodeName: string = '#document'
   nodeValue: string | null = null
-  attributes = new Map<string, string>()
+  attributes: Map<string, string> = new Map<string, string>()
   children: VirtualNode[] = []
   parentNode: VirtualNode | null = null
 
@@ -61,70 +61,71 @@ export class VirtualDocument implements VirtualNode {
     }
 
     // Initialize history with closure to maintain 'this' context
-    const self = this
+    // eslint-disable-next-line ts/no-this-alias
+    const doc = this
     this.history = {
       get length() {
-        return self._historyStack.length
+        return doc._historyStack.length
       },
       get state() {
-        return self._historyStack[self._historyIndex]?.state || null
+        return doc._historyStack[doc._historyIndex]?.state || null
       },
       pushState(state: any, title: string, url?: string) {
         // Remove any forward history
-        self._historyStack = self._historyStack.slice(0, self._historyIndex + 1)
+        doc._historyStack = doc._historyStack.slice(0, doc._historyIndex + 1)
 
         // Add new state
-        self._historyStack.push({
+        doc._historyStack.push({
           state,
           title,
-          url: url || self.location.href,
+          url: url || doc.location.href,
         })
-        self._historyIndex++
+        doc._historyIndex++
 
         // Update location if URL provided
         if (url) {
-          self._updateLocation(url)
+          doc._updateLocation(url)
         }
       },
       replaceState(state: any, title: string, url?: string) {
-        if (self._historyIndex >= 0) {
-          self._historyStack[self._historyIndex] = {
+        if (doc._historyIndex >= 0) {
+          doc._historyStack[doc._historyIndex] = {
             state,
             title,
-            url: url || self.location.href,
+            url: url || doc.location.href,
           }
 
           // Update location if URL provided
           if (url) {
-            self._updateLocation(url)
+            doc._updateLocation(url)
           }
         }
       },
       back() {
-        if (self._historyIndex > 0) {
-          self._historyIndex--
-          const entry = self._historyStack[self._historyIndex]
+        if (doc._historyIndex > 0) {
+          doc._historyIndex--
+          const entry = doc._historyStack[doc._historyIndex]
           if (entry.url) {
-            self._updateLocation(entry.url)
+            doc._updateLocation(entry.url)
           }
         }
       },
       forward() {
-        if (self._historyIndex < self._historyStack.length - 1) {
-          self._historyIndex++
-          const entry = self._historyStack[self._historyIndex]
+        if (doc._historyIndex < doc._historyStack.length - 1) {
+          doc._historyIndex++
+          const entry = doc._historyStack[doc._historyIndex]
           if (entry.url) {
-            self._updateLocation(entry.url)
+            doc._updateLocation(entry.url)
           }
         }
       },
       go(delta: number) {
-        const newIndex = self._historyIndex + delta
-        if (newIndex >= 0 && newIndex < self._historyStack.length) {
-          self._historyIndex = newIndex
-          const entry = self._historyStack[self._historyIndex]
+        const newIndex = doc._historyIndex + delta
+        if (newIndex >= 0 && newIndex < doc._historyStack.length) {
+          doc._historyIndex = newIndex
+          const entry = doc._historyStack[doc._historyIndex]
           if (entry.url) {
-            self._updateLocation(entry.url)
+            doc._updateLocation(entry.url)
           }
         }
       },
@@ -219,7 +220,8 @@ export class VirtualDocument implements VirtualNode {
     const nodes = parseHTML(html)
 
     if (this.body) {
-      this.body.children = []
+      // Clear all child nodes (children is a computed property)
+      this.body.childNodes = []
       for (const node of nodes) {
         this.body.appendChild(node)
       }
@@ -395,7 +397,7 @@ export class VirtualDocument implements VirtualNode {
   set cookie(value: string) {
     // Parse cookie string: "name=value; expires=...; path=..."
     const parts = value.split(';').map(p => p.trim())
-    const [nameValue, ...attributes] = parts
+    const [nameValue] = parts
 
     if (nameValue) {
       const [name, val] = nameValue.split('=').map(s => s.trim())

@@ -12,7 +12,7 @@ export interface InterceptedRequest {
 
   continue: (overrides?: { url?: string, method?: string, headers?: Record<string, string>, postData?: string }) => void
   abort: (errorCode?: string) => void
-  respond: (response: { status: number, headers?: Record<string, string>, body: string | Buffer }) => void
+  respond: (response: { status: number, headers?: Record<string, string>, body: string | ArrayBuffer }) => void
 }
 
 export interface RequestInterceptionHandler {
@@ -37,8 +37,9 @@ export class RequestInterceptor {
     this._enabled = true
 
     // Override global fetch
-    const self = this
-    globalThis.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    // eslint-disable-next-line ts/no-this-alias
+    const interceptor = this
+    const overriddenFetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
       const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
       const method = init?.method || 'GET'
       const headers: Record<string, string> = {}
@@ -60,7 +61,6 @@ export class RequestInterceptor {
         }
       }
 
-      let continued = false
       let aborted = false
       let responded = false
       let mockResponse: Response | null = null
@@ -74,11 +74,10 @@ export class RequestInterceptor {
         resourceType: 'fetch',
 
         continue(reqOverrides = {}) {
-          continued = true
           overrides = reqOverrides
         },
 
-        abort(errorCode = 'failed') {
+        abort(_errorCode = 'failed') {
           aborted = true
         },
 
@@ -92,7 +91,7 @@ export class RequestInterceptor {
       }
 
       // Call handlers
-      for (const handler of self._handlers) {
+      for (const handler of interceptor._handlers) {
         await handler(interceptedRequest)
       }
 
@@ -112,13 +111,16 @@ export class RequestInterceptor {
       const finalHeaders = overrides.headers || headers
       const finalBody = overrides.postData !== undefined ? overrides.postData : init?.body
 
-      return self._originalFetch(finalUrl, {
+      return interceptor._originalFetch(finalUrl, {
         ...init,
         method: finalMethod,
         headers: finalHeaders,
         body: finalBody,
       })
     }
+    // Add the preconnect property to match fetch signature
+    Object.assign(overriddenFetch, { preconnect: () => {} })
+    globalThis.fetch = overriddenFetch as typeof fetch
   }
 
   disable(): void {

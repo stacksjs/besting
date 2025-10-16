@@ -139,11 +139,7 @@ testGroup('Hello World', (str) => {
 
 ## Browser Testing
 
-Besting offers **two modes** for browser testing - choose the right tool for the job:
-
-### 🎯 Virtual DOM Mode (Default) - **ZERO Setup Required**
-
-Uses our pure Bun virtual DOM implementation - **NO browser downloads needed**!
+Besting uses a pure Bun virtual DOM implementation - **NO browser downloads needed**!
 
 ```typescript
 import { browse, test } from 'besting'
@@ -165,36 +161,6 @@ test('test with virtual DOM', async () => {
 - 💪 Pure Bun (no dependencies)
 - 🏆 Faster than happy-dom
 
-### 🌐 Real Browser Mode (Optional) - When You Need It
-
-For visual testing, screenshots, PDFs, or cross-browser validation:
-
-```typescript
-import { browser, test } from 'besting'
-
-test('test with real browser', async () => {
-  const br = browser({ browser: 'chromium' }) // or 'firefox'
-
-  try {
-    await br.launch()
-    const page = await br.newPage()
-
-    await page.goto('https://example.com')
-    await page.screenshot({ path: 'screenshot.png' })
-  }
-  finally {
-    await br.close()
-  }
-})
-```
-
-**Use real browsers when you need:**
-
-- Screenshots & PDFs
-- Visual regression testing
-- Cross-browser compatibility
-- Browser-specific features
-
 ### Virtual DOM Setup
 
 **No setup required!** Just import and use:
@@ -206,10 +172,10 @@ import { browse } from 'besting'
 ### Basic Browser Testing
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('visit a website', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
     await page.assertSee('Example Domain')
     await page.assertTitle('Example Domain')
@@ -271,10 +237,10 @@ test('full browser control', async () => {
 ### Laravel Dusk-Style Assertions
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('Dusk-style assertions', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Text assertions
@@ -312,10 +278,10 @@ test('Dusk-style assertions', async () => {
 ### Form Testing
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('fill and submit a form', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://myapp.com/contact')
 
     // Fill form fields
@@ -342,10 +308,10 @@ test('fill and submit a form', async () => {
 ### Screenshots and Debugging
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('take screenshots for debugging', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Take a regular screenshot
@@ -461,10 +427,10 @@ test('work with multiple pages', async () => {
 ### Advanced Mouse Interactions
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('mouse interactions', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Hover over an element
@@ -485,10 +451,10 @@ test('mouse interactions', async () => {
 ### Cookie Management
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('manage cookies', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Set a cookie
@@ -518,10 +484,10 @@ test('manage cookies', async () => {
 ### Local Storage & Session Storage
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('storage operations', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Local Storage
@@ -542,10 +508,10 @@ test('storage operations', async () => {
 ### Scrolling
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('scroll operations', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Scroll to specific coordinates
@@ -566,10 +532,10 @@ test('scroll operations', async () => {
 ### Dialog Handling
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('handle dialogs', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Set up dialog handler
@@ -599,10 +565,10 @@ test('handle dialogs', async () => {
 ### File Uploads
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('upload files', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com/upload')
 
     // Upload single file
@@ -623,10 +589,10 @@ test('upload files', async () => {
 ### Console Log Capture
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('capture console logs', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     // Start capturing console logs
     await page.startConsoleCapture()
 
@@ -655,10 +621,10 @@ test('capture console logs', async () => {
 ### PDF Generation
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('generate PDF', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     await page.goto('https://example.com')
 
     // Generate PDF
@@ -683,10 +649,10 @@ test('generate PDF', async () => {
 ### Network Control
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('network control', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     // Set offline mode
     await page.setOffline(true)
     await page.goto('https://example.com') // Will fail
@@ -714,10 +680,10 @@ test('network control', async () => {
 ### Mobile Emulation
 
 ```typescript
-import { browseTest, test } from 'besting'
+import { browse, test } from 'besting'
 
 test('mobile emulation', async () => {
-  await browseTest(async (page) => {
+  await browse(async (page) => {
     // Emulate iPhone
     await page.emulateDevice('iPhone')
     await page.goto('https://example.com')
@@ -741,24 +707,6 @@ test('mobile emulation', async () => {
     await page.setTouchEmulation(true)
   })
 })
-```
-
-### CLI Commands
-
-```bash
-# Install Chromium for browser testing
-besting setup-browser
-
-# Install Firefox for browser testing
-besting setup-browser --browser firefox
-
-# Force reinstall
-besting setup-browser --force
-besting setup-browser --browser firefox --force
-
-# Remove installed browsers
-besting remove-browser
-besting remove-browser --browser firefox
 ```
 
 ## API Testing

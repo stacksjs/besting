@@ -88,11 +88,11 @@ console.log('\nTest 5: Shadow DOM')
   window.document.write('<div id="host"></div>')
 
   const host = window.document.getElementById('host')
-  const shadow = (host as any).attachShadow({ mode: 'open' })
+  const shadow = host?.attachShadow({ mode: 'open' })
 
-  assert(shadow !== null, 'Shadow root created')
-  assert(shadow.mode === 'open', 'Shadow root mode is open')
-  assert((host as any).shadowRoot === shadow, 'Shadow root attached to host')
+  assert(shadow !== null && shadow !== undefined, 'Shadow root created')
+  assert(shadow?.mode === 'open', 'Shadow root mode is open')
+  assert(host?.shadowRoot === shadow, 'Shadow root attached to host')
 
   await window.happyDOM.close()
 }
@@ -123,13 +123,17 @@ console.log('\nTest 7: Drag and Drop')
   const source = page.mainFrame.document.getElementById('source')
   const target = page.mainFrame.document.getElementById('target')
 
-  ;(source as any).addEventListener('dragstart', () => { dragStarted = true })
-  ;(target as any).addEventListener('drop', () => { dropped = true })
+  source?.addEventListener('dragstart', () => {
+    dragStarted = true
+  })
+  target?.addEventListener('drop', () => {
+    dropped = true
+  })
 
   await page.dragAndDrop('#source', '#target')
 
-  assert(dragStarted === true, 'Drag start event fired')
-  assert(dropped === true, 'Drop event fired')
+  assert((dragStarted as boolean) === true, 'Drag start event fired')
+  assert((dropped as boolean) === true, 'Drop event fired')
 
   await browser.close()
 }
@@ -182,7 +186,7 @@ console.log('\nTest 10: Geolocation API')
   })
 
   await new Promise(resolve => setTimeout(resolve, 10))
-  assert(positionReceived === true, 'Position callback called')
+  assert((positionReceived as boolean) === true, 'Position callback called')
 
   await window.happyDOM.close()
 }
@@ -200,10 +204,12 @@ console.log('\nTest 11: Notifications API')
 
   let notificationShown = false
   const notification = new window.Notification('Test', { body: 'Test body' })
-  notification.onshow = () => { notificationShown = true }
+  notification.onshow = () => {
+    notificationShown = true
+  }
 
   await new Promise(resolve => setTimeout(resolve, 10))
-  assert(notificationShown === true, 'Notification shown')
+  assert((notificationShown as boolean) === true, 'Notification shown')
 
   await window.happyDOM.close()
 }

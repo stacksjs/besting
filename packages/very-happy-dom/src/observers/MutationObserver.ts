@@ -38,7 +38,7 @@ export class MutationObserver {
     this._callback = callback
   }
 
-  observe(target: VirtualNode, options: MutationObserverInit = {}): void {
+  observe(_target: VirtualNode, _options: MutationObserverInit = {}): void {
     this._observing = true
     // In a full implementation, this would hook into DOM mutation events
     // For now, it's a no-op that provides the API

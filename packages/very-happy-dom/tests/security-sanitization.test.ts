@@ -17,15 +17,16 @@ console.log('Test Group 1: Script Injection Prevention')
   const window = createTestWindow()
 
   // Test innerHTML with script tags
-  window.document.body.innerHTML = '<div><script>alert("XSS")</script></div>'
+  window.document.body!.innerHTML = '<div><script>alert("XSS")</script></div>'
   const scriptTags = window.document.querySelectorAll('script')
   assert(scriptTags.length > 0, 'Script tags are parsed (not executed)')
 
   // Test textContent doesn't create elements
   const div = window.document.createElement('div')
   div.textContent = '<script>alert("XSS")</script>'
-  assert(div.children.length === 1, 'textContent creates text node, not elements')
-  assert(div.children[0].nodeType === 'text', 'Child is text node')
+  assert(div.children.length === 0, 'textContent creates text node, not elements')
+  assert(div.childNodes.length === 1, 'One text node created')
+  assert(div.childNodes[0].nodeType === 'text', 'Child is text node')
 
   await cleanupWindow(window)
 }
@@ -39,7 +40,7 @@ console.log('\nTest Group 2: Attribute Injection')
   const div = window.document.createElement('div')
   div.setAttribute('onclick', 'alert("XSS")')
   assert(div.getAttribute('onclick') === 'alert("XSS")', 'Event handler stored as string')
-  assert(typeof div.onclick !== 'function', 'onclick not converted to function')
+  assert(typeof (div as any).onclick !== 'function', 'onclick not converted to function')
 
   // Test data URIs
   const img = window.document.createElement('img')
@@ -60,7 +61,7 @@ console.log('\nTest Group 3: HTML Entity Handling')
   const window = createTestWindow()
 
   // Test common entities
-  window.document.body.innerHTML = '<div>&lt;script&gt;alert("XSS")&lt;/script&gt;</div>'
+  window.document.body!.innerHTML = '<div>&lt;script&gt;alert("XSS")&lt;/script&gt;</div>'
   const div = window.document.querySelector('div')
   assert(div !== null, 'Div created')
   // Entities should be decoded in textContent
@@ -130,7 +131,7 @@ console.log('\nTest Group 6: SVG and XML Injection')
 
   // Test SVG with script
   const svg = '<svg><script>alert("XSS")</script></svg>'
-  window.document.body.innerHTML = svg
+  window.document.body!.innerHTML = svg
   const scripts = window.document.querySelectorAll('script')
   assert(scripts.length > 0, 'SVG script parsed')
 
@@ -152,6 +153,7 @@ console.log('\nTest Group 7: Prototype Pollution Prevention')
   // Test __proto__ in attributes
   div.setAttribute('__proto__', 'polluted')
   assert(div.getAttribute('__proto__') === 'polluted', '__proto__ stored as regular attribute')
+  // eslint-disable-next-line no-proto, no-restricted-properties
   assert((div as any).__proto__ !== 'polluted', 'Prototype not polluted')
 
   // Test constructor in attributes
@@ -172,12 +174,12 @@ console.log('\nTest Group 8: Form Input Sanitization')
   assert(input.getAttribute('value')!.includes('script'), 'Script in value attribute')
 
   // Test textarea content
-  window.document.body.innerHTML = '<textarea><script>alert("XSS")</script></textarea>'
+  window.document.body!.innerHTML = '<textarea><script>alert("XSS")</script></textarea>'
   const textarea = window.document.querySelector('textarea')
   assert(textarea !== null, 'Textarea created')
 
   // Test select options
-  window.document.body.innerHTML = '<select><option value="<script>">Test</option></select>'
+  window.document.body!.innerHTML = '<select><option value="<script>">Test</option></select>'
   const select = window.document.querySelector('select')
   const option = window.document.querySelector('option')
   assert(select !== null && option !== null, 'Select and option created')
@@ -242,12 +244,12 @@ console.log('\nTest Group 11: Nested Injection Attempts')
       </div>
     </div>
   `
-  window.document.body.innerHTML = complex
+  window.document.body!.innerHTML = complex
   const scripts = window.document.querySelectorAll('script')
   assert(scripts.length > 0, 'Deeply nested script found')
 
   // Test mixed content
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     Text <b>bold</b>
     <script>alert("XSS")</script>
     More text <i>italic</i>
@@ -265,13 +267,14 @@ console.log('\nTest Group 12: Comment Injection')
   const window = createTestWindow()
 
   // Test HTML comments with scripts
-  window.document.body.innerHTML = '<!-- <script>alert("XSS")</script> --><div>Content</div>'
-  const comments = window.document.body.children.filter(child => child.nodeType === 'comment')
+  window.document.body!.innerHTML = '<!-- <script>alert("XSS")</script> --><div>Content</div>'
+  const comments = window.document.body!.childNodes.filter(child => child.nodeType === 'comment')
   assert(comments.length > 0, 'Comments parsed')
 
   // Test conditional comments (IE-specific)
-  window.document.body.innerHTML = '<!--[if IE]><script>alert("XSS")</script><![endif]-->'
-  assert(window.document.body.children.length > 0, 'Conditional comment parsed')
+  window.document.body!.innerHTML = '<!--[if IE]><script>alert("XSS")</script><![endif]-->'
+  // Conditional comments are treated as regular comments, check childNodes not children
+  assert(window.document.body!.childNodes.length > 0, 'Conditional comment parsed')
 
   await cleanupWindow(window)
 }
@@ -315,7 +318,7 @@ console.log('\nTest Group 14: CDATA Section Handling')
   // The parser should handle this gracefully (error or ignore)
   try {
     const cdataContent = '<div><![CDATA[<script>alert("XSS")</script>]]></div>'
-    window.document.body.innerHTML = cdataContent
+    window.document.body!.innerHTML = cdataContent
     // If parsing succeeds, verify content
     assert(true, 'CDATA handled without crash')
   }

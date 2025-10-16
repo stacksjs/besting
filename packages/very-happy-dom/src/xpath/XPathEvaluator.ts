@@ -13,9 +13,9 @@ export class XPathEvaluator {
   evaluate(
     expression: string,
     contextNode: VirtualNode,
-    resolver: any = null,
+    _resolver: any = null,
     type: XPathResultType = XPathResultType.ANY_TYPE,
-    result: XPathResult | null = null,
+    _result: XPathResult | null = null,
   ): XPathResult {
     const nodes = this._evaluateExpression(expression, contextNode)
 
@@ -85,7 +85,6 @@ export class XPathEvaluator {
       return results
 
     const [first, ...rest] = parts
-    const tagName = this._parseTagName(first)
 
     for (const child of node.children || []) {
       if (this._matchesExpression(child, first)) {
