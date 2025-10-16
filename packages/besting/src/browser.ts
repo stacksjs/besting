@@ -1357,7 +1357,7 @@ export function browser(options?: BrowserOptions): Browser {
 /**
  * Helper for running browser tests with automatic cleanup
  */
-export async function browseTest(
+export async function browse(
   callback: (page: Page) => Promise<void>,
   options?: BrowserOptions,
 ): Promise<void> {
