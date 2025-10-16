@@ -21,7 +21,7 @@
     "framework"
   ],
   "scripts": {
-    "build": "bun --bun build.ts",
+    "build": "cd packages/besting && bun run build && cd ../very-happy-dom && bun run build && cd ../",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
     "lint": "bunx --bun eslint .",
     "lint:fix": "bunx --bun eslint . --fix",
