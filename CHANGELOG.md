@@ -1,3 +1,24 @@
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.6...v0.0.7)
+
+### 🧹 Chores
+
+- release v0.0.7 ([0282339](https://github.com/stacksjs/besting/commit/0282339))
+- wip ([27f833e](https://github.com/stacksjs/besting/commit/27f833e))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.6...HEAD)
+
+### 🧹 Chores
+
+- wip ([27f833e](https://github.com/stacksjs/besting/commit/27f833e))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+
 [Compare changes](https://github.com/stacksjs/besting/compare/v0.0.5...v0.0.6)
 
 ### 🧹 Chores
