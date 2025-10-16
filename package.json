@@ -1,7 +1,7 @@
 {
   "name": "besting",
   "type": "module",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "description": "A Bun test framework.",
   "author": "Chris Breuer <chris@stacksjs.org>",

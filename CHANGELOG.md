@@ -1,3 +1,24 @@
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.8...v0.0.9)
+
+### 🧹 Chores
+
+- release v0.0.9 ([b07c4db](https://github.com/stacksjs/besting/commit/b07c4db))
+- wip ([266e4c6](https://github.com/stacksjs/besting/commit/266e4c6))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.8...HEAD)
+
+### 🧹 Chores
+
+- wip ([266e4c6](https://github.com/stacksjs/besting/commit/266e4c6))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+
 [Compare changes](https://github.com/stacksjs/besting/compare/v0.0.7...v0.0.8)
 
 ### 🧹 Chores
