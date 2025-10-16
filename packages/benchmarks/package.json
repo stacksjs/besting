@@ -1,7 +1,7 @@
 {
   "name": "@besting/benchmarks",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.5",
   "description": "Benchmarks for the `besting` library.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",

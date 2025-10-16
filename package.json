@@ -1,7 +1,7 @@
 {
   "name": "besting",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": true,
   "description": "A Bun test framework.",
   "author": "Chris Breuer <chris@stacksjs.org>",
@@ -27,7 +27,7 @@
     "lint:fix": "bunx --bun eslint . --fix",
     "changelog": "bunx logsmith --verbose",
     "changelog:generate": "bunx logsmith --output CHANGELOG.md",
-    "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
+    "release": "bun run changelog:generate && bunx --bun bumpx prompt --recursive",
     "bench": "bun packages/benchmarks/dom-performance.bench.ts",
     "bench:dom": "bun packages/benchmarks/dom-performance.bench.ts",
     "bench:compare": "bun packages/benchmarks/competitive-comparison.bench.ts",
