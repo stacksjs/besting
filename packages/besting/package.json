@@ -80,6 +80,7 @@
     "very-happy-dom": "workspace:*"
   },
   "devDependencies": {
+    "@stacksjs/clapp": "^0.2.0",
     "bunfig": "^0.15.0"
   }
 }

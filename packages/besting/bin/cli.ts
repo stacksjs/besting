@@ -1,7 +1,7 @@
-import { CAC } from 'cac'
+import { CLI } from '@stacksjs/clapp'
 import { version } from '../package.json'
 
-const cli = new CAC('besting')
+const cli = new CLI('besting')
 
 interface CliOption {
   verbose: boolean
