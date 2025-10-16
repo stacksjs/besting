@@ -131,7 +131,7 @@ export function wait(ms: number): Promise<void> {
  */
 export function createHTMLFixture(html: string): (window: Window) => void {
   return (window: Window) => {
-    window.document.body.innerHTML = html
+    window.document.body!.innerHTML = html
   }
 }
 

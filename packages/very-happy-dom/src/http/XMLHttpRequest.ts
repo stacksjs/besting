@@ -11,17 +11,17 @@ export class XMLHttpRequest {
   static readonly DONE = 4
 
   // Instance properties
-  public readyState = XMLHttpRequest.UNSENT
+  public readyState: number = XMLHttpRequest.UNSENT
   public response: any = null
-  public responseText = ''
+  public responseText: string = ''
   public responseType: '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' = ''
-  public responseURL = ''
+  public responseURL: string = ''
   public responseXML: Document | null = null
-  public status = 0
-  public statusText = ''
-  public timeout = 0
-  public upload = new XMLHttpRequestUpload()
-  public withCredentials = false
+  public status: number = 0
+  public statusText: string = ''
+  public timeout: number = 0
+  public upload: XMLHttpRequestUpload = new XMLHttpRequestUpload()
+  public withCredentials: boolean = false
 
   // Event handlers
   public onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null = null

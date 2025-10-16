@@ -295,9 +295,12 @@ export class BrowserPage {
   /**
    * Keyboard actions
    */
-  get keyboard() {
+  get keyboard(): {
+    press: (key: string, options?: { delay?: number }) => Promise<void>
+    type: (text: string, options?: { delay?: number }) => Promise<void>
+  } {
     return {
-      press: async (key: string, options: { delay?: number } = {}) => {
+      press: async (key: string, options: { delay?: number } = {}): Promise<void> => {
         const { delay = 0 } = options
 
         const keydownEvent = new (this.mainFrame.window as any).Event('keydown', { bubbles: true })
@@ -313,7 +316,7 @@ export class BrowserPage {
         this.mainFrame.document.dispatchEvent?.(keyupEvent)
       },
 
-      type: async (text: string, options: { delay?: number } = {}) => {
+      type: async (text: string, options: { delay?: number } = {}): Promise<void> => {
         for (const char of text) {
           await this.keyboard.press(char, options)
         }
@@ -324,9 +327,12 @@ export class BrowserPage {
   /**
    * Mouse actions
    */
-  get mouse() {
+  get mouse(): {
+    click: (x: number, y: number, options?: { button?: 'left' | 'right' | 'middle', delay?: number }) => Promise<void>
+    move: (x: number, y: number) => Promise<void>
+  } {
     return {
-      click: async (x: number, y: number, options: { button?: 'left' | 'right' | 'middle', delay?: number } = {}) => {
+      click: async (x: number, y: number, options: { button?: 'left' | 'right' | 'middle', delay?: number } = {}): Promise<void> => {
         const { delay = 0 } = options
 
         const clickEvent = new (this.mainFrame.window as any).Event('click', { bubbles: true })
@@ -339,7 +345,7 @@ export class BrowserPage {
         }
       },
 
-      move: async (x: number, y: number) => {
+      move: async (x: number, y: number): Promise<void> => {
         const moveEvent = new (this.mainFrame.window as any).Event('mousemove', { bubbles: true })
         ;(moveEvent as any).clientX = x
         ;(moveEvent as any).clientY = y

@@ -55,7 +55,7 @@ console.log('\nTest Group 3: Type Mismatch Handling')
 
   // Setting non-string attributes - implementation stores as-is
   element.setAttribute('test', 123 as any)
-  assert(element.getAttribute('test') === 123, 'Attribute stored as number')
+  assert(element.getAttribute('test') as any === 123, 'Attribute stored as number')
 
   // Setting null/undefined - both return null
   element.setAttribute('nullable', null as any)
@@ -217,7 +217,7 @@ console.log('\nTest Group 10: Custom Elements Error Handling')
   // Invalid name (no hyphen)
   let errorThrown = false
   try {
-    window.customElements.define('testelement', TestElement)
+    window.customElements.define('testelement', TestElement as any)
   }
   catch {
     errorThrown = true

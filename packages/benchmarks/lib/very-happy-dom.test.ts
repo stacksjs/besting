@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { createDocument } from '../../very-happy-dom/src/index'
+// @ts-expect-error - HTMLPage is a JS file
 import HTMLPage from './data/HTMLPage'
 
 function testImportVeryHappyDOM() {

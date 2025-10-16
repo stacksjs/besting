@@ -4,7 +4,7 @@ export class VirtualCommentNode implements VirtualNode {
   nodeType: NodeType = 'comment'
   nodeName: string = '#comment'
   nodeValue: string
-  attributes = new Map<string, string>()
+  attributes: Map<string, string> = new Map<string, string>()
   children: VirtualNode[] = []
   parentNode: VirtualNode | null = null
 

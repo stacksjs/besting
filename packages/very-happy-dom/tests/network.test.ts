@@ -43,10 +43,12 @@ console.log('\nTest Group 2: Request Interception - Setup')
   const page = browser.newPage()
   let interceptorCalled = false
 
-  await page.setRequestInterception(true, async (request: InterceptedRequest) => {
+  page.on('request', async (request: InterceptedRequest) => {
     interceptorCalled = true
     request.continue()
   })
+
+  await page.setRequestInterception(true)
 
   assert(true, 'Request interception enabled without error')
   assert(interceptorCalled === false, 'Interceptor not called until fetch')
@@ -61,7 +63,7 @@ console.log('\nTest Group 3: Request Interception - InterceptedRequest API')
   const page = browser.newPage()
   let interceptorCalledWithRequest = false
 
-  await page.setRequestInterception(true, async (request: InterceptedRequest) => {
+  page.on('request', async (request: InterceptedRequest) => {
     // Test that request has expected properties
     interceptorCalledWithRequest = (
       typeof request.url === 'string'
@@ -73,6 +75,8 @@ console.log('\nTest Group 3: Request Interception - InterceptedRequest API')
     )
     request.continue()
   })
+
+  await page.setRequestInterception(true)
 
   assert(interceptorCalledWithRequest === false, 'Interceptor not called before fetch')
 

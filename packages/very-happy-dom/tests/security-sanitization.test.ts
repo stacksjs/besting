@@ -39,7 +39,7 @@ console.log('\nTest Group 2: Attribute Injection')
   const div = window.document.createElement('div')
   div.setAttribute('onclick', 'alert("XSS")')
   assert(div.getAttribute('onclick') === 'alert("XSS")', 'Event handler stored as string')
-  assert(typeof div.onclick !== 'function', 'onclick not converted to function')
+  assert(typeof (div as any).onclick !== 'function', 'onclick not converted to function')
 
   // Test data URIs
   const img = window.document.createElement('img')
@@ -130,7 +130,7 @@ console.log('\nTest Group 6: SVG and XML Injection')
 
   // Test SVG with script
   const svg = '<svg><script>alert("XSS")</script></svg>'
-  window.document.body.innerHTML = svg
+  window.document.body!.innerHTML = svg
   const scripts = window.document.querySelectorAll('script')
   assert(scripts.length > 0, 'SVG script parsed')
 
@@ -243,7 +243,7 @@ console.log('\nTest Group 11: Nested Injection Attempts')
       </div>
     </div>
   `
-  window.document.body.innerHTML = complex
+  window.document.body!.innerHTML = complex
   const scripts = window.document.querySelectorAll('script')
   assert(scripts.length > 0, 'Deeply nested script found')
 
@@ -267,12 +267,12 @@ console.log('\nTest Group 12: Comment Injection')
 
   // Test HTML comments with scripts
   window.document.body!.innerHTML = '<!-- <script>alert("XSS")</script> --><div>Content</div>'
-  const comments = window.document.body.children.filter(child => child.nodeType === 'comment')
+  const comments = window.document.body!.children.filter(child => child.nodeType === 'comment')
   assert(comments.length > 0, 'Comments parsed')
 
   // Test conditional comments (IE-specific)
   window.document.body!.innerHTML = '<!--[if IE]><script>alert("XSS")</script><![endif]-->'
-  assert(window.document.body.children.length > 0, 'Conditional comment parsed')
+  assert(window.document.body!.children.length > 0, 'Conditional comment parsed')
 
   await cleanupWindow(window)
 }
@@ -316,7 +316,7 @@ console.log('\nTest Group 14: CDATA Section Handling')
   // The parser should handle this gracefully (error or ignore)
   try {
     const cdataContent = '<div><![CDATA[<script>alert("XSS")</script>]]></div>'
-    window.document.body.innerHTML = cdataContent
+    window.document.body!.innerHTML = cdataContent
     // If parsing succeeds, verify content
     assert(true, 'CDATA handled without crash')
   }

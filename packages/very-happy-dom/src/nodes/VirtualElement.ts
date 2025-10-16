@@ -10,13 +10,13 @@ export class VirtualElement implements VirtualNode {
   nodeName: string
   nodeValue: string | null = null
   tagName: string
-  attributes = new Map<string, string>()
+  attributes: Map<string, string> = new Map<string, string>()
   childNodes: VirtualNode[] = []
   parentNode: VirtualNode | null = null
   shadowRoot: ShadowRoot | null = null
-  private eventListeners = new Map<string, EventListener[]>()
-  private _customValidity = ''
-  private _internalStyles = new Map<string, string>()
+  private eventListeners: Map<string, EventListener[]> = new Map<string, EventListener[]>()
+  private _customValidity: string = ''
+  private _internalStyles: Map<string, string> = new Map<string, string>()
 
   // children should only contain element nodes, per DOM spec
   get children(): VirtualNode[] {

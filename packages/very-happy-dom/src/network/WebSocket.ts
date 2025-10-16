@@ -11,10 +11,10 @@ export enum WebSocketReadyState {
 }
 
 export class VeryHappyWebSocket {
-  static readonly CONNECTING = WebSocketReadyState.CONNECTING
-  static readonly OPEN = WebSocketReadyState.OPEN
-  static readonly CLOSING = WebSocketReadyState.CLOSING
-  static readonly CLOSED = WebSocketReadyState.CLOSED
+  static readonly CONNECTING: number = WebSocketReadyState.CONNECTING
+  static readonly OPEN: number = WebSocketReadyState.OPEN
+  static readonly CLOSING: number = WebSocketReadyState.CLOSING
+  static readonly CLOSED: number = WebSocketReadyState.CLOSED
 
   public readyState: WebSocketReadyState = WebSocketReadyState.CONNECTING
   public url: string

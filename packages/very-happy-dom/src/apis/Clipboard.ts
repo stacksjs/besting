@@ -38,14 +38,14 @@ export class Clipboard {
 }
 
 export class Navigator {
-  public clipboard = new Clipboard()
-  public geolocation = new Geolocation()
-  public userAgent = 'Mozilla/5.0 (X11; Linux x64) AppleWebKit/537.36 (KHTML, like Gecko) VeryHappyDOM/1.0.0'
-  public language = 'en-US'
-  public languages = ['en-US', 'en']
-  public platform = 'Linux x86_64'
-  public cookieEnabled = true
-  public onLine = true
+  public clipboard: Clipboard = new Clipboard()
+  public geolocation: Geolocation = new Geolocation()
+  public userAgent: string = 'Mozilla/5.0 (X11; Linux x64) AppleWebKit/537.36 (KHTML, like Gecko) VeryHappyDOM/1.0.0'
+  public language: string = 'en-US'
+  public languages: readonly string[] = ['en-US', 'en'] as const
+  public platform: string = 'Linux x86_64'
+  public cookieEnabled: boolean = true
+  public onLine: boolean = true
 }
 
 type ClipboardItems = ClipboardItem[]

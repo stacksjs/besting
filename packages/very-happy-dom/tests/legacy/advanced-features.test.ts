@@ -44,8 +44,8 @@ console.log('Test 1: BrowserPage Event Emitters')
   page._emitConsole('log', 'Hello from console')
   page._emitError(new Error('Test error'))
 
-  assert(consoleEmitted === true, 'Console event emitted')
-  assert(errorEmitted === true, 'Error event emitted')
+  assert((consoleEmitted as boolean) === true, 'Console event emitted')
+  assert((errorEmitted as boolean) === true, 'Error event emitted')
 
   await browser.close()
 }
@@ -68,7 +68,7 @@ console.log('\nTest 2: virtualConsolePrinter')
 
   page._emitConsole('warn', 'Warning message', 123)
 
-  assert(printerCalled === true, 'virtualConsolePrinter called')
+  assert((printerCalled as boolean) === true, 'virtualConsolePrinter called')
   assert(capturedType === 'warn', 'Captured correct type')
   assert(capturedArgs[0] === 'Warning message', 'Captured correct message')
   assert(capturedArgs[1] === 123, 'Captured correct number')
@@ -146,7 +146,7 @@ console.log('\nTest 6: IntersectionObserver')
 
   await new Promise(resolve => setTimeout(resolve, 10))
 
-  assert(observerCalled === true, 'IntersectionObserver callback called')
+  assert((observerCalled as boolean) === true, 'IntersectionObserver callback called')
 
   observer.disconnect()
   await window.happyDOM.close()
@@ -173,7 +173,7 @@ console.log('\nTest 7: ResizeObserver')
 
   await new Promise(resolve => setTimeout(resolve, 10))
 
-  assert(observerCalled === true, 'ResizeObserver callback called')
+  assert((observerCalled as boolean) === true, 'ResizeObserver callback called')
 
   observer.disconnect()
   await window.happyDOM.close()

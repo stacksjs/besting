@@ -29,7 +29,7 @@ export class VeryHappyFileReader {
   static readonly LOADING = 1
   static readonly DONE = 2
 
-  public readyState = VeryHappyFileReader.EMPTY
+  public readyState: number = VeryHappyFileReader.EMPTY
   public result: string | ArrayBuffer | null = null
   public error: Error | null = null
 
@@ -172,7 +172,7 @@ export class VeryHappyFileList {
     return this._files[index] || null
   }
 
-  [Symbol.iterator]() {
+  [Symbol.iterator](): Iterator<File> {
     return this._files[Symbol.iterator]()
   }
 

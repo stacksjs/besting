@@ -175,15 +175,19 @@ export function customExpect<T>(value: T, isNegated = false): CustomMatchers<T> 
  *   p.it(value).toBe(expected)
  * })
  */
-export function best() {
+export function best(): {
+  test: (name: string, fn: () => void | Promise<void>) => void
+  describe: (name: string, fn: () => void) => void
+  it: <T>(value: T) => CustomMatchers<T>
+} {
   return {
-    test: (name: string, fn: () => void | Promise<void>) => {
+    test: (name: string, fn: () => void | Promise<void>): void => {
       return test(name, fn)
     },
-    describe: (name: string, fn: () => void) => {
+    describe: (name: string, fn: () => void): void => {
       return describe(name, fn)
     },
-    it: <T>(value: T) => {
+    it: <T>(value: T): CustomMatchers<T> => {
       return customExpect(value)
     },
   }
@@ -198,7 +202,7 @@ export function best() {
  *   v.toHaveLength(5)
  * })
  */
-export function testGroup<T>(value: T, fn: (expect: CustomMatchers<T>) => void) {
+export function testGroup<T>(value: T, fn: (expect: CustomMatchers<T>) => void): void {
   const expectValue = customExpect(value)
   fn(expectValue)
 }

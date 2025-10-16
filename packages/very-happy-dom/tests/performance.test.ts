@@ -229,7 +229,7 @@ console.log('\nTest Group 10: DOM Tree Traversal Performance')
   let current = window.document.body!
   for (let i = 0; i < 50; i++) {
     const div = window.document.createElement('div')
-    div.className = `level-${i}`
+    div.setAttribute('class', `level-${i}`)
     current.appendChild(div)
     current = div
   }

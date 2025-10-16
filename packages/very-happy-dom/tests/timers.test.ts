@@ -37,7 +37,7 @@ console.log('Test Group 1: setTimeout - Basic Operations')
 
   // Execute pending timers
   await window.happyDOM.waitUntilComplete()
-  assert(executed === true, 'Callback executed after timeout')
+  assert((executed as boolean) === true, 'Callback executed after timeout')
 
   await window.happyDOM.close()
 }
@@ -129,7 +129,7 @@ console.log('\nTest Group 5: setInterval - Basic Operations')
 
   // Wait for intervals to execute (intervals don't count as "pending" in waitUntilComplete)
   await new Promise(resolve => setTimeout(resolve, 50))
-  assert(count >= 3, 'Interval executed multiple times')
+  assert((count as number) >= 3, 'Interval executed multiple times')
 
   await window.happyDOM.close()
 }
@@ -191,7 +191,7 @@ console.log('\nTest Group 8: requestAnimationFrame - Basic Operations')
   assert(typeof id === 'number', 'requestAnimationFrame returns numeric ID')
 
   await window.happyDOM.waitUntilComplete()
-  assert(executed === true, 'Animation frame callback executed')
+  assert((executed as boolean) === true, 'Animation frame callback executed')
   assert(typeof timestamp === 'number', 'Timestamp provided to callback')
   assert(timestamp! >= 0, 'Timestamp is non-negative')
 
@@ -283,8 +283,8 @@ console.log('\nTest Group 12: waitUntilComplete - Integration')
 
   await window.happyDOM.waitUntilComplete()
 
-  assert(executed1 === true, 'setTimeout completed before waitUntilComplete resolves')
-  assert(executed2 === true, 'requestAnimationFrame completed before waitUntilComplete resolves')
+  assert((executed1 as boolean) === true, 'setTimeout completed before waitUntilComplete resolves')
+  assert((executed2 as boolean) === true, 'requestAnimationFrame completed before waitUntilComplete resolves')
 
   await window.happyDOM.close()
 }

@@ -9,9 +9,9 @@ import { VirtualTextNode } from './VirtualTextNode'
 
 export class VirtualDocument implements VirtualNode {
   nodeType: NodeType = 'document'
-  nodeName = '#document'
+  nodeName: string = '#document'
   nodeValue: string | null = null
-  attributes = new Map<string, string>()
+  attributes: Map<string, string> = new Map<string, string>()
   children: VirtualNode[] = []
   parentNode: VirtualNode | null = null
 

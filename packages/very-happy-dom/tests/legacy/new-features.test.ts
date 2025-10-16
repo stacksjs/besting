@@ -68,7 +68,7 @@ console.log('\nTest 3: setTimeout')
   }, 10)
 
   await new Promise(resolve => setTimeout(resolve, 50))
-  assert(executed === true, 'setTimeout executes callback')
+  assert((executed as boolean) === true, 'setTimeout executes callback')
 
   await window.happyDOM.close()
 }
@@ -104,7 +104,7 @@ console.log('\nTest 5: requestAnimationFrame')
   })
 
   await new Promise(resolve => setTimeout(resolve, 50))
-  assert(executed === true, 'requestAnimationFrame executes callback')
+  assert((executed as boolean) === true, 'requestAnimationFrame executes callback')
   assert(timestamp > 0, 'requestAnimationFrame provides timestamp')
 
   await window.happyDOM.close()
@@ -138,7 +138,7 @@ console.log('\nTest 7: waitUntilComplete with timers')
 
   await window.happyDOM.waitUntilComplete()
 
-  assert(executed === true, 'waitUntilComplete waits for timers')
+  assert((executed as boolean) === true, 'waitUntilComplete waits for timers')
 
   await window.happyDOM.close()
 }
@@ -299,7 +299,7 @@ console.log('\nTest 16: BrowserPage.click')
 
   await page.click('#btn')
 
-  assert(clicked === true, 'click() triggers click event')
+  assert((clicked as boolean) === true, 'click() triggers click event')
 
   await browser.close()
 }
@@ -338,7 +338,7 @@ console.log('\nTest 18: BrowserPage.focus')
 
   await page.focus('#input')
 
-  assert(focused === true, 'focus() triggers focus event')
+  assert((focused as boolean) === true, 'focus() triggers focus event')
 
   await browser.close()
 }

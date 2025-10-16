@@ -79,7 +79,7 @@ console.log('\nTest Group 4: Element - addEventListener')
   const event = new window.CustomEvent('click')
   element.dispatchEvent(event)
 
-  assert(eventFired === true, 'Event listener executed')
+  assert((eventFired as boolean) === true, 'Event listener executed')
 
   await window.happyDOM.close()
 }
@@ -119,7 +119,7 @@ console.log('\nTest Group 6: Document - addEventListener')
   })
 
   window.document.dispatchEvent(new window.CustomEvent('custom'))
-  assert(eventFired === true, 'Document event listener works')
+  assert((eventFired as boolean) === true, 'Document event listener works')
 
   await window.happyDOM.close()
 }

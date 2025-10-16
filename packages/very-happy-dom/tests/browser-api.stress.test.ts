@@ -638,7 +638,7 @@ console.log('\nTest 33: Frame Document Operations')
 
   const elem = page.mainFrame.document.getElementById('test')
   assert(elem !== null, 'Frame document querySelector works')
-  assert(elem.textContent === 'Content', 'Frame document content accessible')
+  assert(elem?.textContent === 'Content', 'Frame document content accessible')
 
   await browser.close()
 }

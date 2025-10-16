@@ -132,8 +132,8 @@ console.log('\nTest 7: Drag and Drop')
 
   await page.dragAndDrop('#source', '#target')
 
-  assert(dragStarted === true, 'Drag start event fired')
-  assert(dropped === true, 'Drop event fired')
+  assert((dragStarted as boolean) === true, 'Drag start event fired')
+  assert((dropped as boolean) === true, 'Drop event fired')
 
   await browser.close()
 }
@@ -186,7 +186,7 @@ console.log('\nTest 10: Geolocation API')
   })
 
   await new Promise(resolve => setTimeout(resolve, 10))
-  assert(positionReceived === true, 'Position callback called')
+  assert((positionReceived as boolean) === true, 'Position callback called')
 
   await window.happyDOM.close()
 }
@@ -209,7 +209,7 @@ console.log('\nTest 11: Notifications API')
   }
 
   await new Promise(resolve => setTimeout(resolve, 10))
-  assert(notificationShown === true, 'Notification shown')
+  assert((notificationShown as boolean) === true, 'Notification shown')
 
   await window.happyDOM.close()
 }

@@ -4,7 +4,7 @@ export class VirtualTextNode implements VirtualNode {
   nodeType: NodeType = 'text'
   nodeName: string = '#text'
   nodeValue: string
-  attributes = new Map<string, string>()
+  attributes: Map<string, string> = new Map<string, string>()
   children: VirtualNode[] = []
   parentNode: VirtualNode | null = null
 

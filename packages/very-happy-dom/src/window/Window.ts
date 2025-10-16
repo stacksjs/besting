@@ -49,41 +49,41 @@ export class Window {
   public happyDOM: DetachedWindowAPI
   public console: Console
   public navigator: VeryHappyNavigator
-  public customElements = new CustomElementRegistry()
-  public HTMLElement = HTMLElement
+  public customElements: CustomElementRegistry = new CustomElementRegistry()
+  public HTMLElement: typeof HTMLElement = HTMLElement
   public localStorage: Storage
   public sessionStorage: Storage
 
   // Global APIs from Bun/Browser
-  public fetch = globalThis.fetch.bind(globalThis)
-  public Request = globalThis.Request
-  public Response = globalThis.Response
-  public Headers = globalThis.Headers
-  public FormData = globalThis.FormData
-  public URL = globalThis.URL
-  public URLSearchParams = globalThis.URLSearchParams
+  public fetch: typeof globalThis.fetch = globalThis.fetch.bind(globalThis)
+  public Request: typeof globalThis.Request = globalThis.Request
+  public Response: typeof globalThis.Response = globalThis.Response
+  public Headers: typeof globalThis.Headers = globalThis.Headers
+  public FormData: typeof globalThis.FormData = globalThis.FormData
+  public URL: typeof globalThis.URL = globalThis.URL
+  public URLSearchParams: typeof globalThis.URLSearchParams = globalThis.URLSearchParams
 
   // Observer APIs
-  public CustomEvent = VeryHappyCustomEvent
-  public MutationObserver = VeryHappyMutationObserver
-  public IntersectionObserver = VeryHappyIntersectionObserver
-  public ResizeObserver = VeryHappyResizeObserver
+  public CustomEvent: typeof VeryHappyCustomEvent = VeryHappyCustomEvent
+  public MutationObserver: typeof VeryHappyMutationObserver = VeryHappyMutationObserver
+  public IntersectionObserver: typeof VeryHappyIntersectionObserver = VeryHappyIntersectionObserver
+  public ResizeObserver: typeof VeryHappyResizeObserver = VeryHappyResizeObserver
 
   // Legacy HTTP API
-  public XMLHttpRequest = VeryHappyXMLHttpRequest
+  public XMLHttpRequest: typeof VeryHappyXMLHttpRequest = VeryHappyXMLHttpRequest
 
   // WebSocket API
-  public WebSocket = VeryHappyWebSocket
+  public WebSocket: typeof VeryHappyWebSocket = VeryHappyWebSocket
 
   // File API
-  public File = VeryHappyFile
-  public FileReader = VeryHappyFileReader
-  public FileList = VeryHappyFileList
+  public File: typeof VeryHappyFile = VeryHappyFile
+  public FileReader: typeof VeryHappyFileReader = VeryHappyFileReader
+  public FileList: typeof VeryHappyFileList = VeryHappyFileList
 
   // Additional Browser APIs
-  public performance = new Performance()
-  public Notification = Notification
-  public DataTransfer = DataTransfer
+  public performance: Performance = new Performance()
+  public Notification: typeof Notification = Notification
+  public DataTransfer: typeof DataTransfer = DataTransfer
 
   private _location: Location
   private _settings: IBrowserSettings

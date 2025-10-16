@@ -664,7 +664,7 @@ console.log('\nTest Group 34: closest() Method')
 
   const span = window.document.querySelector('.child')!
   assert(span.closest('.child') === span, 'closest() returns self if matches')
-  assert(span.closest('.parent')?.textContent?.includes('Target'), 'closest() finds parent')
+  assert(span.closest('.parent')?.textContent?.includes('Target') ?? false, 'closest() finds parent')
   assert(span.closest('.grandparent') !== null, 'closest() finds grandparent')
   assert(span.closest('.nonexistent') === null, 'closest() returns null if not found')
 
@@ -682,7 +682,7 @@ console.log('\nTest Group 35: Performance with Many Elements')
     html += `<div class="item ${i % 2 === 0 ? 'even' : 'odd'}" data-index="${i}">Item ${i}</div>`
   }
   html += '</div>'
-  window.document.body.innerHTML = html
+  window.document.body!.innerHTML = html
 
   const startTime = performance.now()
   const evens = window.document.querySelectorAll('.item.even')

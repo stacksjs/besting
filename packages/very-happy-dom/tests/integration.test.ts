@@ -76,7 +76,7 @@ console.log('\nTest Group 3: Events - DOM Integration')
 
   button.dispatchEvent(new window.CustomEvent('click'))
 
-  assert(clicked === true, 'Event listener triggered')
+  assert((clicked as boolean) === true, 'Event listener triggered')
   assert(window.document.body!.children.length === 1, 'Button in DOM')
 
   await window.happyDOM.close()
@@ -98,7 +98,7 @@ console.log('\nTest Group 4: Storage - Timer Integration')
 
   await window.happyDOM.waitUntilComplete()
 
-  assert(timerExecuted === true, 'Timer executed')
+  assert((timerExecuted as boolean) === true, 'Timer executed')
 
   await window.happyDOM.close()
 }
@@ -125,7 +125,7 @@ console.log('\nTest Group 5: XPath - DOM Integration')
   )
 
   assert(result.singleNodeValue !== null, 'XPath found active item')
-  assert(result.singleNodeValue?.textContent?.includes('Item 2'), 'XPath found correct item')
+  assert(result.singleNodeValue?.textContent?.includes('Item 2') ?? false, 'XPath found correct item')
 
   await window.happyDOM.close()
 }
@@ -149,7 +149,7 @@ console.log('\nTest Group 6: Shadow DOM - Event Integration')
 
   button.dispatchEvent(new window.CustomEvent('click'))
 
-  assert(clicked === true, 'Shadow DOM event works')
+  assert((clicked as boolean) === true, 'Shadow DOM event works')
   assert(shadow.querySelector('button') === button, 'Shadow querySelector works')
 
   await window.happyDOM.close()
@@ -188,7 +188,7 @@ console.log('\nTest Group 8: Custom Elements - DOM Integration')
     }
   }
 
-  window.customElements.define('my-component', MyComponent)
+  window.customElements.define('my-component', MyComponent as any)
 
   window.document.body!.innerHTML = '<my-component></my-component>'
 
