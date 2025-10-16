@@ -48,7 +48,7 @@ console.log('\nTest Group 2: CustomElements - define()')
   assert(true, 'Custom element defined without error')
 
   const retrieved = window.customElements.get('my-element')
-  assert(retrieved === MyElement, 'get() returns correct constructor')
+  assert((retrieved as any) === MyElement, 'get() returns correct constructor')
 
   await window.happyDOM.close()
 }

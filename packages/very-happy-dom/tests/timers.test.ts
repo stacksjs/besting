@@ -302,7 +302,7 @@ console.log('\nTest Group 13: Zero Delay - Immediate Execution')
   assert(executed === false, 'Zero delay timer does not execute synchronously')
 
   await window.happyDOM.waitUntilComplete()
-  assert(executed === true, 'Zero delay timer executes asynchronously')
+  assert((executed as boolean) === true, 'Zero delay timer executes asynchronously')
 
   await window.happyDOM.close()
 }
