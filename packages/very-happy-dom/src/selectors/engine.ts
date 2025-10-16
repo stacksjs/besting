@@ -16,11 +16,11 @@ import type { VirtualNode } from '../nodes/VirtualNode'
  */
 export function querySelectorEngine(root: VirtualNode, selector: string): VirtualElement | null {
   if (!selector || typeof selector !== 'string') {
-    throw new TypeError('Selector must be a non-empty string')
+    return null
   }
 
   if (!selector.trim()) {
-    throw new Error('Failed to execute \'querySelector\': The provided selector is empty')
+    return null
   }
 
   const results = querySelectorAllEngine(root, selector)
@@ -49,11 +49,11 @@ export function querySelectorEngine(root: VirtualNode, selector: string): Virtua
  */
 export function querySelectorAllEngine(root: VirtualNode, selector: string): VirtualElement[] {
   if (!selector || typeof selector !== 'string') {
-    throw new TypeError('Selector must be a non-empty string')
+    return []
   }
 
   if (!selector.trim()) {
-    throw new Error('Failed to execute \'querySelectorAll\': The provided selector is empty')
+    return []
   }
 
   // Handle comma-separated selectors

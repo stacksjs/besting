@@ -89,8 +89,9 @@ describe('DOM Edge Cases', () => {
 
       div.textContent = '<script>alert("xss")</script>'
       expect(div.textContent).toBe('<script>alert("xss")</script>')
-      expect(div.children.length).toBe(1)
-      expect(div.children[0].nodeType).toBe('text')
+      expect(div.children.length).toBe(0)
+      expect(div.childNodes.length).toBe(1)
+      expect(div.childNodes[0].nodeType).toBe('text')
     })
 
     test('should handle textContent with newlines and whitespace', () => {
@@ -120,8 +121,9 @@ describe('DOM Edge Cases', () => {
       expect(div.children.length).toBe(2)
 
       div.textContent = 'new text'
-      expect(div.children.length).toBe(1)
-      expect(div.children[0].nodeType).toBe('text')
+      expect(div.children.length).toBe(0)
+      expect(div.childNodes.length).toBe(1)
+      expect(div.childNodes[0].nodeType).toBe('text')
     })
   })
 
@@ -294,8 +296,9 @@ describe('DOM Edge Cases', () => {
       const div = doc.createElement('div')
 
       div.innerHTML = 'text1<span>span1</span>text2<p>para</p>text3'
-      // Parser creates text nodes between elements
-      expect(div.children.length).toBeGreaterThan(2)
+      // Parser creates element nodes (span and p) and text nodes
+      // children only contains element nodes, so should be 2 (span and p)
+      expect(div.children.length).toBe(2)
       expect(div.textContent).toContain('text1')
       expect(div.textContent).toContain('span1')
       expect(div.textContent).toContain('para')

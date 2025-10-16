@@ -2,7 +2,7 @@ import type { ShadowRootInit } from '../webcomponents/ShadowRoot'
 import type { EventListener, EventListenerOptions, NodeType, VirtualNode } from './VirtualNode'
 import { VirtualEvent } from '../events/VirtualEvent'
 import { parseHTML } from '../parsers/html-parser'
-import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
+import { hasCombinators, matchesComplexSelector, matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
 import { ShadowRoot } from '../webcomponents/ShadowRoot'
 
 export class VirtualElement implements VirtualNode {
@@ -689,7 +689,25 @@ export class VirtualElement implements VirtualNode {
   }
 
   matches(selector: string): boolean {
-    return matchesSimpleSelector(this, selector)
+    // Check if selector has combinators
+    if (hasCombinators(selector)) {
+      // For complex selectors with combinators, we need to find a root to search from
+      // Navigate to the document root or highest ancestor
+      let root: VirtualNode = this
+      while (root.parentNode && root.parentNode.nodeType !== 'document') {
+        root = root.parentNode
+      }
+      // If we have a document parent, use the document as root
+      if (root.parentNode && root.parentNode.nodeType === 'document') {
+        root = root.parentNode
+      }
+
+      return matchesComplexSelector(this, selector, root)
+    }
+    else {
+      // Simple selector without combinators
+      return matchesSimpleSelector(this, selector)
+    }
   }
 
   // Event handling

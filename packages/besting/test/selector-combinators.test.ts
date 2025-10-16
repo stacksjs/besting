@@ -103,16 +103,18 @@ describe('CSS Selector Combinators', () => {
     test('should not match grandchildren', () => {
       const doc = createDocument()
       doc.body!.innerHTML = `
-        <ul>
+        <ul id="outer">
           <li>
-            <ul>
+            <ul id="inner">
               <li id="nested">Nested</li>
             </ul>
           </li>
         </ul>
       `
 
-      const result = doc.querySelector('ul > li#nested')
+      // ul > li#nested WILL match because li#nested IS a direct child of ul#inner
+      // To test "grandchildren not matching", we need to be more specific
+      const result = doc.querySelector('#outer > li#nested')
       expect(result).toBeNull()
     })
 
