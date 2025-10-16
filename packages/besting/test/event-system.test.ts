@@ -374,6 +374,10 @@ describe('Event System', () => {
 
       const calls: string[] = []
 
+      // Suppress console.error during this test
+      const originalError = console.error
+      console.error = () => {}
+
       button.addEventListener('click', () => {
         calls.push('first')
         throw new Error('Listener error')
@@ -384,6 +388,9 @@ describe('Event System', () => {
       })
 
       button.dispatchEvent(new VirtualEvent('click'))
+
+      // Restore console.error
+      console.error = originalError
 
       expect(calls).toEqual(['first', 'second']) // Both should run despite error
     })
