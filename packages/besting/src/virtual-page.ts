@@ -7,7 +7,7 @@
 
 import type { VirtualDocument, VirtualElement } from 'very-happy-dom'
 import { expect } from 'bun:test'
-import { createDocument, parseHTML, VirtualEvent } from 'very-happy-dom'
+import { createDocument, VirtualEvent } from 'very-happy-dom'
 
 interface VirtualStorage {
   [key: string]: string
@@ -59,23 +59,9 @@ export class VirtualPage {
       const response = await fetch(url)
       const html = await response.text()
 
-      // Parse and set HTML
-      const nodes = parseHTML(html)
-      const htmlNode = nodes.find(n => n.nodeName === 'HTML')
-
-      if (htmlNode) {
-        this.document.children = [htmlNode]
-        htmlNode.parentNode = this.document
-      }
-      else {
-        // Create basic structure and add nodes to body
-        const body = this.document.body
-        if (body) {
-          // Clear existing children and append new nodes
-          body.childNodes = []
-          nodes.forEach(node => body.appendChild(node))
-        }
-      }
+      // Use document.write() to properly handle the HTML
+      // This will update documentElement, head, body references correctly
+      this.document.write(html)
 
       // Extract title
       const titleElement = this.document.querySelector('title')

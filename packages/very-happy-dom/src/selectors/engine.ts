@@ -204,7 +204,7 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
           return false
         }
         // Found and verified match, skip checking in next iteration
-        i--
+        // Don't manually decrement i - let the for loop handle it
         skipCheck = true
         break
       }
@@ -238,7 +238,7 @@ export function matchesComplexSelector(element: VirtualElement, selector: string
         }
 
         // Found and verified match, skip checking in next iteration
-        i--
+        // Don't manually decrement i - let the for loop handle it
         skipCheck = true
         break
       }

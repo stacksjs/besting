@@ -721,10 +721,19 @@ export class VirtualElement implements VirtualNode {
       this.eventListeners.set(type, [])
     }
 
-    this.eventListeners.get(type)!.push({
-      listener,
-      options: opts,
-    })
+    const listeners = this.eventListeners.get(type)!
+
+    // Don't add duplicate listeners - check if same listener with same capture option already exists
+    const isDuplicate = listeners.some(
+      l => l.listener === listener && l.options.capture === opts.capture,
+    )
+
+    if (!isDuplicate) {
+      listeners.push({
+        listener,
+        options: opts,
+      })
+    }
   }
 
   removeEventListener(type: string, listener: (event: VirtualEvent) => void, options: EventListenerOptions | boolean = {}): void {
@@ -825,7 +834,13 @@ export class VirtualElement implements VirtualNode {
       if (event.immediatePropagationStopped)
         break
 
-      listener.call(element, event)
+      try {
+        listener.call(element, event)
+      }
+      catch (error) {
+        // Log error but continue executing other listeners
+        console.error('Error in event listener:', error)
+      }
 
       if (options.once) {
         element.removeEventListener(event.type, listener, options)
