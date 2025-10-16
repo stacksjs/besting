@@ -1,8 +1,9 @@
+import type { ShadowRootInit } from '../webcomponents/ShadowRoot'
 import type { EventListener, EventListenerOptions, NodeType, VirtualNode } from './VirtualNode'
 import { VirtualEvent } from '../events/VirtualEvent'
-import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
 import { parseHTML } from '../parsers/html-parser'
-import { ShadowRoot, type ShadowRootInit } from '../webcomponents/ShadowRoot'
+import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
+import { ShadowRoot } from '../webcomponents/ShadowRoot'
 
 export class VirtualElement implements VirtualNode {
   nodeType: NodeType = 'element'
@@ -597,7 +598,7 @@ export class VirtualElement implements VirtualNode {
 
     // Check type-specific validation
     if (type === 'email' && value) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      const emailRegex = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/
       if (!emailRegex.test(value)) {
         validity.typeMismatch = true
         validity.valid = false

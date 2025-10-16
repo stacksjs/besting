@@ -1,6 +1,6 @@
-import { VirtualDocument } from '../nodes/VirtualDocument'
-import { VirtualEvent } from '../events/VirtualEvent'
 import type { BrowserPage } from './BrowserPage'
+import { VirtualEvent } from '../events/VirtualEvent'
+import { VirtualDocument } from '../nodes/VirtualDocument'
 
 /**
  * BrowserFrame represents a browser frame
@@ -29,9 +29,9 @@ export class BrowserFrame {
       document: this.document,
       location: {
         href: this._url,
-        toString: () => this._url
+        toString: () => this._url,
       },
-      Event: VirtualEvent
+      Event: VirtualEvent,
     } as any
   }
 
@@ -114,7 +114,8 @@ export class BrowserFrame {
       // Use Function constructor to create a function with window in scope
       const wrappedFn = new Function('window', 'document', `return (${code.toString()})()`).bind(null, window, document)
       return wrappedFn()
-    } else {
+    }
+    else {
       // Simple eval in context - in a real implementation this would use VM
       const window = this.window
       return eval(code)

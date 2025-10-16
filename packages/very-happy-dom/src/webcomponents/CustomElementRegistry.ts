@@ -49,7 +49,7 @@ export class CustomElementRegistry {
       }
       this._whenDefinedPromises.get(name)!.push({
         resolve: () => resolve(this._definitions.get(name)!),
-        reject
+        reject,
       })
     })
   }

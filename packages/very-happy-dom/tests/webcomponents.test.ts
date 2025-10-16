@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Web Components Tests
  * Comprehensive tests for Shadow DOM and Custom Elements
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -61,7 +63,8 @@ console.log('\nTest Group 3: CustomElements - Invalid Name')
   let errorThrown = false
   try {
     window.customElements.define('badelement', BadElement) // Missing hyphen
-  } catch (e) {
+  }
+  catch (e) {
     errorThrown = true
   }
 
@@ -181,7 +184,7 @@ console.log('\nTest Group 10: Custom Element - Lifecycle Callbacks')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -189,6 +192,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All web component tests passing!')
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * XPath API Tests
  * Comprehensive tests for document.evaluate(), XPathResult, XPath expressions
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -42,7 +44,7 @@ console.log('\nTest Group 2: XPathResult - Result Types')
     window.document,
     null,
     0, // ANY_TYPE
-    null
+    null,
   )
 
   assert(result !== null, 'evaluate returns result')
@@ -62,7 +64,7 @@ console.log('\nTest Group 3: XPath - Simple Tag Selector')
     window.document,
     null,
     7, // ORDERED_NODE_SNAPSHOT_TYPE
-    null
+    null,
   )
 
   assert(result.snapshotLength === 2, 'Found 2 span elements')
@@ -88,7 +90,7 @@ console.log('\nTest Group 4: XPath - Descendant Axis')
     window.document,
     null,
     7, // ORDERED_NODE_SNAPSHOT_TYPE
-    null
+    null,
   )
 
   assert(result.snapshotLength >= 2, 'Found at least 2 p elements')
@@ -111,7 +113,7 @@ console.log('\nTest Group 5: XPath - Attribute Selector')
     window.document,
     null,
     7,
-    null
+    null,
   )
 
   assert(result.snapshotLength === 2, 'Found 2 divs with class="foo"')
@@ -133,7 +135,7 @@ console.log('\nTest Group 6: XPath - Text Content')
     window.document,
     null,
     7,
-    null
+    null,
   )
 
   assert(result.snapshotLength >= 0, 'XPath with text() predicate works')
@@ -158,7 +160,7 @@ console.log('\nTest Group 7: XPath - First Child')
     window.document,
     null,
     9, // FIRST_ORDERED_NODE_TYPE
-    null
+    null,
   )
 
   assert(result.singleNodeValue !== null, 'Found first li element')
@@ -184,7 +186,7 @@ console.log('\nTest Group 8: XPath - Last Child')
     window.document,
     null,
     9,
-    null
+    null,
   )
 
   assert(result.singleNodeValue !== null || true, 'XPath last() function works')
@@ -209,7 +211,7 @@ console.log('\nTest Group 9: XPath - Count Function')
     window.document,
     null,
     1, // NUMBER_TYPE
-    null
+    null,
   )
 
   assert(typeof result.numberValue === 'number', 'Count returns number')
@@ -229,7 +231,7 @@ console.log('\nTest Group 10: XPath - Iterator Result Type')
     window.document,
     null,
     5, // ORDERED_NODE_ITERATOR_TYPE
-    null
+    null,
   )
 
   let count = 0
@@ -288,7 +290,7 @@ console.log('\nTest Group 13: XPath - Context Node')
     container!,
     null,
     7,
-    null
+    null,
   )
 
   assert(result.snapshotLength >= 0, 'Context node XPath executes')
@@ -311,7 +313,7 @@ console.log('\nTest Group 14: XPath - Multiple Predicates')
     window.document,
     null,
     7,
-    null
+    null,
   )
 
   assert(result.snapshotLength >= 0, 'Multiple predicates XPath executes')
@@ -335,7 +337,7 @@ console.log('\nTest Group 15: XPath - Parent Axis')
     child!,
     null,
     9,
-    null
+    null,
   )
 
   assert(result.singleNodeValue !== null, 'Parent axis returns parent node')
@@ -344,7 +346,7 @@ console.log('\nTest Group 15: XPath - Parent Axis')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -352,6 +354,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All XPath tests passing!')
 }

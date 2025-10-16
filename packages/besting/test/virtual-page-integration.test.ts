@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { describe, expect, test } from 'bun:test'
 import { browse, createVirtualPage } from '../src/virtual-page'
 

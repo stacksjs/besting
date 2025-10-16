@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 /**
  * Network API Tests
  * Comprehensive tests for fetch, XMLHttpRequest, WebSocket, Request Interception
  */
 
-import { Window, Browser, type InterceptedRequest } from '../src/index'
+import type { InterceptedRequest } from '../src/index'
+import { Browser, Window } from '../src/index'
 
 let passed = 0
 let failed = 0
@@ -12,7 +14,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -61,12 +64,12 @@ console.log('\nTest Group 3: Request Interception - InterceptedRequest API')
   await page.setRequestInterception(true, async (request: InterceptedRequest) => {
     // Test that request has expected properties
     interceptorCalledWithRequest = (
-      typeof request.url === 'string' &&
-      typeof request.method === 'string' &&
-      typeof request.headers === 'object' &&
-      typeof request.continue === 'function' &&
-      typeof request.abort === 'function' &&
-      typeof request.respond === 'function'
+      typeof request.url === 'string'
+      && typeof request.method === 'string'
+      && typeof request.headers === 'object'
+      && typeof request.continue === 'function'
+      && typeof request.abort === 'function'
+      && typeof request.respond === 'function'
     )
     request.continue()
   })
@@ -130,7 +133,7 @@ console.log('\nTest Group 7: XMLHttpRequest - Send State Changes')
   const window = new Window()
 
   const xhr = new window.XMLHttpRequest()
-  let stateChanges: number[] = []
+  const stateChanges: number[] = []
 
   xhr.onreadystatechange = () => {
     stateChanges.push(xhr.readyState)
@@ -171,7 +174,8 @@ console.log('\nTest Group 9: WebSocket - Event Handlers')
   try {
     ws = new window.WebSocket('wss://echo.websocket.org/')
     assert(ws.readyState === 0, 'Initial readyState is CONNECTING')
-  } catch (e) {
+  }
+  catch (e) {
     error = e
   }
 
@@ -256,7 +260,7 @@ console.log('\nTest Group 12: Headers - Basic Operations')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -264,6 +268,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All network tests passing!')
 }

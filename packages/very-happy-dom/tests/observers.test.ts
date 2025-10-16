@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Observer API Tests
  * Comprehensive tests for MutationObserver, IntersectionObserver, ResizeObserver
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -213,8 +215,8 @@ console.log('\nTest Group 10: IntersectionObserver - With Options')
     {
       root: null,
       rootMargin: '10px',
-      threshold: [0, 0.5, 1.0]
-    }
+      threshold: [0, 0.5, 1.0],
+    },
   )
 
   assert(typeof observer === 'object', 'Observer created with options')
@@ -348,7 +350,7 @@ console.log('\nTest Group 15: Observer Cleanup - Disconnect')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -356,6 +358,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All observer tests passing!')
 }

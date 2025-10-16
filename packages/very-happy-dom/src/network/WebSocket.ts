@@ -7,7 +7,7 @@ export enum WebSocketReadyState {
   CONNECTING = 0,
   OPEN = 1,
   CLOSING = 2,
-  CLOSED = 3
+  CLOSED = 3,
 }
 
 export class VeryHappyWebSocket {
@@ -51,7 +51,7 @@ export class VeryHappyWebSocket {
           origin: this.url,
           lastEventId: '',
           source: null,
-          ports: []
+          ports: [],
         } as MessageEvent
         this.dispatchEvent(messageEvent)
       })
@@ -66,11 +66,12 @@ export class VeryHappyWebSocket {
           type: 'close',
           code: event.code || 1000,
           reason: event.reason || '',
-          wasClean: event.wasClean !== false
+          wasClean: event.wasClean !== false,
         } as CloseEvent
         this.dispatchEvent(closeEvent)
       })
-    } catch (error) {
+    }
+    catch (error) {
       this.readyState = WebSocketReadyState.CLOSED
       setTimeout(() => {
         this.dispatchEvent({ type: 'error' } as Event)
@@ -80,16 +81,17 @@ export class VeryHappyWebSocket {
 
   send(data: string | ArrayBuffer | Blob): void {
     if (this.readyState !== WebSocketReadyState.OPEN) {
-      throw new Error('WebSocket is not open: readyState ' + this.readyState)
+      throw new Error(`WebSocket is not open: readyState ${this.readyState}`)
     }
 
     if (this._ws) {
       if (data instanceof Blob) {
         // Convert Blob to ArrayBuffer
-        data.arrayBuffer().then(buffer => {
+        data.arrayBuffer().then((buffer) => {
           this._ws?.send(buffer)
         })
-      } else {
+      }
+      else {
         this._ws.send(data as any)
       }
     }

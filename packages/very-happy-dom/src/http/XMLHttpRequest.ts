@@ -65,7 +65,7 @@ export class XMLHttpRequest {
       method: this._method,
       headers,
       body: body as any,
-      credentials: this.withCredentials ? 'include' : 'same-origin'
+      credentials: this.withCredentials ? 'include' : 'same-origin',
     }
 
     const controller = new AbortController()
@@ -80,8 +80,10 @@ export class XMLHttpRequest {
 
     fetch(this._url, { ...fetchOptions, signal: controller.signal })
       .then(async (response) => {
-        if (timeoutId) clearTimeout(timeoutId)
-        if (this._aborted) return
+        if (timeoutId)
+          clearTimeout(timeoutId)
+        if (this._aborted)
+          return
 
         this.status = response.status
         this.statusText = response.statusText
@@ -102,12 +104,15 @@ export class XMLHttpRequest {
         if (this.responseType === '' || this.responseType === 'text') {
           this.responseText = await response.text()
           this.response = this.responseText
-        } else if (this.responseType === 'json') {
+        }
+        else if (this.responseType === 'json') {
           this.response = await response.json()
           this.responseText = JSON.stringify(this.response)
-        } else if (this.responseType === 'arraybuffer') {
+        }
+        else if (this.responseType === 'arraybuffer') {
           this.response = await response.arrayBuffer()
-        } else if (this.responseType === 'blob') {
+        }
+        else if (this.responseType === 'blob') {
           this.response = await response.blob()
         }
 
@@ -117,7 +122,8 @@ export class XMLHttpRequest {
         this._triggerEvent('loadend', true)
       })
       .catch((error) => {
-        if (timeoutId) clearTimeout(timeoutId)
+        if (timeoutId)
+          clearTimeout(timeoutId)
         if (this._aborted) {
           this._triggerEvent('abort', true)
           this._triggerEvent('loadend', true)

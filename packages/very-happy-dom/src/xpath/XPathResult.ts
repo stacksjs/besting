@@ -1,5 +1,4 @@
 import type { VirtualNode } from '../nodes/VirtualNode'
-import type { VirtualElement } from '../nodes/VirtualElement'
 
 /**
  * XPathResult types
@@ -14,7 +13,7 @@ export enum XPathResultType {
   UNORDERED_NODE_SNAPSHOT_TYPE = 6,
   ORDERED_NODE_SNAPSHOT_TYPE = 7,
   ANY_UNORDERED_NODE_TYPE = 8,
-  FIRST_ORDERED_NODE_TYPE = 9
+  FIRST_ORDERED_NODE_TYPE = 9,
 }
 
 /**
@@ -36,7 +35,7 @@ export class XPathResult {
     nodes: VirtualNode[] = [],
     numberValue = 0,
     stringValue = '',
-    booleanValue = false
+    booleanValue = false,
   ) {
     this.resultType = resultType
     this._nodes = nodes

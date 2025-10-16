@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Performance Regression Tests
  * Ensures performance characteristics don't degrade over time
  */
 
-import { TestStats, createAssert, createTestWindow, cleanupWindow, PerformanceMeasure } from './test-utils'
+import { cleanupWindow, createAssert, createTestWindow, PerformanceMeasure, TestStats } from './test-utils'
 
 const stats = new TestStats()
 const assert = createAssert(stats)
@@ -13,20 +14,20 @@ console.log('=== ⚡ Performance Regression Test Suite ===\n')
 
 // Performance thresholds (in milliseconds)
 const THRESHOLDS = {
-  htmlParsing: 1,        // HTML parsing should be < 1ms
-  querySelector: 1,      // querySelector should be < 1ms
-  createElement: 0.1,    // createElement should be < 0.1ms
-  appendChild: 0.1,      // appendChild should be < 0.1ms
-  setAttribute: 0.1,     // setAttribute should be < 0.1ms
-  storageOps: 0.1,      // Storage ops should be < 0.1ms
-  eventListener: 0.1,    // Event listener should be < 0.1ms
+  htmlParsing: 1, // HTML parsing should be < 1ms
+  querySelector: 1, // querySelector should be < 1ms
+  createElement: 0.1, // createElement should be < 0.1ms
+  appendChild: 0.1, // appendChild should be < 0.1ms
+  setAttribute: 0.1, // setAttribute should be < 0.1ms
+  storageOps: 0.1, // Storage ops should be < 0.1ms
+  eventListener: 0.1, // Event listener should be < 0.1ms
 }
 
 // Test 1: HTML parsing performance
 console.log('Test Group 1: HTML Parsing Performance')
 {
   const window = createTestWindow()
-  const html = '<div>' + '<p>Test</p>'.repeat(100) + '</div>'
+  const html = `<div>${'<p>Test</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
     window.document.body.innerHTML = html
@@ -42,7 +43,7 @@ console.log('Test Group 1: HTML Parsing Performance')
 console.log('\nTest Group 2: querySelector Performance')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = '<div>' + '<p class="test">Item</p>'.repeat(100) + '</div>'
+  window.document.body.innerHTML = `<div>${'<p class="test">Item</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
     window.document.querySelector('.test')
@@ -58,7 +59,7 @@ console.log('\nTest Group 2: querySelector Performance')
 console.log('\nTest Group 3: querySelectorAll Performance')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = '<div>' + '<p class="test">Item</p>'.repeat(100) + '</div>'
+  window.document.body.innerHTML = `<div>${'<p class="test">Item</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
     const results = window.document.querySelectorAll('.test')
@@ -247,7 +248,7 @@ console.log('\nTest Group 10: DOM Tree Traversal Performance')
 console.log('\nTest Group 11: XPath Performance')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = '<div>' + '<p class="item">Item</p>'.repeat(100) + '</div>'
+  window.document.body.innerHTML = `<div>${'<p class="item">Item</p>'.repeat(100)}</div>`
 
   const { duration } = perf.measure(() => {
     window.document.evaluate(
@@ -255,7 +256,7 @@ console.log('\nTest Group 11: XPath Performance')
       window.document,
       null,
       7, // ORDERED_NODE_SNAPSHOT_TYPE
-      null
+      null,
     )
   })
 
@@ -286,7 +287,7 @@ console.log('\nTest Group 12: Batch Operations Performance')
   await cleanupWindow(window)
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log('Performance Thresholds:')
 console.log(`  HTML Parsing: < ${THRESHOLDS.htmlParsing}ms`)
 console.log(`  querySelector: < ${THRESHOLDS.querySelector}ms`)

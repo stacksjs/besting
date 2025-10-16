@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Storage API Tests
  * Comprehensive tests for localStorage and sessionStorage
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -52,17 +54,17 @@ console.log('\nTest Group 2: localStorage - Bracket Notation')
 {
   const window = new Window()
 
-  window.localStorage['bracket1'] = 'value1'
-  assert(window.localStorage['bracket1'] === 'value1', 'Bracket notation write/read')
+  window.localStorage.bracket1 = 'value1'
+  assert(window.localStorage.bracket1 === 'value1', 'Bracket notation write/read')
 
-  window.localStorage['bracket2'] = 123
-  assert(window.localStorage['bracket2'] === '123', 'Bracket notation auto-converts to string')
+  window.localStorage.bracket2 = 123
+  assert(window.localStorage.bracket2 === '123', 'Bracket notation auto-converts to string')
 
   // Mixed access methods (avoid 'key' name which is a method)
   window.localStorage.setItem('mixed1', 'method')
-  assert(window.localStorage['mixed1'] === 'method', 'setItem accessible via bracket')
+  assert(window.localStorage.mixed1 === 'method', 'setItem accessible via bracket')
 
-  window.localStorage['mixed2'] = 'bracket'
+  window.localStorage.mixed2 = 'bracket'
   assert(window.localStorage.getItem('mixed2') === 'bracket', 'Bracket accessible via getItem')
 
   await window.happyDOM.close()
@@ -157,8 +159,8 @@ console.log('\nTest Group 6: sessionStorage - Basic Operations')
   window.sessionStorage.setItem('session1', 'data1')
   assert(window.sessionStorage.getItem('session1') === 'data1', 'sessionStorage setItem/getItem')
 
-  window.sessionStorage['session2'] = 'data2'
-  assert(window.sessionStorage['session2'] === 'data2', 'sessionStorage bracket notation')
+  window.sessionStorage.session2 = 'data2'
+  assert(window.sessionStorage.session2 === 'data2', 'sessionStorage bracket notation')
 
   assert(window.sessionStorage.length === 2, 'sessionStorage length')
 
@@ -259,7 +261,7 @@ console.log('\nTest Group 10: Storage - Edge Cases')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -267,6 +269,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All storage tests passing!')
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Integration Tests
  * End-to-end scenarios combining multiple features
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -119,7 +121,7 @@ console.log('\nTest Group 5: XPath - DOM Integration')
     window.document,
     null,
     9, // FIRST_ORDERED_NODE_TYPE
-    null
+    null,
   )
 
   assert(result.singleNodeValue !== null, 'XPath found active item')
@@ -252,7 +254,7 @@ console.log('\nTest Group 10: Complete App - Simulation')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -260,6 +262,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All integration tests passing!')
 }

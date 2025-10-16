@@ -1,7 +1,7 @@
 import type { VirtualNode } from '../nodes/VirtualNode'
+import { VirtualCommentNode } from '../nodes/VirtualCommentNode'
 import { VirtualElement } from '../nodes/VirtualElement'
 import { VirtualTextNode } from '../nodes/VirtualTextNode'
-import { VirtualCommentNode } from '../nodes/VirtualCommentNode'
 
 /**
  * Parse HTML string into virtual DOM nodes
@@ -64,7 +64,7 @@ export function parseHTML(html: string): VirtualNode[] {
 
     // Parse tag name
     let tagName = ''
-    while (peek() && /[a-zA-Z0-9-]/.test(peek())) {
+    while (peek() && /[a-z0-9-]/i.test(peek())) {
       tagName += consume()
     }
 
@@ -83,7 +83,7 @@ export function parseHTML(html: string): VirtualNode[] {
 
       // Parse attribute name
       let attrName = ''
-      while (peek() && /[a-zA-Z0-9-_:]/.test(peek())) {
+      while (peek() && /[\w-:]/.test(peek())) {
         attrName += consume()
       }
 

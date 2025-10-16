@@ -1,10 +1,11 @@
+import type { XPathResult } from '../xpath/XPathResult'
 import type { History, HistoryState, Location, NodeType, VirtualNode } from './VirtualNode'
-import { VirtualElement } from './VirtualElement'
-import { VirtualTextNode } from './VirtualTextNode'
-import { VirtualCommentNode } from './VirtualCommentNode'
 import { parseHTML } from '../parsers/html-parser'
 import { XPathEvaluator } from '../xpath/XPathEvaluator'
-import { XPathResult, XPathResultType } from '../xpath/XPathResult'
+import { XPathResultType } from '../xpath/XPathResult'
+import { VirtualCommentNode } from './VirtualCommentNode'
+import { VirtualElement } from './VirtualElement'
+import { VirtualTextNode } from './VirtualTextNode'
 
 export class VirtualDocument implements VirtualNode {
   nodeType: NodeType = 'document'
@@ -248,7 +249,8 @@ export class VirtualDocument implements VirtualNode {
               const childEl = child as VirtualElement
               if (childEl.tagName === 'HEAD') {
                 this.head = childEl
-              } else if (childEl.tagName === 'BODY') {
+              }
+              else if (childEl.tagName === 'BODY') {
                 this.body = childEl
               }
             }
@@ -270,28 +272,28 @@ export class VirtualDocument implements VirtualNode {
   getComputedStyle(element: VirtualElement): any {
     // Define default display values for common elements
     const defaultDisplay: Record<string, string> = {
-      'DIV': 'block',
-      'P': 'block',
-      'H1': 'block',
-      'H2': 'block',
-      'H3': 'block',
-      'H4': 'block',
-      'H5': 'block',
-      'H6': 'block',
-      'UL': 'block',
-      'OL': 'block',
-      'LI': 'list-item',
-      'TABLE': 'table',
-      'TR': 'table-row',
-      'TD': 'table-cell',
-      'TH': 'table-cell',
-      'SPAN': 'inline',
-      'A': 'inline',
-      'EM': 'inline',
-      'STRONG': 'inline',
-      'SCRIPT': 'none',
-      'STYLE': 'none',
-      'HEAD': 'none',
+      DIV: 'block',
+      P: 'block',
+      H1: 'block',
+      H2: 'block',
+      H3: 'block',
+      H4: 'block',
+      H5: 'block',
+      H6: 'block',
+      UL: 'block',
+      OL: 'block',
+      LI: 'list-item',
+      TABLE: 'table',
+      TR: 'table-row',
+      TD: 'table-cell',
+      TH: 'table-cell',
+      SPAN: 'inline',
+      A: 'inline',
+      EM: 'inline',
+      STRONG: 'inline',
+      SCRIPT: 'none',
+      STYLE: 'none',
+      HEAD: 'none',
     }
 
     const self = element
@@ -299,7 +301,8 @@ export class VirtualDocument implements VirtualNode {
       {
         getPropertyValue(property: string): string {
           const value = self.style.getPropertyValue(property)
-          if (value) return value
+          if (value)
+            return value
 
           // Return default display value for the element type
           if (property === 'display' && !value) {
@@ -317,7 +320,8 @@ export class VirtualDocument implements VirtualNode {
           // Convert camelCase to kebab-case
           const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
           const value = self.style.getPropertyValue(kebabProp)
-          if (value) return value
+          if (value)
+            return value
 
           // Return default display value for the element type
           if (kebabProp === 'display' && !value) {
@@ -364,7 +368,7 @@ export class VirtualDocument implements VirtualNode {
     contextNode: VirtualNode = this,
     resolver: any = null,
     type: XPathResultType = XPathResultType.ANY_TYPE,
-    result: XPathResult | null = null
+    result: XPathResult | null = null,
   ): XPathResult {
     // If contextNode is the document, start from documentElement
     const actualContext = contextNode === this ? (this.documentElement || this) : contextNode
@@ -377,7 +381,7 @@ export class VirtualDocument implements VirtualNode {
         // If contextNode is the document, start from documentElement
         const actualContext = contextNode === this ? (this.documentElement || this) : contextNode
         return this._xpathEvaluator.evaluate(expression, actualContext, resolver, type, null)
-      }
+      },
     }
   }
 

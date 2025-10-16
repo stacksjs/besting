@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Test Utilities
  * Common helpers and utilities for testing VeryHappyDOM
  */
 
-import { Window, Browser, type BrowserPage } from '../src/index'
+import { Browser, Window } from '../src/index'
 
 /**
  * Test statistics tracking
@@ -26,14 +27,15 @@ export class TestStats {
   }
 
   printSummary(): void {
-    console.log('\n' + '='.repeat(50))
+    console.log(`\n${'='.repeat(50)}`)
     console.log(`✅ Passed: ${this.passed}`)
     console.log(`❌ Failed: ${this.failed}`)
     console.log(`📊 Total: ${this.total}`)
 
     if (this.hasFailures) {
       console.log('\n⚠️  Some tests failed!')
-    } else {
+    }
+    else {
       console.log('\n🎉 All tests passing!')
     }
   }
@@ -53,7 +55,8 @@ export function createAssert(stats: TestStats) {
     if (condition) {
       console.log(`✅ ${message}`)
       stats.passed++
-    } else {
+    }
+    else {
       console.log(`❌ FAILED: ${message}`)
       stats.failed++
     }
@@ -73,7 +76,7 @@ export function createTestWindow(options: TestWindowOptions = {}): Window {
   return new Window({
     url: options.url || 'http://localhost:3000',
     width: options.width || 1920,
-    height: options.height || 1080
+    height: options.height || 1080,
   })
 }
 
@@ -184,7 +187,8 @@ export const assertHelpers = {
     let threw = false
     try {
       fn()
-    } catch {
+    }
+    catch {
       threw = true
     }
     assert(threw, message)
@@ -197,11 +201,12 @@ export const assertHelpers = {
     let threw = false
     try {
       await fn()
-    } catch {
+    }
+    catch {
       threw = true
     }
     assert(threw, message)
-  }
+  },
 }
 
 /**
@@ -213,8 +218,7 @@ export const mockData = {
    */
   elements(count: number, tagName: string = 'div'): string {
     return Array.from({ length: count }, (_, i) =>
-      `<${tagName} id="item-${i}" class="test-item">Item ${i}</${tagName}>`
-    ).join('')
+      `<${tagName} id="item-${i}" class="test-item">Item ${i}</${tagName}>`).join('')
   },
 
   /**
@@ -230,7 +234,7 @@ export const mockData = {
    */
   json(obj: Record<string, any>): string {
     return JSON.stringify(obj)
-  }
+  },
 }
 
 /**

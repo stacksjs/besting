@@ -1,5 +1,4 @@
-import type { Window } from './Window'
-import type { IBrowserSettings } from './Window'
+import type { IBrowserSettings, Window } from './Window'
 
 /**
  * DetachedWindowAPI provides an API for communicating with a detached Window
@@ -72,7 +71,7 @@ export class DetachedWindowAPI {
   /**
    * Sets the viewport size
    */
-  setViewport(options: { width?: number; height?: number }): void {
+  setViewport(options: { width?: number, height?: number }): void {
     if (options.width !== undefined) {
       (this._window as any)._width = options.width
     }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console, ts/no-require-imports */
 /**
  * Competitive DOM Performance Benchmarks
  *

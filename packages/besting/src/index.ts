@@ -6,12 +6,12 @@ export * from './command'
 export * from './config'
 export * from './cookie'
 export * from './database'
-export * from 'very-happy-dom'
 export * from './event'
 export * from './test'
 export * from './types'
 export * from './url'
 export * from './virtual-page'
+export * from 'very-happy-dom'
 
 // Note: Import test utilities directly from 'bun:test' in your test files
 // export { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, mock, spyOn, test } from 'bun:test'

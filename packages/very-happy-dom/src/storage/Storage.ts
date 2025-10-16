@@ -62,6 +62,6 @@ export function createStorage(): Storage {
     },
     has(target, prop: string) {
       return prop in target || target.getItem(prop) !== null
-    }
+    },
   })
 }

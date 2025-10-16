@@ -3,6 +3,8 @@
  * Provides in-memory clipboard for testing
  */
 
+import { Geolocation } from './BrowserAPIs'
+
 export class Clipboard {
   private _text = ''
 
@@ -29,13 +31,11 @@ export class Clipboard {
   async read(): Promise<ClipboardItems> {
     const blob = new Blob([this._text], { type: 'text/plain' })
     const item = new ClipboardItem({
-      'text/plain': blob
+      'text/plain': blob,
     })
     return [item]
   }
 }
-
-import { Geolocation } from './BrowserAPIs'
 
 export class Navigator {
   public clipboard = new Clipboard()

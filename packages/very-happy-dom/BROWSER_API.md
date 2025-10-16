@@ -249,11 +249,11 @@ const browser = new Browser()
 
 browser.defaultContext.cookieContainer.addCookies([
   {
-    key: "session",
-    value: "abc123",
-    originURL: "https://example.com",
-    domain: "example.com",
-    path: "/",
+    key: 'session',
+    value: 'abc123',
+    originURL: 'https://example.com',
+    domain: 'example.com',
+    path: '/',
     httpOnly: true,
     secure: true,
     sameSite: CookieSameSiteEnum.strict
@@ -261,7 +261,7 @@ browser.defaultContext.cookieContainer.addCookies([
 ])
 
 const cookies = browser.defaultContext.cookieContainer.getCookies(
-  "https://example.com/",
+  'https://example.com/',
   true // include HttpOnly cookies
 )
 

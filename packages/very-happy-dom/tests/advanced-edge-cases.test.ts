@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Advanced Edge Cases Tests
  * Additional tests for complex scenarios and edge cases
  */
 
-import { TestStats, createAssert, createTestWindow, cleanupWindow, createTestBrowser } from './test-utils'
+import { cleanupWindow, createAssert, createTestBrowser, createTestWindow, TestStats } from './test-utils'
 
 const stats = new TestStats()
 const assert = createAssert(stats)
@@ -287,7 +288,7 @@ console.log('\nTest Group 10: Advanced XPath Expressions')
     window.document,
     null,
     7, // ORDERED_NODE_SNAPSHOT_TYPE
-    null
+    null,
   )
 
   assert(result1.snapshotLength === 2, 'XPath finds 2 content paragraphs')
@@ -298,7 +299,7 @@ console.log('\nTest Group 10: Advanced XPath Expressions')
     window.document,
     null,
     7,
-    null
+    null,
   )
 
   assert(result2.snapshotLength === 4, 'XPath finds all paragraphs with class attribute')
@@ -309,7 +310,7 @@ console.log('\nTest Group 10: Advanced XPath Expressions')
     window.document,
     null,
     7,
-    null
+    null,
   )
 
   assert(result3.snapshotLength === 4, 'XPath descendant axis works')

@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Error Handling Tests
  * Tests for error scenarios, null references, type mismatches, and edge cases
  */
 
-import { TestStats, createAssert, createTestWindow, cleanupWindow, assertHelpers } from './test-utils'
+import { cleanupWindow, createAssert, createTestWindow, TestStats } from './test-utils'
 
 const stats = new TestStats()
 const assert = createAssert(stats)
@@ -81,7 +82,8 @@ console.log('\nTest Group 4: Invalid DOM Operations')
     if (!(text as any).appendChild) {
       errorThrown = true
     }
-  } catch {
+  }
+  catch {
     errorThrown = true
   }
   assert(errorThrown || !(text as any).appendChild, 'Cannot append to text node')
@@ -169,9 +171,10 @@ console.log('\nTest Group 8: XPath Error Handling')
       window.document,
       null,
       0,
-      null
+      null,
     )
-  } catch {
+  }
+  catch {
     errorThrown = true
   }
   assert(errorThrown || true, 'Invalid XPath expression handled')
@@ -215,7 +218,8 @@ console.log('\nTest Group 10: Custom Elements Error Handling')
   let errorThrown = false
   try {
     window.customElements.define('testelement', TestElement)
-  } catch {
+  }
+  catch {
     errorThrown = true
   }
   assert(errorThrown, 'Invalid custom element name throws')
@@ -239,7 +243,8 @@ console.log('\nTest Group 11: Shadow DOM Error Handling')
   let errorThrown = false
   try {
     element.attachShadow({ mode: 'open' })
-  } catch {
+  }
+  catch {
     errorThrown = true
   }
   assert(errorThrown, 'Attaching shadow twice throws')
@@ -307,7 +312,8 @@ console.log('\nTest Group 15: File API Error Handling')
   let errorThrown = false
   try {
     reader.readAsText(null as any)
-  } catch {
+  }
+  catch {
     errorThrown = true
   }
   assert(errorThrown || reader.readyState === 0, 'readAsText without file handled')

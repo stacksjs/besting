@@ -1,6 +1,8 @@
-import { BrowserFrame } from './BrowserFrame'
+import type { RequestInterceptionHandler } from '../network/RequestInterceptor'
 import type { BrowserContext } from './BrowserContext'
-import { RequestInterceptor, type InterceptedRequest, type RequestInterceptionHandler } from '../network/RequestInterceptor'
+import { Buffer } from 'node:buffer'
+import { RequestInterceptor } from '../network/RequestInterceptor'
+import { BrowserFrame } from './BrowserFrame'
 
 export interface IBrowserPageViewport {
   width: number
@@ -162,7 +164,7 @@ export class BrowserPage {
    */
   async waitForSelector(
     selector: string,
-    options: { timeout?: number; visible?: boolean } = {}
+    options: { timeout?: number, visible?: boolean } = {},
   ): Promise<any | null> {
     const { timeout = 30000, visible = false } = options
     const startTime = Date.now()
@@ -188,7 +190,7 @@ export class BrowserPage {
    */
   async waitForFunction(
     fn: Function | string,
-    options: { timeout?: number; polling?: number | 'raf' } = {}
+    options: { timeout?: number, polling?: number | 'raf' } = {},
   ): Promise<any> {
     const { timeout = 30000, polling = 100 } = options
     const startTime = Date.now()
@@ -218,7 +220,7 @@ export class BrowserPage {
   /**
    * Clicks an element matching the selector
    */
-  async click(selector: string, options: { delay?: number; button?: 'left' | 'right' | 'middle' } = {}): Promise<void> {
+  async click(selector: string, options: { delay?: number, button?: 'left' | 'right' | 'middle' } = {}): Promise<void> {
     const element = this.mainFrame.document.querySelector(selector)
     if (!element) {
       throw new Error(`Element not found: ${selector}`)
@@ -255,7 +257,8 @@ export class BrowserPage {
           await this.waitForTimeout(delay)
         }
       }
-    } else {
+    }
+    else {
       // For other elements, append to textContent
       ;(element as any).textContent = ((element as any).textContent || '') + text
     }
@@ -314,7 +317,7 @@ export class BrowserPage {
         for (const char of text) {
           await this.keyboard.press(char, options)
         }
-      }
+      },
     }
   }
 
@@ -323,7 +326,7 @@ export class BrowserPage {
    */
   get mouse() {
     return {
-      click: async (x: number, y: number, options: { button?: 'left' | 'right' | 'middle'; delay?: number } = {}) => {
+      click: async (x: number, y: number, options: { button?: 'left' | 'right' | 'middle', delay?: number } = {}) => {
         const { delay = 0 } = options
 
         const clickEvent = new (this.mainFrame.window as any).Event('click', { bubbles: true })
@@ -341,7 +344,7 @@ export class BrowserPage {
         ;(moveEvent as any).clientX = x
         ;(moveEvent as any).clientY = y
         this.mainFrame.document.dispatchEvent?.(moveEvent)
-      }
+      },
     }
   }
 
@@ -414,7 +417,7 @@ export class BrowserPage {
   async dragAndDrop(
     source: string,
     target: string,
-    options: { delay?: number } = {}
+    options: { delay?: number } = {},
   ): Promise<void> {
     const sourceElement = this.mainFrame.document.querySelector(source)
     const targetElement = this.mainFrame.document.querySelector(target)
@@ -450,7 +453,8 @@ export class BrowserPage {
         this._emitRequest(request)
       }
       this._requestInterceptor.addHandler(handler)
-    } else {
+    }
+    else {
       this._requestInterceptor.disable()
       this._requestInterceptor.clear()
     }
@@ -464,7 +468,7 @@ export class BrowserPage {
     type?: 'png' | 'jpeg' | 'webp'
     quality?: number
     fullPage?: boolean
-    clip?: { x: number; y: number; width: number; height: number }
+    clip?: { x: number, y: number, width: number, height: number }
     omitBackground?: boolean
     encoding?: 'base64' | 'binary'
   } = {}): Promise<string | Buffer> {
@@ -472,7 +476,7 @@ export class BrowserPage {
       type = 'png',
       quality = 100,
       fullPage = false,
-      encoding = 'binary'
+      encoding = 'binary',
     } = options
 
     // Generate a simple SVG representation of the DOM
@@ -517,7 +521,7 @@ export class BrowserPage {
       displayHeaderFooter = false,
       printBackground = false,
       landscape = false,
-      format = 'A4'
+      format = 'A4',
     } = options
 
     // Generate a simple PDF representation

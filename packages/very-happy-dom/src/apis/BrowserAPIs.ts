@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Browser APIs implementation
  * Performance, Geolocation, Notifications, Console, etc.
@@ -6,7 +7,7 @@
 // Performance API
 export class Performance {
   private _marks = new Map<string, number>()
-  private _measures = new Map<string, { start: number; duration: number }>()
+  private _measures = new Map<string, { start: number, duration: number }>()
   private _startTime = Date.now()
 
   now(): number {
@@ -24,7 +25,7 @@ export class Performance {
     if (end !== undefined && start !== undefined) {
       this._measures.set(name, {
         start,
-        duration: end - start
+        duration: end - start,
       })
     }
   }
@@ -32,7 +33,8 @@ export class Performance {
   clearMarks(name?: string): void {
     if (name) {
       this._marks.delete(name)
-    } else {
+    }
+    else {
       this._marks.clear()
     }
   }
@@ -40,7 +42,8 @@ export class Performance {
   clearMeasures(name?: string): void {
     if (name) {
       this._measures.delete(name)
-    } else {
+    }
+    else {
       this._measures.clear()
     }
   }
@@ -63,7 +66,7 @@ export class Geolocation {
   getCurrentPosition(
     success: (position: GeolocationPosition) => void,
     error?: (error: GeolocationPositionError) => void,
-    options?: GeolocationOptions
+    options?: GeolocationOptions,
   ): void {
     // Mock position
     setTimeout(() => {
@@ -75,9 +78,9 @@ export class Geolocation {
           altitude: null,
           altitudeAccuracy: null,
           heading: null,
-          speed: null
+          speed: null,
         },
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
     }, 0)
   }
@@ -85,7 +88,7 @@ export class Geolocation {
   watchPosition(
     success: (position: GeolocationPosition) => void,
     error?: (error: GeolocationPositionError) => void,
-    options?: GeolocationOptions
+    options?: GeolocationOptions,
   ): number {
     const id = setInterval(() => {
       success({
@@ -96,9 +99,9 @@ export class Geolocation {
           altitude: null,
           altitudeAccuracy: null,
           heading: null,
-          speed: null
+          speed: null,
         },
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
     }, 1000)
     return id as unknown as number
@@ -297,7 +300,8 @@ export class DataTransfer {
       if (index !== -1) {
         this.types.splice(index, 1)
       }
-    } else {
+    }
+    else {
       this._data.clear()
       this.types = []
     }

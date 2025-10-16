@@ -1,7 +1,7 @@
 export enum CookieSameSiteEnum {
   none = 'None',
   lax = 'Lax',
-  strict = 'Strict'
+  strict = 'Strict',
 }
 
 export interface ICookie {
@@ -29,9 +29,9 @@ export class CookieContainer {
     for (const cookie of cookies) {
       // Remove existing cookie with same key, domain, and path
       this._cookies = this._cookies.filter(c =>
-        !(c.key === cookie.key &&
-          (c.domain || new URL(c.originURL).hostname) === (cookie.domain || new URL(cookie.originURL).hostname) &&
-          (c.path || '/') === (cookie.path || '/'))
+        !(c.key === cookie.key
+          && (c.domain || new URL(c.originURL).hostname) === (cookie.domain || new URL(cookie.originURL).hostname)
+          && (c.path || '/') === (cookie.path || '/')),
       )
 
       // Add new cookie
@@ -43,7 +43,7 @@ export class CookieContainer {
         expires: cookie.expires,
         httpOnly: cookie.httpOnly || false,
         secure: cookie.secure || false,
-        sameSite: cookie.sameSite || CookieSameSiteEnum.lax
+        sameSite: cookie.sameSite || CookieSameSiteEnum.lax,
       })
     }
   }
@@ -58,7 +58,7 @@ export class CookieContainer {
     const isSecure = parsedURL.protocol === 'https:'
     const now = new Date()
 
-    return this._cookies.filter(cookie => {
+    return this._cookies.filter((cookie) => {
       // Check if expired
       if (cookie.expires && cookie.expires < now) {
         return false

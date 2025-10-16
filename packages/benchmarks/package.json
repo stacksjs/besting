@@ -2,6 +2,7 @@
   "name": "@besting/benchmarks",
   "type": "module",
   "version": "0.0.5",
+  "private": true,
   "description": "Benchmarks for the `besting` library.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
@@ -41,8 +42,8 @@
     "test": "bun test"
   },
   "devDependencies": {
-    "mitata": "^1.0.34",
     "happy-dom": "^15.11.7",
-    "jsdom": "^25.0.1"
+    "jsdom": "^25.0.1",
+    "mitata": "^1.0.34"
   }
 }

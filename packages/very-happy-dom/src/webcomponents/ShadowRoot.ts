@@ -2,8 +2,8 @@
  * Shadow DOM implementation
  */
 
+import type { VirtualElement } from '../nodes/VirtualElement'
 import type { VirtualNode } from '../nodes/VirtualNode'
-import { VirtualElement } from '../nodes/VirtualElement'
 
 export type ShadowRootMode = 'open' | 'closed'
 
@@ -34,7 +34,8 @@ export class ShadowRoot {
       if (child.nodeType === 'element') {
         const element = child as VirtualElement
         const result = element.querySelector(selector)
-        if (result) return result
+        if (result)
+          return result
       }
     }
     return null

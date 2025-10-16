@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Attribute and Property Handling Tests
  * Comprehensive tests for HTML attributes and DOM properties
  */
 
-import { TestStats, createAssert, createTestWindow, cleanupWindow } from './test-utils'
+import { cleanupWindow, createAssert, createTestWindow, TestStats } from './test-utils'
 
 const stats = new TestStats()
 const assert = createAssert(stats)
@@ -208,8 +209,8 @@ console.log('\nTest Group 8: Attribute Special Characters')
   div.setAttribute('title', 'He said "Hello"')
   assert(div.getAttribute('title') === 'He said "Hello"', 'Double quotes in value')
 
-  div.setAttribute('data-text', "It's working")
-  assert(div.getAttribute('data-text') === "It's working", 'Single quote in value')
+  div.setAttribute('data-text', 'It\'s working')
+  assert(div.getAttribute('data-text') === 'It\'s working', 'Single quote in value')
 
   // Special HTML characters
   div.setAttribute('data-html', '<script>alert("XSS")</script>')

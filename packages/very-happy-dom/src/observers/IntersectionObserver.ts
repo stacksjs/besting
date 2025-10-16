@@ -53,15 +53,18 @@ export class IntersectionObserver {
     // Normalize threshold to array
     if (options.threshold === undefined) {
       this.thresholds = [0]
-    } else if (Array.isArray(options.threshold)) {
+    }
+    else if (Array.isArray(options.threshold)) {
       this.thresholds = options.threshold
-    } else {
+    }
+    else {
       this.thresholds = [options.threshold]
     }
   }
 
   observe(target: VirtualElement): void {
-    if (this._observedElements.has(target)) return
+    if (this._observedElements.has(target))
+      return
 
     this._observedElements.add(target)
 
@@ -97,7 +100,7 @@ export class IntersectionObserver {
       isIntersecting,
       rootBounds: this.root ? this._getBoundingClientRect(this.root) : null,
       target,
-      time: Date.now()
+      time: Date.now(),
     }
   }
 
@@ -112,7 +115,7 @@ export class IntersectionObserver {
       top: 0,
       right: 100,
       bottom: 100,
-      left: 0
+      left: 0,
     }
   }
 
@@ -125,7 +128,7 @@ export class IntersectionObserver {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
+      left: 0,
     }
   }
 }

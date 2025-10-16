@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Selector Engine Tests
  * Comprehensive tests for CSS selector matching
  */
 
-import { TestStats, createAssert, createTestWindow, cleanupWindow } from './test-utils'
+import { cleanupWindow, createAssert, createTestWindow, TestStats } from './test-utils'
 
 const stats = new TestStats()
 const assert = createAssert(stats)

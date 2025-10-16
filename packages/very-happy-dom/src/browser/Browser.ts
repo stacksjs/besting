@@ -1,6 +1,6 @@
-import { BrowserContext } from './BrowserContext'
+import type { IBrowserSettings, IOptionalBrowserSettings } from '../window/Window'
 import type { BrowserPage } from './BrowserPage'
-import type { IOptionalBrowserSettings, IBrowserSettings } from '../window/Window'
+import { BrowserContext } from './BrowserContext'
 
 export interface BrowserOptions {
   settings?: IOptionalBrowserSettings
@@ -26,11 +26,11 @@ export class Browser {
     // Initialize settings with defaults
     this._settings = {
       navigator: {
-        userAgent: settings.navigator?.userAgent || 'Mozilla/5.0 (X11; Linux x64) AppleWebKit/537.36 (KHTML, like Gecko) VeryHappyDOM/1.0.0'
+        userAgent: settings.navigator?.userAgent || 'Mozilla/5.0 (X11; Linux x64) AppleWebKit/537.36 (KHTML, like Gecko) VeryHappyDOM/1.0.0',
       },
       device: {
-        prefersColorScheme: settings.device?.prefersColorScheme || 'light'
-      }
+        prefersColorScheme: settings.device?.prefersColorScheme || 'light',
+      },
     }
 
     // Create default context

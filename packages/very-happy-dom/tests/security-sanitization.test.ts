@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Security and Sanitization Tests
  * Tests for XSS prevention, script injection, and content sanitization
  */
 
-import { TestStats, createAssert, createTestWindow, cleanupWindow } from './test-utils'
+import { cleanupWindow, createAssert, createTestWindow, TestStats } from './test-utils'
 
 const stats = new TestStats()
 const assert = createAssert(stats)
@@ -284,9 +285,17 @@ console.log('\nTest Group 13: Event Handler Security')
 
   // Test all event handler attributes
   const eventHandlers = [
-    'onclick', 'onload', 'onerror', 'onmouseover',
-    'onmouseout', 'onkeydown', 'onkeyup', 'onfocus',
-    'onblur', 'onchange', 'onsubmit'
+    'onclick',
+    'onload',
+    'onerror',
+    'onmouseover',
+    'onmouseout',
+    'onkeydown',
+    'onkeyup',
+    'onfocus',
+    'onblur',
+    'onchange',
+    'onsubmit',
   ]
 
   for (const handler of eventHandlers) {

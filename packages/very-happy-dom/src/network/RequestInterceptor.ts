@@ -10,9 +10,9 @@ export interface InterceptedRequest {
   postData?: string | null
   resourceType: string
 
-  continue(overrides?: { url?: string; method?: string; headers?: Record<string, string>; postData?: string }): void
-  abort(errorCode?: string): void
-  respond(response: { status: number; headers?: Record<string, string>; body: string | Buffer }): void
+  continue: (overrides?: { url?: string, method?: string, headers?: Record<string, string>, postData?: string }) => void
+  abort: (errorCode?: string) => void
+  respond: (response: { status: number, headers?: Record<string, string>, body: string | Buffer }) => void
 }
 
 export interface RequestInterceptionHandler {
@@ -32,12 +32,13 @@ export class RequestInterceptor {
   }
 
   enable(): void {
-    if (this._enabled) return
+    if (this._enabled)
+      return
     this._enabled = true
 
     // Override global fetch
     const self = this
-    globalThis.fetch = async function(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    globalThis.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
       const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
       const method = init?.method || 'GET'
       const headers: Record<string, string> = {}
@@ -48,11 +49,13 @@ export class RequestInterceptor {
           init.headers.forEach((value, key) => {
             headers[key] = value
           })
-        } else if (Array.isArray(init.headers)) {
+        }
+        else if (Array.isArray(init.headers)) {
           init.headers.forEach(([key, value]) => {
             headers[key] = value
           })
-        } else {
+        }
+        else {
           Object.assign(headers, init.headers)
         }
       }
@@ -83,9 +86,9 @@ export class RequestInterceptor {
           responded = true
           mockResponse = new Response(response.body, {
             status: response.status,
-            headers: response.headers
+            headers: response.headers,
           })
-        }
+        },
       }
 
       // Call handlers
@@ -113,13 +116,14 @@ export class RequestInterceptor {
         ...init,
         method: finalMethod,
         headers: finalHeaders,
-        body: finalBody
+        body: finalBody,
       })
     }
   }
 
   disable(): void {
-    if (!this._enabled) return
+    if (!this._enabled)
+      return
     this._enabled = false
     globalThis.fetch = this._originalFetch
   }

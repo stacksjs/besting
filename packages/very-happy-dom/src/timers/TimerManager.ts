@@ -10,7 +10,8 @@ export class TimerManager {
   private _aborted = false
 
   setTimeout(callback: (...args: any[]) => void, delay: number = 0, ...args: any[]): number {
-    if (this._aborted) return -1
+    if (this._aborted)
+      return -1
 
     const id = this._nextId++
     const timeout = globalThis.setTimeout(() => {
@@ -33,7 +34,8 @@ export class TimerManager {
   }
 
   setInterval(callback: (...args: any[]) => void, delay: number = 0, ...args: any[]): number {
-    if (this._aborted) return -1
+    if (this._aborted)
+      return -1
 
     const id = this._nextId++
     const interval = globalThis.setInterval(() => {
@@ -55,7 +57,8 @@ export class TimerManager {
   }
 
   requestAnimationFrame(callback: (time: number) => void): number {
-    if (this._aborted) return -1
+    if (this._aborted)
+      return -1
 
     const id = this._nextId++
     // RAF fires after ~16ms (60fps)

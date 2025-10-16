@@ -43,7 +43,8 @@ export class ResizeObserver {
   }
 
   observe(target: VirtualElement, options?: { box?: 'content-box' | 'border-box' | 'device-pixel-content-box' }): void {
-    if (this._observedElements.has(target)) return
+    if (this._observedElements.has(target))
+      return
 
     this._observedElements.add(target)
 
@@ -68,7 +69,7 @@ export class ResizeObserver {
     const rect = this._getContentRect(target)
     const size: ResizeObserverSize = {
       inlineSize: rect.width,
-      blockSize: rect.height
+      blockSize: rect.height,
     }
 
     return {
@@ -76,7 +77,7 @@ export class ResizeObserver {
       contentRect: rect,
       borderBoxSize: [size],
       contentBoxSize: [size],
-      devicePixelContentBoxSize: [size]
+      devicePixelContentBoxSize: [size],
     }
   }
 
@@ -91,7 +92,7 @@ export class ResizeObserver {
       top: 0,
       right: 100,
       bottom: 100,
-      left: 0
+      left: 0,
     }
   }
 }

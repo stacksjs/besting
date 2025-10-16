@@ -1,5 +1,5 @@
-import type { VirtualNode } from '../nodes/VirtualNode'
 import type { VirtualElement } from '../nodes/VirtualElement'
+import type { VirtualNode } from '../nodes/VirtualNode'
 import { XPathResult, XPathResultType } from './XPathResult'
 
 /**
@@ -15,7 +15,7 @@ export class XPathEvaluator {
     contextNode: VirtualNode,
     resolver: any = null,
     type: XPathResultType = XPathResultType.ANY_TYPE,
-    result: XPathResult | null = null
+    result: XPathResult | null = null,
   ): XPathResult {
     const nodes = this._evaluateExpression(expression, contextNode)
 
@@ -81,7 +81,8 @@ export class XPathEvaluator {
     // Parse expression parts (e.g., "div/span" -> ["div", "span"])
     const parts = expression.split('/').filter(p => p.trim())
 
-    if (parts.length === 0) return results
+    if (parts.length === 0)
+      return results
 
     const [first, ...rest] = parts
     const tagName = this._parseTagName(first)
@@ -90,7 +91,8 @@ export class XPathEvaluator {
       if (this._matchesExpression(child, first)) {
         if (rest.length === 0) {
           results.push(child)
-        } else {
+        }
+        else {
           results.push(...this._findChildren(child, rest.join('/')))
         }
       }
@@ -108,7 +110,8 @@ export class XPathEvaluator {
     // Parse expression parts
     const parts = expression.split('/').filter(p => p.trim())
 
-    if (parts.length === 0) return results
+    if (parts.length === 0)
+      return results
 
     const [first, ...rest] = parts
 
@@ -116,7 +119,8 @@ export class XPathEvaluator {
       if (this._matchesExpression(current, first)) {
         if (rest.length === 0) {
           results.push(current)
-        } else {
+        }
+        else {
           results.push(...this._findChildren(current, rest.join('/')))
         }
       }
@@ -153,7 +157,8 @@ export class XPathEvaluator {
     const predicateMatch = expression.match(/^(\w+)\[(.+)\]$/)
     if (predicateMatch) {
       const [, tagName, predicate] = predicateMatch
-      if (node.nodeType !== 'element') return false
+      if (node.nodeType !== 'element')
+        return false
       const element = node as VirtualElement
 
       if (tagName !== '*' && element.tagName !== tagName.toUpperCase()) {

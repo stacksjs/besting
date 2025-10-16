@@ -107,10 +107,10 @@ Use `test-utils.ts` for consistent testing:
 
 ```typescript
 import {
-  TestStats,
+  cleanupWindow,
   createAssert,
   createTestWindow,
-  cleanupWindow
+  TestStats
 } from './test-utils'
 
 const stats = new TestStats()

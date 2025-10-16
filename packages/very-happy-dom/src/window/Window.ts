@@ -1,17 +1,18 @@
-import { VirtualDocument } from '../nodes/VirtualDocument'
+import type { Storage } from '../storage/Storage'
 import type { DetachedWindowAPI } from './DetachedWindowAPI'
-import { createStorage, type Storage } from '../storage/Storage'
-import { TimerManager } from '../timers/TimerManager'
+import { DataTransfer, Notification, Performance } from '../apis/BrowserAPIs'
+import { Navigator as VeryHappyNavigator } from '../apis/Clipboard'
+import { VeryHappyFile, VeryHappyFileList, VeryHappyFileReader } from '../apis/FileAPI'
 import { CustomEvent as VeryHappyCustomEvent } from '../events/CustomEvent'
-import { MutationObserver as VeryHappyMutationObserver } from '../observers/MutationObserver'
-import { IntersectionObserver as VeryHappyIntersectionObserver } from '../observers/IntersectionObserver'
-import { ResizeObserver as VeryHappyResizeObserver } from '../observers/ResizeObserver'
 import { XMLHttpRequest as VeryHappyXMLHttpRequest } from '../http/XMLHttpRequest'
 import { VeryHappyWebSocket } from '../network/WebSocket'
-import { Navigator as VeryHappyNavigator } from '../apis/Clipboard'
-import { VeryHappyFile, VeryHappyFileReader, VeryHappyFileList } from '../apis/FileAPI'
+import { VirtualDocument } from '../nodes/VirtualDocument'
+import { IntersectionObserver as VeryHappyIntersectionObserver } from '../observers/IntersectionObserver'
+import { MutationObserver as VeryHappyMutationObserver } from '../observers/MutationObserver'
+import { ResizeObserver as VeryHappyResizeObserver } from '../observers/ResizeObserver'
+import { createStorage } from '../storage/Storage'
+import { TimerManager } from '../timers/TimerManager'
 import { CustomElementRegistry, HTMLElement } from '../webcomponents/CustomElementRegistry'
-import { Performance, Geolocation, Notification, EnhancedConsole, DataTransfer } from '../apis/BrowserAPIs'
 
 export interface WindowOptions {
   url?: string
@@ -96,7 +97,7 @@ export class Window {
       width = 1024,
       height = 768,
       console: consoleInstance,
-      settings = {}
+      settings = {},
     } = options
 
     this._width = width
@@ -105,11 +106,11 @@ export class Window {
     // Initialize settings with defaults
     this._settings = {
       navigator: {
-        userAgent: settings.navigator?.userAgent || 'Mozilla/5.0 (X11; Linux x64) AppleWebKit/537.36 (KHTML, like Gecko) VeryHappyDOM/1.0.0'
+        userAgent: settings.navigator?.userAgent || 'Mozilla/5.0 (X11; Linux x64) AppleWebKit/537.36 (KHTML, like Gecko) VeryHappyDOM/1.0.0',
       },
       device: {
-        prefersColorScheme: settings.device?.prefersColorScheme || 'light'
-      }
+        prefersColorScheme: settings.device?.prefersColorScheme || 'light',
+      },
     }
 
     // Use provided console or global console
@@ -183,9 +184,10 @@ export class Window {
         reload: () => {
           // No-op for now
         },
-        toString: () => parsed.href
+        toString: () => parsed.href,
       } as Location
-    } catch {
+    }
+    catch {
       // Fallback for invalid URLs
       return {
         href: url,
@@ -204,7 +206,7 @@ export class Window {
           this.location = url
         },
         reload: () => {},
-        toString: () => url
+        toString: () => url,
       } as Location
     }
   }

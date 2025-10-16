@@ -1,6 +1,6 @@
+import type { Browser } from './Browser'
 import { BrowserPage } from './BrowserPage'
 import { CookieContainer } from './CookieContainer'
-import type { Browser } from './Browser'
 
 /**
  * BrowserContext represents a context where data such as cache and cookies

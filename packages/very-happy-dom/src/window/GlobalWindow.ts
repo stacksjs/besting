@@ -1,4 +1,5 @@
-import { Window, type WindowOptions } from './Window'
+import type { WindowOptions } from './Window'
+import { Window } from './Window'
 
 /**
  * GlobalWindow represents a window instance running in the global scope

@@ -1,5 +1,6 @@
+import type { VirtualElement } from '../src/dom'
 import { describe, expect, test } from 'bun:test'
-import { createDocument, parseHTML, VirtualElement } from '../src/dom'
+import { createDocument } from '../src/dom'
 
 describe('DOM Edge Cases', () => {
   describe('Element Creation and Manipulation', () => {

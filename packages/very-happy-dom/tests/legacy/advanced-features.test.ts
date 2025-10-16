@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Tests for advanced features
  * Event Emitters, XPath, Observers, XMLHttpRequest, Screenshot/PDF
  */
 
-import { Browser, Window, IntersectionObserver, ResizeObserver, XMLHttpRequest, XPathResultType } from '../../src/index'
+import { Browser, Window, XPathResultType } from '../../src/index'
 
 let passed = 0
 let failed = 0
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -323,7 +325,7 @@ console.log('\nTest 15: XPath - descendant axis')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -331,6 +333,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All advanced features working!')
 }

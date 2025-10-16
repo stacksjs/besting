@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * User Interaction Tests
  * Comprehensive tests for click, type, focus, hover, keyboard, mouse, drag & drop
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -111,7 +113,7 @@ console.log('\nTest Group 8: DataTransfer - API')
   await browser.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -119,6 +121,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All interaction tests passing!')
 }

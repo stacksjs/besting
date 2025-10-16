@@ -60,7 +60,8 @@ export class MutationObserver {
    * @internal
    */
   _addRecord(record: MutationRecord): void {
-    if (!this._observing) return
+    if (!this._observing)
+      return
 
     this._records.push(record)
 

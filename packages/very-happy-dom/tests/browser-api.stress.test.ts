@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Comprehensive Browser API Stress Tests
  * Attempting to break the implementation!
  */
 
-import { Browser, Window, GlobalWindow, CookieContainer, CookieSameSiteEnum } from '../src/index'
+import { Browser, CookieContainer, GlobalWindow, Window } from '../src/index'
 
 let passed = 0
 let failed = 0
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -23,7 +25,8 @@ function assertThrows(fn: () => void, message: string) {
     fn()
     console.log(`❌ FAILED: ${message} (should have thrown)`)
     failed++
-  } catch (e) {
+  }
+  catch {
     console.log(`✅ ${message}`)
     passed++
   }
@@ -69,7 +72,7 @@ console.log('\nTest 3: Context Isolation - Cookies')
   browser.defaultContext.cookieContainer.addCookies([{
     key: 'default-cookie',
     value: 'default-value',
-    originURL: 'https://example.com'
+    originURL: 'https://example.com',
   }])
 
   // Create incognito context
@@ -77,7 +80,7 @@ console.log('\nTest 3: Context Isolation - Cookies')
   incognito.cookieContainer.addCookies([{
     key: 'incognito-cookie',
     value: 'incognito-value',
-    originURL: 'https://example.com'
+    originURL: 'https://example.com',
   }])
 
   const defaultCookies = browser.defaultContext.cookieContainer.getCookies('https://example.com')
@@ -99,7 +102,7 @@ console.log('\nTest 4: Cookie Domain Matching Edge Cases')
   container.addCookies([
     { key: 'exact', originURL: 'https://example.com', domain: 'example.com' },
     { key: 'subdomain', originURL: 'https://sub.example.com', domain: 'example.com' },
-    { key: 'wrong', originURL: 'https://other.com', domain: 'other.com' }
+    { key: 'wrong', originURL: 'https://other.com', domain: 'other.com' },
   ])
 
   const cookiesExact = container.getCookies('https://example.com')
@@ -119,7 +122,7 @@ console.log('\nTest 5: Cookie Path Matching')
   container.addCookies([
     { key: 'root', originURL: 'https://example.com', path: '/' },
     { key: 'specific', originURL: 'https://example.com', path: '/api/' },
-    { key: 'deep', originURL: 'https://example.com', path: '/api/v1/' }
+    { key: 'deep', originURL: 'https://example.com', path: '/api/v1/' },
   ])
 
   const rootCookies = container.getCookies('https://example.com/')
@@ -140,7 +143,7 @@ console.log('\nTest 6: Secure Cookie Filtering')
 
   container.addCookies([
     { key: 'insecure', originURL: 'http://example.com', secure: false },
-    { key: 'secure', originURL: 'https://example.com', secure: true }
+    { key: 'secure', originURL: 'https://example.com', secure: true },
   ])
 
   const httpCookies = container.getCookies('http://example.com')
@@ -157,7 +160,7 @@ console.log('\nTest 7: HttpOnly Cookie Filtering')
 
   container.addCookies([
     { key: 'public', originURL: 'https://example.com', httpOnly: false },
-    { key: 'httponly', originURL: 'https://example.com', httpOnly: true }
+    { key: 'httponly', originURL: 'https://example.com', httpOnly: true },
   ])
 
   const publicCookies = container.getCookies('https://example.com', false)
@@ -178,7 +181,7 @@ console.log('\nTest 8: Expired Cookie Filtering')
   container.addCookies([
     { key: 'expired', originURL: 'https://example.com', expires: pastDate },
     { key: 'valid', originURL: 'https://example.com', expires: futureDate },
-    { key: 'noexpiry', originURL: 'https://example.com' }
+    { key: 'noexpiry', originURL: 'https://example.com' },
   ])
 
   const cookies = container.getCookies('https://example.com')
@@ -193,14 +196,14 @@ console.log('\nTest 9: Cookie Replacement')
   const container = new CookieContainer()
 
   container.addCookies([
-    { key: 'test', value: 'value1', originURL: 'https://example.com' }
+    { key: 'test', value: 'value1', originURL: 'https://example.com' },
   ])
 
   let cookies = container.getCookies('https://example.com')
   assert(cookies.length === 1 && cookies[0].value === 'value1', 'First cookie added')
 
   container.addCookies([
-    { key: 'test', value: 'value2', originURL: 'https://example.com' }
+    { key: 'test', value: 'value2', originURL: 'https://example.com' },
   ])
 
   cookies = container.getCookies('https://example.com')
@@ -286,7 +289,7 @@ console.log('\nTest 15: Context Close Clears Resources')
   const context = browser.newIncognitoContext()
 
   context.cookieContainer.addCookies([
-    { key: 'test', originURL: 'https://example.com' }
+    { key: 'test', originURL: 'https://example.com' },
   ])
   context.responseCache.set('key', {} as Response)
 
@@ -346,9 +349,9 @@ console.log('\nTest 18: Settings Modification')
   const browser = new Browser({
     settings: {
       navigator: {
-        userAgent: 'Custom UA'
-      }
-    }
+        userAgent: 'Custom UA',
+      },
+    },
   })
 
   assert(browser.settings.navigator.userAgent === 'Custom UA', 'Custom settings applied')
@@ -453,7 +456,7 @@ console.log('\nTest 23: Evaluate Function vs String')
   const result1 = page.evaluate('1 + 1')
   assert(result1 === 2, 'String evaluation works')
 
-  const result2 = page.evaluate(function() {
+  const result2 = page.evaluate(() => {
     return 2 + 2
   })
   assert(result2 === 4, 'Function evaluation works')
@@ -566,7 +569,7 @@ console.log('\nTest 29: Cookie with No Value')
   const container = new CookieContainer()
 
   container.addCookies([
-    { key: 'novalue', originURL: 'https://example.com' }
+    { key: 'novalue', originURL: 'https://example.com' },
   ])
 
   const cookies = container.getCookies('https://example.com')
@@ -585,7 +588,7 @@ console.log('\nTest 30: Large Number of Cookies')
     cookiesToAdd.push({
       key: `cookie${i}`,
       value: `value${i}`,
-      originURL: 'https://example.com'
+      originURL: 'https://example.com',
     })
   }
 
@@ -607,8 +610,8 @@ console.log('\nTest 31: Window with Custom Console')
   const logs: string[] = []
   const customConsole = {
     log: (...args: any[]) => logs.push(args.join(' ')),
-    error: (...args: any[]) => logs.push('ERROR: ' + args.join(' ')),
-    warn: (...args: any[]) => logs.push('WARN: ' + args.join(' '))
+    error: (...args: any[]) => logs.push(`ERROR: ${args.join(' ')}`),
+    warn: (...args: any[]) => logs.push(`WARN: ${args.join(' ')}`),
   } as Console
 
   const window = new Window({ console: customConsole })
@@ -670,7 +673,7 @@ console.log('\nTest 35: Close Individual Pages in Context')
   const pages = [
     browser.newPage(),
     browser.newPage(),
-    browser.newPage()
+    browser.newPage(),
   ]
 
   assert(browser.defaultContext.pages.length === 3, 'Created 3 pages')
@@ -685,7 +688,7 @@ console.log('\nTest 35: Close Individual Pages in Context')
   await browser.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -693,6 +696,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All tests passed!')
 }

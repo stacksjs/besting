@@ -123,11 +123,11 @@ export function querySelectorAllEngine(root: VirtualNode, selector: string): Vir
 export function hasCombinators(selector: string): boolean {
   // Remove content within brackets and pseudo-classes to avoid false positives
   const cleaned = selector
-    .replace(/\[[^\]]*\]/g, '')  // Remove attribute selectors
-    .replace(/:not\([^)]*\)/g, '')  // Remove :not() pseudo-class
-    .replace(/:nth-child\([^)]*\)/g, '')  // Remove :nth-child()
+    .replace(/\[[^\]]*\]/g, '') // Remove attribute selectors
+    .replace(/:not\([^)]*\)/g, '') // Remove :not() pseudo-class
+    .replace(/:nth-child\([^)]*\)/g, '') // Remove :nth-child()
 
-  return /[>+~]|\s/.test(cleaned)
+  return /[>+~\s]/.test(cleaned)
 }
 
 /**
@@ -374,14 +374,14 @@ export function matchesSimpleSelector(element: VirtualElement, selector: string)
   }
 
   // Remove pseudo-class content before parsing other parts to avoid matching inside pseudo-classes
-  const selectorWithoutPseudo = selector.replace(/:([a-zA-Z-]+)\([^)]*\)/g, ':$1')
+  const selectorWithoutPseudo = selector.replace(/:([a-z-]+)\([^)]*\)/gi, ':$1')
 
   // Parse selector parts (tag, id, classes, attributes, pseudo-classes)
-  const tagMatch = selectorWithoutPseudo.match(/^([a-zA-Z0-9-]+)/)
-  const idMatch = selectorWithoutPseudo.match(/#([a-zA-Z0-9-_]+)/)
-  const classMatches = selectorWithoutPseudo.match(/\.([a-zA-Z0-9-_]+)/g)
+  const tagMatch = selectorWithoutPseudo.match(/^([a-z0-9-]+)/i)
+  const idMatch = selectorWithoutPseudo.match(/#([\w-]+)/)
+  const classMatches = selectorWithoutPseudo.match(/\.([\w-]+)/g)
   const attrMatches = selectorWithoutPseudo.match(/\[([^\]]+)\]/g)
-  const pseudoMatches = selector.match(/:([a-zA-Z-]+)(\([^)]*\))?/g)
+  const pseudoMatches = selector.match(/:([a-z-]+)(\([^)]*\))?/gi)
 
   // Check tag name
   if (tagMatch && tagMatch[1].toLowerCase() !== element.tagName.toLowerCase()) {
@@ -451,7 +451,7 @@ export function matchesSimpleSelector(element: VirtualElement, selector: string)
  * @returns True if the element matches the pseudo-class
  */
 export function matchesPseudoClass(element: VirtualElement, pseudo: string): boolean {
-  const pseudoMatch = pseudo.match(/:([a-zA-Z-]+)(\(([^)]*)\))?/)
+  const pseudoMatch = pseudo.match(/:([a-z-]+)(\(([^)]*)\))?/i)
   if (!pseudoMatch) {
     throw new Error(`Invalid pseudo-class selector: "${pseudo}"`)
   }
@@ -461,49 +461,49 @@ export function matchesPseudoClass(element: VirtualElement, pseudo: string): boo
 
   switch (pseudoName) {
     case 'first-child':
-      {
-        // Only consider element children (not text nodes)
-        const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
-        return siblings[0] === element
-      }
+    {
+      // Only consider element children (not text nodes)
+      const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
+      return siblings[0] === element
+    }
 
     case 'last-child':
-      {
-        // Only consider element children (not text nodes)
-        const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
-        return siblings[siblings.length - 1] === element
-      }
+    {
+      // Only consider element children (not text nodes)
+      const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
+      return siblings[siblings.length - 1] === element
+    }
 
     case 'nth-child':
-      {
-        if (!pseudoArg)
-          return false
-        const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
-        const index = siblings.indexOf(element)
-        if (index === -1)
-          return false
-
-        const position = index + 1 // 1-indexed
-
-        if (pseudoArg === 'odd')
-          return position % 2 === 1
-        if (pseudoArg === 'even')
-          return position % 2 === 0
-
-        const n = Number.parseInt(pseudoArg, 10)
-        if (!Number.isNaN(n))
-          return position === n
-
+    {
+      if (!pseudoArg)
         return false
-      }
+      const siblings = element.parentNode?.children.filter(child => child.nodeType === 'element') || []
+      const index = siblings.indexOf(element)
+      if (index === -1)
+        return false
+
+      const position = index + 1 // 1-indexed
+
+      if (pseudoArg === 'odd')
+        return position % 2 === 1
+      if (pseudoArg === 'even')
+        return position % 2 === 0
+
+      const n = Number.parseInt(pseudoArg, 10)
+      if (!Number.isNaN(n))
+        return position === n
+
+      return false
+    }
 
     case 'not':
-      {
-        if (!pseudoArg)
-          return false
+    {
+      if (!pseudoArg)
+        return false
         // Recursively check if element does NOT match the selector inside :not()
-        return !matchesSimpleSelector(element, pseudoArg)
-      }
+      return !matchesSimpleSelector(element, pseudoArg)
+    }
 
     case 'disabled':
       return element.hasAttribute('disabled')
@@ -518,129 +518,129 @@ export function matchesPseudoClass(element: VirtualElement, pseudo: string): boo
       return element.children.length === 0
 
     case 'first-of-type':
-      {
-        if (!element.parentNode)
-          return false
-        const siblings = element.parentNode.children.filter(
-          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
-        )
-        return siblings[0] === element
-      }
+    {
+      if (!element.parentNode)
+        return false
+      const siblings = element.parentNode.children.filter(
+        child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+      )
+      return siblings[0] === element
+    }
 
     case 'last-of-type':
-      {
-        if (!element.parentNode)
-          return false
-        const siblings = element.parentNode.children.filter(
-          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
-        )
-        return siblings[siblings.length - 1] === element
-      }
+    {
+      if (!element.parentNode)
+        return false
+      const siblings = element.parentNode.children.filter(
+        child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+      )
+      return siblings[siblings.length - 1] === element
+    }
 
     case 'only-child':
-      {
-        if (!element.parentNode)
-          return false
-        const siblings = element.parentNode.children.filter(child => child.nodeType === 'element')
-        return siblings.length === 1 && siblings[0] === element
-      }
+    {
+      if (!element.parentNode)
+        return false
+      const siblings = element.parentNode.children.filter(child => child.nodeType === 'element')
+      return siblings.length === 1 && siblings[0] === element
+    }
 
     case 'only-of-type':
-      {
-        if (!element.parentNode)
-          return false
-        const siblings = element.parentNode.children.filter(
-          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
-        )
-        return siblings.length === 1 && siblings[0] === element
-      }
+    {
+      if (!element.parentNode)
+        return false
+      const siblings = element.parentNode.children.filter(
+        child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+      )
+      return siblings.length === 1 && siblings[0] === element
+    }
 
     case 'nth-of-type':
-      {
-        if (!pseudoArg || !element.parentNode)
-          return false
-        const siblings = element.parentNode.children.filter(
-          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
-        )
-        const index = siblings.indexOf(element)
-        if (index === -1)
-          return false
-
-        const position = index + 1 // 1-indexed
-
-        if (pseudoArg === 'odd')
-          return position % 2 === 1
-        if (pseudoArg === 'even')
-          return position % 2 === 0
-
-        // Handle An+B notation (e.g., 2n+1, 3n, -n+6)
-        const anPlusBMatch = pseudoArg.match(/^(-?\d*)n([+-]\d+)?$/)
-        if (anPlusBMatch) {
-          const a = anPlusBMatch[1] === '' ? 1 : anPlusBMatch[1] === '-' ? -1 : Number.parseInt(anPlusBMatch[1], 10)
-          const b = anPlusBMatch[2] ? Number.parseInt(anPlusBMatch[2], 10) : 0
-
-          // Position must satisfy: position = a*n + b for some non-negative integer n
-          if (a === 0)
-            return position === b
-
-          const n = (position - b) / a
-          return n >= 0 && Number.isInteger(n)
-        }
-
-        const n = Number.parseInt(pseudoArg, 10)
-        if (!Number.isNaN(n))
-          return position === n
-
+    {
+      if (!pseudoArg || !element.parentNode)
         return false
+      const siblings = element.parentNode.children.filter(
+        child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+      )
+      const index = siblings.indexOf(element)
+      if (index === -1)
+        return false
+
+      const position = index + 1 // 1-indexed
+
+      if (pseudoArg === 'odd')
+        return position % 2 === 1
+      if (pseudoArg === 'even')
+        return position % 2 === 0
+
+      // Handle An+B notation (e.g., 2n+1, 3n, -n+6)
+      const anPlusBMatch = pseudoArg.match(/^(-?\d*)n([+-]\d+)?$/)
+      if (anPlusBMatch) {
+        const a = anPlusBMatch[1] === '' ? 1 : anPlusBMatch[1] === '-' ? -1 : Number.parseInt(anPlusBMatch[1], 10)
+        const b = anPlusBMatch[2] ? Number.parseInt(anPlusBMatch[2], 10) : 0
+
+        // Position must satisfy: position = a*n + b for some non-negative integer n
+        if (a === 0)
+          return position === b
+
+        const n = (position - b) / a
+        return n >= 0 && Number.isInteger(n)
       }
+
+      const n = Number.parseInt(pseudoArg, 10)
+      if (!Number.isNaN(n))
+        return position === n
+
+      return false
+    }
 
     case 'nth-last-child':
-      {
-        if (!pseudoArg || !element.parentNode)
-          return false
-        const siblings = element.parentNode.children.filter(child => child.nodeType === 'element')
-        const index = siblings.indexOf(element)
-        if (index === -1)
-          return false
-
-        const position = siblings.length - index // Position from the end (1-indexed)
-
-        if (pseudoArg === 'odd')
-          return position % 2 === 1
-        if (pseudoArg === 'even')
-          return position % 2 === 0
-
-        const n = Number.parseInt(pseudoArg, 10)
-        if (!Number.isNaN(n))
-          return position === n
-
+    {
+      if (!pseudoArg || !element.parentNode)
         return false
-      }
+      const siblings = element.parentNode.children.filter(child => child.nodeType === 'element')
+      const index = siblings.indexOf(element)
+      if (index === -1)
+        return false
+
+      const position = siblings.length - index // Position from the end (1-indexed)
+
+      if (pseudoArg === 'odd')
+        return position % 2 === 1
+      if (pseudoArg === 'even')
+        return position % 2 === 0
+
+      const n = Number.parseInt(pseudoArg, 10)
+      if (!Number.isNaN(n))
+        return position === n
+
+      return false
+    }
 
     case 'nth-last-of-type':
-      {
-        if (!pseudoArg || !element.parentNode)
-          return false
-        const siblings = element.parentNode.children.filter(
-          child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
-        )
-        const index = siblings.indexOf(element)
-        if (index === -1)
-          return false
-
-        const position = siblings.length - index // Position from the end (1-indexed)
-
-        if (pseudoArg === 'odd')
-          return position % 2 === 1
-        if (pseudoArg === 'even')
-          return position % 2 === 0
-
-        const n = Number.parseInt(pseudoArg, 10)
-        if (!Number.isNaN(n))
-          return position === n
-
+    {
+      if (!pseudoArg || !element.parentNode)
         return false
-      }
+      const siblings = element.parentNode.children.filter(
+        child => child.nodeType === 'element' && (child as VirtualElement).tagName === element.tagName,
+      )
+      const index = siblings.indexOf(element)
+      if (index === -1)
+        return false
+
+      const position = siblings.length - index // Position from the end (1-indexed)
+
+      if (pseudoArg === 'odd')
+        return position % 2 === 1
+      if (pseudoArg === 'even')
+        return position % 2 === 0
+
+      const n = Number.parseInt(pseudoArg, 10)
+      if (!Number.isNaN(n))
+        return position === n
+
+      return false
+    }
 
     default:
       throw new Error(`Unsupported pseudo-class: ":${pseudoName}". Supported pseudo-classes are: :first-child, :last-child, :first-of-type, :last-of-type, :only-child, :only-of-type, :nth-child(), :nth-last-child(), :nth-of-type(), :nth-last-of-type(), :not(), :disabled, :enabled, :checked, :empty`)
@@ -674,34 +674,34 @@ export function matchesAttributeSelector(element: VirtualElement, attrSelector: 
   }
 
   // [attr="value"] - exact match
-  const exactMatch = attrSelector.match(/^([a-zA-Z0-9-]+)="([^"]*)"$/)
+  const exactMatch = attrSelector.match(/^([a-z0-9-]+)="([^"]*)"$/i)
   if (exactMatch) {
     return element.getAttribute(exactMatch[1]) === exactMatch[2]
   }
 
   // [attr^="value"] - starts with
-  const startsWithMatch = attrSelector.match(/^([a-zA-Z0-9-]+)\^="([^"]*)"$/)
+  const startsWithMatch = attrSelector.match(/^([a-z0-9-]+)\^="([^"]*)"$/i)
   if (startsWithMatch) {
     const value = element.getAttribute(startsWithMatch[1])
     return value !== null && value.startsWith(startsWithMatch[2])
   }
 
   // [attr$="value"] - ends with
-  const endsWithMatch = attrSelector.match(/^([a-zA-Z0-9-]+)\$="([^"]*)"$/)
+  const endsWithMatch = attrSelector.match(/^([a-z0-9-]+)\$="([^"]*)"$/i)
   if (endsWithMatch) {
     const value = element.getAttribute(endsWithMatch[1])
     return value !== null && value.endsWith(endsWithMatch[2])
   }
 
   // [attr*="value"] - contains
-  const containsMatch = attrSelector.match(/^([a-zA-Z0-9-]+)\*="([^"]*)"$/)
+  const containsMatch = attrSelector.match(/^([a-z0-9-]+)\*="([^"]*)"$/i)
   if (containsMatch) {
     const value = element.getAttribute(containsMatch[1])
     return value !== null && value.includes(containsMatch[2])
   }
 
   // [attr~="value"] - contains word
-  const wordMatch = attrSelector.match(/^([a-zA-Z0-9-]+)~="([^"]*)"$/)
+  const wordMatch = attrSelector.match(/^([a-z0-9-]+)~="([^"]*)"$/i)
   if (wordMatch) {
     const value = element.getAttribute(wordMatch[1])
     if (value === null)

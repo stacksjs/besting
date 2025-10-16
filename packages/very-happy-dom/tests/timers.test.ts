@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Timer API Tests
  * Comprehensive tests for setTimeout, setInterval, requestAnimationFrame
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -61,7 +63,7 @@ console.log('\nTest Group 2: setTimeout - Arguments')
   await window.happyDOM.waitUntilComplete()
   assert(
     receivedArgs[0] === 42 && receivedArgs[1] === 'hello' && receivedArgs[2] === true,
-    'Multiple arguments passed correctly'
+    'Multiple arguments passed correctly',
   )
 
   await window.happyDOM.close()
@@ -327,7 +329,7 @@ console.log('\nTest Group 14: Nested Timers - Execution Order')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -335,6 +337,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All timer tests passing!')
 }

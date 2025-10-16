@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Event API Tests
  * Comprehensive tests for CustomEvent, Event emitters, page events
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -39,7 +41,7 @@ console.log('\nTest Group 2: CustomEvent - With Detail')
   const window = new Window()
 
   const event = new window.CustomEvent('custom', {
-    detail: { foo: 'bar', count: 42 }
+    detail: { foo: 'bar', count: 42 },
   })
 
   assert(event.type === 'custom', 'Event type is custom')
@@ -212,7 +214,7 @@ console.log('\nTest Group 12: Element - Event Capture')
   await window.happyDOM.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -220,6 +222,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All event tests passing!')
 }

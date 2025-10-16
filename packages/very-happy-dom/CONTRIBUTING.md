@@ -74,7 +74,7 @@ bun test:coverage
 - Follow the existing test structure:
 
 ```typescript
-import { TestStats, createAssert, createTestWindow, cleanupWindow } from './test-utils'
+import { cleanupWindow, createAssert, createTestWindow, TestStats } from './test-utils'
 
 const stats = new TestStats()
 const assert = createAssert(stats)
@@ -263,10 +263,10 @@ Before submitting your PR, ensure:
 
 ```typescript
 // Enable debug output
-window.happyDOM.setDebug(true)
-
 // Check selector parsing
 import { parseComplexSelector } from './src/selectors/engine'
+
+window.happyDOM.setDebug(true)
 console.log(parseComplexSelector('div > p.intro'))
 ```
 

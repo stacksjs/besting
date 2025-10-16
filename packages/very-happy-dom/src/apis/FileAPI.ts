@@ -46,12 +46,12 @@ export class VeryHappyFileReader {
     this.readyState = VeryHappyFileReader.LOADING
     this._trigger('loadstart')
 
-    blob.text().then(text => {
+    blob.text().then((text) => {
       this.result = text
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('load')
       this._trigger('loadend')
-    }).catch(error => {
+    }).catch((error) => {
       this.error = error
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('error')
@@ -63,13 +63,13 @@ export class VeryHappyFileReader {
     this.readyState = VeryHappyFileReader.LOADING
     this._trigger('loadstart')
 
-    blob.arrayBuffer().then(buffer => {
+    blob.arrayBuffer().then((buffer) => {
       const base64 = Buffer.from(buffer).toString('base64')
       this.result = `data:${blob.type};base64,${base64}`
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('load')
       this._trigger('loadend')
-    }).catch(error => {
+    }).catch((error) => {
       this.error = error
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('error')
@@ -81,12 +81,12 @@ export class VeryHappyFileReader {
     this.readyState = VeryHappyFileReader.LOADING
     this._trigger('loadstart')
 
-    blob.arrayBuffer().then(buffer => {
+    blob.arrayBuffer().then((buffer) => {
       this.result = buffer
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('load')
       this._trigger('loadend')
-    }).catch(error => {
+    }).catch((error) => {
       this.error = error
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('error')
@@ -98,12 +98,12 @@ export class VeryHappyFileReader {
     this.readyState = VeryHappyFileReader.LOADING
     this._trigger('loadstart')
 
-    blob.arrayBuffer().then(buffer => {
+    blob.arrayBuffer().then((buffer) => {
       this.result = String.fromCharCode(...new Uint8Array(buffer))
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('load')
       this._trigger('loadend')
-    }).catch(error => {
+    }).catch((error) => {
       this.error = error
       this.readyState = VeryHappyFileReader.DONE
       this._trigger('error')
@@ -136,7 +136,7 @@ export class VeryHappyFileReader {
       type,
       lengthComputable: false,
       loaded: 0,
-      total: 0
+      total: 0,
     } as any
 
     const listeners = this._eventListeners.get(type)

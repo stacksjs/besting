@@ -18,6 +18,7 @@
     "happy-dom",
     "bun"
   ],
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -65,6 +66,5 @@
   },
   "devDependencies": {
     "bunfig": "^0.15.0"
-  },
-  "sideEffects": false
+  }
 }

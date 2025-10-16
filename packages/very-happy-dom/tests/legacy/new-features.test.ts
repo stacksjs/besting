@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /**
  * Tests for newly implemented features
  * Storage, Timers, Waiting Utilities, Network APIs, Events, etc.
  */
 
-import { Browser, Window, MutationObserver, CustomEvent } from '../../src/index'
+import { Browser, Window } from '../../src/index'
 
 let passed = 0
 let failed = 0
@@ -12,7 +13,8 @@ function assert(condition: boolean, message: string) {
   if (condition) {
     console.log(`✅ ${message}`)
     passed++
-  } else {
+  }
+  else {
     console.log(`❌ FAILED: ${message}`)
     failed++
   }
@@ -28,8 +30,8 @@ console.log('Test 1: localStorage')
   window.localStorage.setItem('key1', 'value1')
   assert(window.localStorage.getItem('key1') === 'value1', 'localStorage setItem/getItem')
 
-  window.localStorage['key2'] = 'value2'
-  assert(window.localStorage['key2'] === 'value2', 'localStorage bracket notation')
+  window.localStorage.key2 = 'value2'
+  assert(window.localStorage.key2 === 'value2', 'localStorage bracket notation')
 
   assert(window.localStorage.length === 2, 'localStorage.length')
 
@@ -470,7 +472,7 @@ console.log('\nTest 25: waitForSelector timeout')
   await browser.close()
 }
 
-console.log('\n' + '='.repeat(50))
+console.log(`\n${'='.repeat(50)}`)
 console.log(`✅ Passed: ${passed}`)
 console.log(`❌ Failed: ${failed}`)
 console.log(`📊 Total: ${passed + failed}`)
@@ -478,6 +480,7 @@ console.log(`📊 Total: ${passed + failed}`)
 if (failed > 0) {
   console.log('\n⚠️  Some tests failed!')
   process.exit(1)
-} else {
+}
+else {
   console.log('\n🎉 All new features working!')
 }
