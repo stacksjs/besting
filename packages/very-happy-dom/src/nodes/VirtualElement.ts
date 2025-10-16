@@ -693,6 +693,7 @@ export class VirtualElement implements VirtualNode {
     if (hasCombinators(selector)) {
       // For complex selectors with combinators, we need to find a root to search from
       // Navigate to the document root or highest ancestor
+      // eslint-disable-next-line ts/no-this-alias
       let root: VirtualNode = this
       while (root.parentNode && root.parentNode.nodeType !== 'document') {
         root = root.parentNode
