@@ -34,7 +34,6 @@
     "very-happy-dom": "./dist/bin/cli.js"
   },
   "files": [
-    "README.md",
     "dist"
   ],
   "scripts": {
