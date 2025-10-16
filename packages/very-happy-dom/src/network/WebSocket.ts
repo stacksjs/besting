@@ -71,7 +71,7 @@ export class VeryHappyWebSocket {
         this.dispatchEvent(closeEvent)
       })
     }
-    catch (error) {
+    catch {
       this.readyState = WebSocketReadyState.CLOSED
       setTimeout(() => {
         this.dispatchEvent({ type: 'error' } as Event)

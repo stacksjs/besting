@@ -64,7 +64,7 @@ console.log('\nTest Group 3: CustomElements - Invalid Name')
   try {
     window.customElements.define('badelement', BadElement) // Missing hyphen
   }
-  catch (e) {
+  catch {
     errorThrown = true
   }
 

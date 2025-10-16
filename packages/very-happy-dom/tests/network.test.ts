@@ -175,7 +175,7 @@ console.log('\nTest Group 9: WebSocket - Event Handlers')
     ws = new window.WebSocket('wss://echo.websocket.org/')
     assert(ws.readyState === 0, 'Initial readyState is CONNECTING')
   }
-  catch (e) {
+  catch {
     error = e
   }
 

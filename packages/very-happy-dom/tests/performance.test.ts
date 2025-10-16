@@ -207,8 +207,8 @@ console.log('\nTest Group 9: Memory Efficiency')
   await cleanupWindow(window)
 
   // Force garbage collection if available
-  if (global.gc) {
-    global.gc()
+  if (globalThis.gc) {
+    globalThis.gc()
   }
 
   const endMemory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)

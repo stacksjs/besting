@@ -5,6 +5,7 @@
  */
 
 import { Browser, Window, XPathResultType } from '../../src/index'
+import { Buffer } from 'node:buffer'
 
 let passed = 0
 let failed = 0

@@ -121,7 +121,7 @@ export class XMLHttpRequest {
         this._triggerEvent('load', true)
         this._triggerEvent('loadend', true)
       })
-      .catch((error) => {
+      .catch(() => {
         if (timeoutId)
           clearTimeout(timeoutId)
         if (this._aborted) {
