@@ -1,3 +1,52 @@
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.5...v0.0.6)
+
+### 🧹 Chores
+
+- release v0.0.6 ([c5c7460](https://github.com/stacksjs/besting/commit/c5c7460))
+- wip ([28df13d](https://github.com/stacksjs/besting/commit/28df13d))
+- wip ([3a97ba4](https://github.com/stacksjs/besting/commit/3a97ba4))
+- wip ([ee3e929](https://github.com/stacksjs/besting/commit/ee3e929))
+- wip ([7f566f9](https://github.com/stacksjs/besting/commit/7f566f9))
+- wip ([126fad1](https://github.com/stacksjs/besting/commit/126fad1))
+- wip ([fa42ca9](https://github.com/stacksjs/besting/commit/fa42ca9))
+- wip ([7895c19](https://github.com/stacksjs/besting/commit/7895c19))
+- wip ([a4ca005](https://github.com/stacksjs/besting/commit/a4ca005))
+- wip ([7025672](https://github.com/stacksjs/besting/commit/7025672))
+- wip ([c136d00](https://github.com/stacksjs/besting/commit/c136d00))
+- wip ([ee658a4](https://github.com/stacksjs/besting/commit/ee658a4))
+- wip ([28ba173](https://github.com/stacksjs/besting/commit/28ba173))
+- wip ([c8a01fe](https://github.com/stacksjs/besting/commit/c8a01fe))
+- wip ([f6f4c2e](https://github.com/stacksjs/besting/commit/f6f4c2e))
+- wip ([e473753](https://github.com/stacksjs/besting/commit/e473753))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.5...HEAD)
+
+### 🧹 Chores
+
+- wip ([28df13d](https://github.com/stacksjs/besting/commit/28df13d))
+- wip ([3a97ba4](https://github.com/stacksjs/besting/commit/3a97ba4))
+- wip ([ee3e929](https://github.com/stacksjs/besting/commit/ee3e929))
+- wip ([7f566f9](https://github.com/stacksjs/besting/commit/7f566f9))
+- wip ([126fad1](https://github.com/stacksjs/besting/commit/126fad1))
+- wip ([fa42ca9](https://github.com/stacksjs/besting/commit/fa42ca9))
+- wip ([7895c19](https://github.com/stacksjs/besting/commit/7895c19))
+- wip ([a4ca005](https://github.com/stacksjs/besting/commit/a4ca005))
+- wip ([7025672](https://github.com/stacksjs/besting/commit/7025672))
+- wip ([c136d00](https://github.com/stacksjs/besting/commit/c136d00))
+- wip ([ee658a4](https://github.com/stacksjs/besting/commit/ee658a4))
+- wip ([28ba173](https://github.com/stacksjs/besting/commit/28ba173))
+- wip ([c8a01fe](https://github.com/stacksjs/besting/commit/c8a01fe))
+- wip ([f6f4c2e](https://github.com/stacksjs/besting/commit/f6f4c2e))
+- wip ([e473753](https://github.com/stacksjs/besting/commit/e473753))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+
 [Compare changes](https://github.com/stacksjs/besting/compare/v0.0.4...v0.0.5)
 
 ### 🧹 Chores
