@@ -20,6 +20,7 @@ entrypoints
 heroicons
 iconify
 lockb
+mitata
 openweb
 outdir
 pausable
