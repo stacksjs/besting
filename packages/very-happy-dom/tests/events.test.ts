@@ -91,7 +91,9 @@ console.log('\nTest Group 5: Element - removeEventListener')
   const element = window.document.createElement('div')
   let count = 0
 
-  const handler = () => { count++ }
+  const handler = () => {
+    count++
+  }
   element.addEventListener('test', handler)
   element.dispatchEvent(new window.CustomEvent('test'))
 
@@ -174,8 +176,12 @@ console.log('\nTest Group 10: Element - Multiple Event Listeners')
   let count1 = 0
   let count2 = 0
 
-  element.addEventListener('test', () => { count1++ })
-  element.addEventListener('test', () => { count2++ })
+  element.addEventListener('test', () => {
+    count1++
+  })
+  element.addEventListener('test', () => {
+    count2++
+  })
 
   element.dispatchEvent(new window.CustomEvent('test'))
 
@@ -192,7 +198,9 @@ console.log('\nTest Group 11: Element - Event Listener Once')
   const element = window.document.createElement('div')
   let count = 0
 
-  element.addEventListener('test', () => { count++ }, { once: true })
+  element.addEventListener('test', () => {
+    count++
+  }, { once: true })
 
   element.dispatchEvent(new window.CustomEvent('test'))
   element.dispatchEvent(new window.CustomEvent('test'))

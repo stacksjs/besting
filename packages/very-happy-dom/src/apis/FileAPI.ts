@@ -42,7 +42,7 @@ export class VeryHappyFileReader {
 
   private _eventListeners = new Map<string, Set<EventListener>>()
 
-  readAsText(blob: Blob, encoding = 'UTF-8'): void {
+  readAsText(blob: Blob, _encoding = 'UTF-8'): void {
     this.readyState = VeryHappyFileReader.LOADING
     this._trigger('loadstart')
 
@@ -64,6 +64,7 @@ export class VeryHappyFileReader {
     this._trigger('loadstart')
 
     blob.arrayBuffer().then((buffer) => {
+      // eslint-disable-next-line node/prefer-global/buffer
       const base64 = Buffer.from(buffer).toString('base64')
       this.result = `data:${blob.type};base64,${base64}`
       this.readyState = VeryHappyFileReader.DONE

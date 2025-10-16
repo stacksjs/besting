@@ -565,8 +565,10 @@ group('Event Handling', () => {
 
   bench('dispatchEvent', () => {
     const el = doc.createElement('button')
-    let clicked = false
-    el.addEventListener('click', () => { clicked = true })
+    let _clicked = false
+    el.addEventListener('click', () => {
+      _clicked = true
+    })
     el.dispatchEvent(new Event('click'))
   })
 
@@ -579,8 +581,10 @@ group('Event Handling', () => {
 
   bench('dispatch 100 events', () => {
     const el = doc.createElement('div')
-    let count = 0
-    el.addEventListener('test', () => { count++ })
+    let _count = 0
+    el.addEventListener('test', () => {
+      _count++
+    })
     for (let i = 0; i < 100; i++) {
       el.dispatchEvent(new Event('test'))
     }
@@ -644,7 +648,7 @@ group('🌍 Real-World Scenarios', () => {
     for (let i = 0; i < 100; i++) {
       const li = doc.createElement('li')
       li.textContent = `Item ${i}`
-      li.className = 'item'
+      li.setAttribute('class', 'item')
       ul.appendChild(li)
     }
 
@@ -684,11 +688,11 @@ group('🌍 Real-World Scenarios', () => {
   bench('Build card grid (4×6 cards)', () => {
     const doc = createDocument()
     const grid = doc.createElement('div')
-    grid.className = 'grid'
+    grid.setAttribute('class', 'grid')
 
     for (let i = 0; i < 24; i++) {
       const card = doc.createElement('div')
-      card.className = 'card'
+      card.setAttribute('class', 'card')
 
       const title = doc.createElement('h3')
       title.textContent = `Card ${i}`
@@ -698,7 +702,7 @@ group('🌍 Real-World Scenarios', () => {
 
       const button = doc.createElement('button')
       button.textContent = 'Click me'
-      button.className = 'btn'
+      button.setAttribute('class', 'btn')
 
       card.appendChild(title)
       card.appendChild(desc)
@@ -721,10 +725,10 @@ group('🌍 Real-World Scenarios', () => {
       input.setAttribute('type', 'text')
       input.setAttribute('name', `field${i}`)
       input.setAttribute('required', 'true')
-      input.className = 'form-input'
+      input.setAttribute('class', 'form-input')
 
       const error = doc.createElement('span')
-      error.className = 'error'
+      error.setAttribute('class', 'error')
       error.textContent = ''
 
       form.appendChild(label)
@@ -782,6 +786,7 @@ group('Memory Efficiency', () => {
 // Based on https://github.com/capricorn86/happy-dom-performance-test
 group('🏆 Competitive Comparison (Real-World GitHub HTML)', () => {
   // Load the large GitHub HTML page used in happy-dom benchmarks
+  // eslint-disable-next-line ts/no-require-imports
   const HTMLPage = require('./lib/data/HTMLPage')
 
   bench('VeryHappyDOM: Parse GitHub HTML', () => {
@@ -822,7 +827,7 @@ group('🏆 Competitive Comparison (Real-World GitHub HTML)', () => {
   bench('VeryHappyDOM: Serialize GitHub HTML', () => {
     const doc = createDocument()
     doc.documentElement!.innerHTML = HTMLPage
-    doc.documentElement!.outerHTML
+    const _html = doc.documentElement!.outerHTML
   })
 })
 

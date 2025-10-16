@@ -15,7 +15,7 @@ console.log('=== 🔬 Advanced Edge Cases Test Suite ===\n')
 console.log('Test Group 1: Complex Selector Combinations')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="container">
       <div class="item active">Item 1</div>
       <div class="item">Item 2</div>
@@ -26,11 +26,11 @@ console.log('Test Group 1: Complex Selector Combinations')
   // Combining multiple pseudo-classes
   const result1 = window.document.querySelector('.item:not(.active):not(.disabled)')
   assert(result1 !== null, 'Complex :not() combinations work')
-  assert(result1?.textContent?.includes('Item 2'), 'Correct element selected')
+  assert((result1?.textContent?.includes('Item 2')) as boolean, 'Correct element selected')
 
   // :first-child with class
   const result2 = window.document.querySelector('.item:first-child')
-  assert(result2?.textContent?.includes('Item 1'), ':first-child with class works')
+  assert((result2?.textContent?.includes('Item 1')) as boolean, ':first-child with class works')
 
   await cleanupWindow(window)
 }
@@ -124,7 +124,7 @@ console.log('\nTest Group 4: Computed Styles Advanced')
 console.log('\nTest Group 5: Advanced Pseudo-Class Scenarios')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul>
       <li class="active">First</li>
       <li>Second</li>
@@ -196,11 +196,13 @@ console.log('\nTest Group 7: Browser Context Operations')
   const page2 = browser.newPage()
 
   // Set different content in each page
-  page1.mainFrame.window.document.body.innerHTML = '<h1>Page 1</h1>'
-  page2.mainFrame.window.document.body.innerHTML = '<h1>Page 2</h1>'
+  const doc1 = page1.mainFrame.window.document as any
+  const doc2 = page2.mainFrame.window.document as any
+  doc1.body!.innerHTML = '<h1>Page 1</h1>'
+  doc2.body!.innerHTML = '<h1>Page 2</h1>'
 
-  const h1Page1 = page1.mainFrame.window.document.querySelector('h1')
-  const h1Page2 = page2.mainFrame.window.document.querySelector('h1')
+  const h1Page1 = doc1.querySelector('h1')
+  const h1Page2 = doc2.querySelector('h1')
 
   assert(h1Page1?.textContent === 'Page 1', 'Page 1 has correct content')
   assert(h1Page2?.textContent === 'Page 2', 'Page 2 has correct content')
@@ -224,13 +226,19 @@ console.log('\nTest Group 8: Event Propagation Edge Cases')
   let childCount = 0
 
   // Add capture phase listener to parent
-  parent.addEventListener('click', () => { parentCaptureCount++ }, { capture: true })
+  parent.addEventListener('click', () => {
+    parentCaptureCount++
+  }, { capture: true })
 
   // Add target phase listener to child
-  child.addEventListener('click', () => { childCount++ })
+  child.addEventListener('click', () => {
+    childCount++
+  })
 
   // Add bubble phase listener to parent
-  parent.addEventListener('click', () => { parentBubbleCount++ }, { capture: false })
+  parent.addEventListener('click', () => {
+    parentBubbleCount++
+  }, { capture: false })
 
   // Dispatch event
   child.click()
@@ -273,7 +281,7 @@ console.log('\nTest Group 9: Performance and Memory')
 console.log('\nTest Group 10: Advanced XPath Expressions')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="container">
       <p class="intro">Introduction</p>
       <p class="content">Content 1</p>

@@ -42,6 +42,16 @@ export class VirtualPage {
       pathname: urlObj.pathname,
       search: urlObj.search,
       hash: urlObj.hash,
+      origin: urlObj.origin,
+      assign: (newUrl: string) => {
+        this.goto(newUrl)
+      },
+      replace: (newUrl: string) => {
+        this.goto(newUrl)
+      },
+      reload: () => {
+        // No-op in virtual DOM
+      },
     }
 
     // Fetch the page
@@ -61,8 +71,9 @@ export class VirtualPage {
         // Create basic structure and add nodes to body
         const body = this.document.body
         if (body) {
-          body.children = nodes
-          nodes.forEach(node => node.parentNode = body)
+          // Clear existing children and append new nodes
+          body.childNodes = []
+          nodes.forEach(node => body.appendChild(node))
         }
       }
 
@@ -288,6 +299,7 @@ export class VirtualPage {
     try {
       // Execute the function with document and window in scope
       // Create a wrapper function that has access to our context variables
+      // eslint-disable-next-line no-new-func
       const wrapper = new Function('document', 'window', 'console', ...Object.keys(args), `
         return (${fn.toString()})(...arguments);
       `)

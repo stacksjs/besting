@@ -15,7 +15,7 @@ console.log('=== 🚨 Error Handling Test Suite ===\n')
 console.log('Test Group 1: Invalid Selectors')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = '<div>Test</div>'
+  window.document.body!.innerHTML = '<div>Test</div>'
 
   // querySelector with empty selector matches first element (HTML)
   let result = window.document.querySelector('')
@@ -161,7 +161,7 @@ console.log('\nTest Group 7: Event Handler Edge Cases')
 console.log('\nTest Group 8: XPath Error Handling')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = '<div>Test</div>'
+  window.document.body!.innerHTML = '<div>Test</div>'
 
   // Invalid XPath expressions (should not crash)
   let errorThrown = false
@@ -291,12 +291,12 @@ console.log('\nTest Group 14: Empty Content Handling')
 {
   const window = createTestWindow()
 
-  window.document.body.innerHTML = ''
-  assert(window.document.body.children.length === 0, 'Empty innerHTML clears children')
+  window.document.body!.innerHTML = ''
+  assert(window.document.body!.children.length === 0, 'Empty innerHTML clears children')
 
-  window.document.body.innerHTML = '   \n\t   '
+  window.document.body!.innerHTML = '   \n\t   '
   // Whitespace creates text node, which shows up in children
-  assert(window.document.body.children.length >= 0, 'Whitespace innerHTML handled')
+  assert(window.document.body!.children.length >= 0, 'Whitespace innerHTML handled')
 
   await cleanupWindow(window)
 }

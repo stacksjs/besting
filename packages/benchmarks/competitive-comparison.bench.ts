@@ -27,7 +27,7 @@ group('⚡ HTML Parsing (GitHub Page ~193KB)', () => {
 
   bench('JSDOM', () => {
     const { JSDOM } = require('jsdom')
-    new JSDOM(HTMLPage)
+    const _dom = new JSDOM(HTMLPage)
   })
 })
 
@@ -36,7 +36,7 @@ group('📝 HTML Serialization', () => {
   bench('VeryHappyDOM', () => {
     const doc = createVeryHappyDocument()
     doc.documentElement!.innerHTML = HTMLPage
-    doc.documentElement!.outerHTML
+    const _html = doc.documentElement!.outerHTML
   })
 
   bench('HappyDOM', () => {

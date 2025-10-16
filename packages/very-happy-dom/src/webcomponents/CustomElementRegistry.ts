@@ -15,7 +15,7 @@ export class CustomElementRegistry {
     reject: (error: Error) => void
   }[]>()
 
-  define(name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions): void {
+  define(name: string, constructor: CustomElementConstructor, _options?: ElementDefinitionOptions): void {
     if (!/^[a-z][\\.0-9_a-z]*-[\\.0-9_a-z]*$/.test(name)) {
       throw new Error(`Failed to execute 'define' on 'CustomElementRegistry': "${name}" is not a valid custom element name`)
     }
@@ -54,7 +54,7 @@ export class CustomElementRegistry {
     })
   }
 
-  upgrade(root: Node): void {
+  upgrade(_root: Node): void {
     // In a full implementation, this would upgrade all custom elements in the tree
     // For now, it's a no-op
   }

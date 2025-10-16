@@ -54,18 +54,18 @@ class CustomElement extends HTMLElement {
                 }
             </style>
             <div>
-				<span>
-					<div class="class1 class2" id="id">
-						<!-- Comment 1 !-->
-						<b>Bold</b>
-						<!-- Comment 2 !-->
-						<span><slot></slot></span>
-					</div>
-					<article class="class1 class2" id="id">
-						<!-- Comment 1 !-->
-						<b>Bold</b>
-						<!-- Comment 2 !-->
-					</article>
+        <span>
+          <div class="class1 class2" id="id">
+            <!-- Comment 1 !-->
+            <b>Bold</b>
+            <!-- Comment 2 !-->
+            <span><slot></slot></span>
+          </div>
+          <article class="class1 class2" id="id">
+            <!-- Comment 1 !-->
+            <b>Bold</b>
+            <!-- Comment 2 !-->
+          </article>
                 </span>
             </div>
         `

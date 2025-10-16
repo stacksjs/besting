@@ -65,8 +65,8 @@ export class Performance {
 export class Geolocation {
   getCurrentPosition(
     success: (position: GeolocationPosition) => void,
-    error?: (error: GeolocationPositionError) => void,
-    options?: GeolocationOptions,
+    _error?: (error: GeolocationPositionError) => void,
+    _options?: GeolocationOptions,
   ): void {
     // Mock position
     setTimeout(() => {
@@ -87,8 +87,8 @@ export class Geolocation {
 
   watchPosition(
     success: (position: GeolocationPosition) => void,
-    error?: (error: GeolocationPositionError) => void,
-    options?: GeolocationOptions,
+    _error?: (error: GeolocationPositionError) => void,
+    _options?: GeolocationOptions,
   ): number {
     const id = setInterval(() => {
       success({
@@ -307,7 +307,7 @@ export class DataTransfer {
     }
   }
 
-  setDragImage(image: Element, x: number, y: number): void {
+  setDragImage(_image: Element, _x: number, _y: number): void {
     // No-op in virtual DOM
   }
 }

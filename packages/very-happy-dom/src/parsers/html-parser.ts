@@ -83,7 +83,7 @@ export function parseHTML(html: string): VirtualNode[] {
 
       // Parse attribute name
       let attrName = ''
-      while (peek() && /[\w-:]/.test(peek())) {
+      while (peek() && /[\w\-:]/.test(peek())) {
         attrName += consume()
       }
 

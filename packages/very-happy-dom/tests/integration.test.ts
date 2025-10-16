@@ -40,7 +40,7 @@ console.log('\nTest Group 2: DOM - Manipulation and Query')
 {
   const window = new Window()
 
-  window.document.body.innerHTML = '<div id="app"><h1>Title</h1><p class="text">Content</p></div>'
+  window.document.body!.innerHTML = '<div id="app"><h1>Title</h1><p class="text">Content</p></div>'
 
   const app = window.document.getElementById('app')
   assert(app !== null, 'getElementById found app')
@@ -67,7 +67,7 @@ console.log('\nTest Group 3: Events - DOM Integration')
 
   const button = window.document.createElement('button')
   button.textContent = 'Click me'
-  window.document.body.appendChild(button)
+  window.document.body!.appendChild(button)
 
   let clicked = false
   button.addEventListener('click', () => {
@@ -77,7 +77,7 @@ console.log('\nTest Group 3: Events - DOM Integration')
   button.dispatchEvent(new window.CustomEvent('click'))
 
   assert(clicked === true, 'Event listener triggered')
-  assert(window.document.body.children.length === 1, 'Button in DOM')
+  assert(window.document.body!.children.length === 1, 'Button in DOM')
 
   await window.happyDOM.close()
 }
@@ -108,7 +108,7 @@ console.log('\nTest Group 5: XPath - DOM Integration')
 {
   const window = new Window()
 
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul>
       <li>Item 1</li>
       <li class="active">Item 2</li>
@@ -167,11 +167,11 @@ console.log('\nTest Group 7: Multiple Windows - Isolation')
   assert(window1.localStorage.getItem('key') === 'window1', 'Window 1 storage isolated')
   assert(window2.localStorage.getItem('key') === 'window2', 'Window 2 storage isolated')
 
-  window1.document.body.innerHTML = '<div>Window 1</div>'
-  window2.document.body.innerHTML = '<div>Window 2</div>'
+  window1.document.body!.innerHTML = '<div>Window 1</div>'
+  window2.document.body!.innerHTML = '<div>Window 2</div>'
 
-  assert(window1.document.body.innerHTML.includes('Window 1'), 'Window 1 DOM isolated')
-  assert(window2.document.body.innerHTML.includes('Window 2'), 'Window 2 DOM isolated')
+  assert(window1.document.body!.innerHTML.includes('Window 1'), 'Window 1 DOM isolated')
+  assert(window2.document.body!.innerHTML.includes('Window 2'), 'Window 2 DOM isolated')
 
   await window1.happyDOM.close()
   await window2.happyDOM.close()
@@ -190,7 +190,7 @@ console.log('\nTest Group 8: Custom Elements - DOM Integration')
 
   window.customElements.define('my-component', MyComponent)
 
-  window.document.body.innerHTML = '<my-component></my-component>'
+  window.document.body!.innerHTML = '<my-component></my-component>'
 
   const component = window.document.querySelector('my-component')
   assert(component !== null, 'Custom element in DOM')
@@ -204,10 +204,10 @@ console.log('\nTest Group 9: Clipboard - DOM Integration')
   const window = new Window()
 
   const input = window.document.createElement('input')
-  input.value = 'Copy me'
-  window.document.body.appendChild(input)
+  input.setAttribute('value', 'Copy me')
+  window.document.body!.appendChild(input)
 
-  await window.navigator.clipboard.writeText(input.value)
+  await window.navigator.clipboard.writeText(input.getAttribute('value') || '')
   const copied = await window.navigator.clipboard.readText()
 
   assert(copied === 'Copy me', 'Clipboard copied input value')
@@ -221,7 +221,7 @@ console.log('\nTest Group 10: Complete App - Simulation')
   const window = new Window()
 
   // Create app structure
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div id="app">
       <h1>Todo App</h1>
       <input id="input" type="text" />
@@ -240,15 +240,15 @@ console.log('\nTest Group 10: Complete App - Simulation')
   // Add click handler
   button?.addEventListener('click', () => {
     const li = window.document.createElement('li')
-    li.textContent = (input as any).value
+    li.textContent = input?.getAttribute('value') || ''
     list?.appendChild(li)
   })
 
   // Simulate user input
-  ;(input as any).value = 'Buy milk'
+  input?.setAttribute('value', 'Buy milk')
   button?.dispatchEvent(new window.CustomEvent('click'))
 
-  assert(list?.children.length === 1, 'Todo item added')
+  assert((list?.children.length as number) === 1, 'Todo item added')
   assert(list?.children[0]?.textContent === 'Buy milk', 'Todo text correct')
 
   await window.happyDOM.close()

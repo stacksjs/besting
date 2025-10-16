@@ -5,17 +5,43 @@
  * Provides additional assertion methods and testing patterns.
  */
 
-import type { Matchers } from 'bun:test'
 import { expect as bunExpect, describe, test } from 'bun:test'
 
 // Extend Bun's expect with custom matchers
-interface CustomMatchers<T = any> extends Matchers<T> {
-  toPass: (fn: (value: T) => boolean, message?: string) => void
-  assert: (fn: (value: T) => void) => void
+// We override all Matchers methods to return CustomMatchers for chaining
+interface CustomMatchers<T = any> {
+  // Override Bun's methods to return CustomMatchers for chaining
+  toBe: (expected: T) => CustomMatchers<T>
+  toEqual: (expected: T) => CustomMatchers<T>
+  toStrictEqual: (expected: T) => CustomMatchers<T>
+  toContain: (item: any) => CustomMatchers<T>
+  toMatch: (pattern: string | RegExp) => CustomMatchers<T>
+  toBeTruthy: () => CustomMatchers<T>
+  toBeFalsy: () => CustomMatchers<T>
+  toBeNull: () => CustomMatchers<T>
+  toBeUndefined: () => CustomMatchers<T>
+  toBeDefined: () => CustomMatchers<T>
+  toBeNaN: () => CustomMatchers<T>
+  toBeGreaterThan: (expected: number | bigint) => CustomMatchers<T>
+  toBeGreaterThanOrEqual: (expected: number | bigint) => CustomMatchers<T>
+  toBeLessThan: (expected: number | bigint) => CustomMatchers<T>
+  toBeLessThanOrEqual: (expected: number | bigint) => CustomMatchers<T>
+  toBeCloseTo: (expected: number, numDigits?: number) => CustomMatchers<T>
+  toHaveLength: (length: number) => CustomMatchers<T>
+  toHaveProperty: (keyPath: string | string[], value?: any) => CustomMatchers<T>
+  toBeInstanceOf: (expected: any) => CustomMatchers<T>
+  toThrow: (expected?: string | RegExp | Error) => CustomMatchers<T>
+
+  // Negation support
+  not: CustomMatchers<T>
+
+  // Custom methods
+  toPass: (fn: (value: T) => boolean, message?: string) => CustomMatchers<T>
+  assert: (fn: (value: T) => void) => CustomMatchers<T>
   withMessage: (message: string) => CustomMatchers<T>
-  toStartWith: (substring: string) => void
-  toEndWith: (substring: string) => void
-  toBeEmpty: () => void
+  toStartWith: (substring: string) => CustomMatchers<T>
+  toEndWith: (substring: string) => CustomMatchers<T>
+  toBeEmpty: () => CustomMatchers<T>
 }
 
 // Create a custom expect that returns chainable assertions
@@ -34,17 +60,18 @@ export function customExpect<T>(value: T, isNegated = false): CustomMatchers<T> 
 
       // Handle custom methods
       if (prop === 'toPass') {
-        return (fn: (value: T) => boolean, message?: string) => {
+        return (fn: (value: T) => boolean, message?: string): CustomMatchers<T> => {
           const result = fn(value)
           const msg = customMessage || message || 'Custom validation failed'
           if (!result) {
             throw new Error(msg)
           }
+          return customExpect(value, isNegated)
         }
       }
 
       if (prop === 'assert') {
-        return (fn: (value: T) => void) => {
+        return (fn: (value: T) => void): CustomMatchers<T> => {
           try {
             fn(value)
           }
@@ -54,56 +81,57 @@ export function customExpect<T>(value: T, isNegated = false): CustomMatchers<T> 
             }
             throw error
           }
+          return customExpect(value, isNegated)
         }
       }
 
       if (prop === 'withMessage') {
-        return (message: string) => {
+        return (message: string): CustomMatchers<T> => {
           customMessage = message
           return new Proxy(target, handler)
         }
       }
 
       if (prop === 'toStartWith') {
-        return (substring: string) => {
+        return (substring: string): CustomMatchers<T> => {
           if (typeof value !== 'string') {
             throw new TypeError('toStartWith can only be used with strings')
           }
-          const result = value.startsWith(substring)
+          const result = (value as string).startsWith(substring)
           if (isNegated) {
             bunExpect(result).toBe(false)
           }
           else {
             bunExpect(result).toBe(true)
           }
-          return customExpect(value, isNegated)
+          return customExpect(value, isNegated) as CustomMatchers<T>
         }
       }
 
       if (prop === 'toEndWith') {
-        return (substring: string) => {
+        return (substring: string): CustomMatchers<T> => {
           if (typeof value !== 'string') {
             throw new TypeError('toEndWith can only be used with strings')
           }
-          const result = value.endsWith(substring)
+          const result = (value as string).endsWith(substring)
           if (isNegated) {
             bunExpect(result).toBe(false)
           }
           else {
             bunExpect(result).toBe(true)
           }
-          return customExpect(value, isNegated)
+          return customExpect(value, isNegated) as CustomMatchers<T>
         }
       }
 
       if (prop === 'toBeEmpty') {
-        return () => {
+        return (): CustomMatchers<T> => {
           let length: number
           if (typeof value === 'string' || Array.isArray(value)) {
-            length = value.length
+            length = (value as any).length
           }
           else if (typeof value === 'object' && value !== null) {
-            length = Object.keys(value).length
+            length = Object.keys(value as object).length
           }
           else {
             throw new Error('toBeEmpty can only be used with strings, arrays, or objects')
@@ -115,14 +143,14 @@ export function customExpect<T>(value: T, isNegated = false): CustomMatchers<T> 
           else {
             bunExpect(length).toBe(0)
           }
-          return customExpect(value, isNegated)
+          return customExpect(value, isNegated) as CustomMatchers<T>
         }
       }
 
       // For all existing Bun expect methods, wrap them to return customExpect for chaining
       const originalMethod = target[prop]
       if (typeof originalMethod === 'function') {
-        return (...args: any[]) => {
+        return (...args: any[]): CustomMatchers<T> => {
           originalMethod.apply(target, args)
           // Return customExpect for chaining (maintaining current negation state)
           return customExpect(value, isNegated)

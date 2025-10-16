@@ -28,7 +28,7 @@ console.log('Test Group 1: MutationObserver - Basic Setup')
   const window = new Window()
   let callbackExecuted = false
 
-  const observer = new window.MutationObserver((mutations) => {
+  const observer = new window.MutationObserver((_mutations) => {
     callbackExecuted = true
   })
 
@@ -46,10 +46,10 @@ console.log('\nTest Group 2: MutationObserver - Observe & Disconnect')
 {
   const window = new Window()
   const element = window.document.createElement('div')
-  let mutationCount = 0
+  let _mutationCount = 0
 
   const observer = new window.MutationObserver((mutations) => {
-    mutationCount = mutations.length
+    _mutationCount = mutations.length
   })
 
   observer.observe(element, { childList: true, attributes: true })
@@ -136,7 +136,7 @@ console.log('\nTest Group 7: IntersectionObserver - Basic Setup')
   const window = new Window()
   let callbackExecuted = false
 
-  const observer = new window.IntersectionObserver((entries) => {
+  const observer = new window.IntersectionObserver((_entries) => {
     callbackExecuted = true
   })
 
@@ -234,7 +234,7 @@ console.log('\nTest Group 11: ResizeObserver - Basic Setup')
   const window = new Window()
   let callbackExecuted = false
 
-  const observer = new window.ResizeObserver((entries) => {
+  const observer = new window.ResizeObserver((_entries) => {
     callbackExecuted = true
   })
 

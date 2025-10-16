@@ -133,6 +133,7 @@ export class Window {
     this._location = this._createLocation(url)
 
     // Import DetachedWindowAPI lazily to avoid circular dependency
+    // eslint-disable-next-line ts/no-require-imports
     const { DetachedWindowAPI } = require('./DetachedWindowAPI')
     this.happyDOM = new DetachedWindowAPI(this)
   }

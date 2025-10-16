@@ -103,7 +103,7 @@ function querySelectorAllNthChildElements() {
 function renderCustomElement() {
   const time1 = performance.now()
   const window = new Window()
-  global.HTMLElement = window.HTMLElement
+  globalThis.HTMLElement = window.HTMLElement
   window.customElements.define(
     'custom-element',
     require('./data/CustomElement'),
@@ -111,7 +111,7 @@ function renderCustomElement() {
   window.document.write(HTMLPage)
   const customElement = window.document.querySelector('custom-element')
   customElement.shadowRoot.innerHTML
-  delete global.HTMLElement
+  delete globalThis.HTMLElement
   const time2 = performance.now()
   console.log(`HappyDOM -> Render custom element': ${time2 - time1}ms`)
 }

@@ -183,9 +183,9 @@ console.log('\nTest Group 8: requestAnimationFrame - Basic Operations')
   let executed = false
   let timestamp: number | null = null
 
-  const id = window.requestAnimationFrame((time: number) => {
+  const id = window.requestAnimationFrame((_time: number) => {
     executed = true
-    timestamp = time
+    timestamp = _time
   })
 
   assert(typeof id === 'number', 'requestAnimationFrame returns numeric ID')
@@ -204,7 +204,7 @@ console.log('\nTest Group 9: requestAnimationFrame - Multiple Frames')
   const window = new Window()
   let count = 0
 
-  function animate(time: number) {
+  function animate(_time: number) {
     count++
     if (count < 3) {
       window.requestAnimationFrame(animate)

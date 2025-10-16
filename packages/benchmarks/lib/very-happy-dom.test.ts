@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { createDocument } from '../../very-happy-dom/src/index'
-
-const HTMLPage = require('./data/HTMLPage')
+import HTMLPage from './data/HTMLPage'
 
 function testImportVeryHappyDOM() {
   const time1 = performance.now()
@@ -24,7 +23,7 @@ function serializeHTML() {
 
   const time1 = performance.now()
   // Get outerHTML (equivalent to XMLSerializer.serializeToString)
-  document.documentElement!.outerHTML
+  const _html = document.documentElement!.outerHTML
   const time2 = performance.now()
   console.log(`VeryHappyDOM -> Serialize HTML: ${time2 - time1}ms`)
 }
@@ -98,7 +97,7 @@ function querySelectorAllNthChildElements() {
 
 function renderCustomElement() {
   const time1 = performance.now()
-  const document = createDocument()
+  const _document = createDocument()
   // Note: Custom elements not yet supported in very-happy-dom
   // This is a placeholder for future implementation
   const time2 = performance.now()

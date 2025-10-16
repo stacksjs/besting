@@ -37,7 +37,7 @@ console.log('Test Group 1: document.evaluate - Basic API')
 console.log('\nTest Group 2: XPathResult - Result Types')
 {
   const window = new Window()
-  window.document.body.innerHTML = '<div><span>Test</span></div>'
+  window.document.body!.innerHTML = '<div><span>Test</span></div>'
 
   const result = window.document.evaluate(
     '//span',
@@ -57,7 +57,7 @@ console.log('\nTest Group 2: XPathResult - Result Types')
 console.log('\nTest Group 3: XPath - Simple Tag Selector')
 {
   const window = new Window()
-  window.document.body.innerHTML = '<div><span>Test</span><span>Test2</span></div>'
+  window.document.body!.innerHTML = '<div><span>Test</span><span>Test2</span></div>'
 
   const result = window.document.evaluate(
     '//span',
@@ -78,7 +78,7 @@ console.log('\nTest Group 3: XPath - Simple Tag Selector')
 console.log('\nTest Group 4: XPath - Descendant Axis')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>
       <p>Para 1</p>
       <section><p>Para 2</p></section>
@@ -102,7 +102,7 @@ console.log('\nTest Group 4: XPath - Descendant Axis')
 console.log('\nTest Group 5: XPath - Attribute Selector')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="foo">Div 1</div>
     <div class="bar">Div 2</div>
     <div class="foo">Div 3</div>
@@ -125,7 +125,7 @@ console.log('\nTest Group 5: XPath - Attribute Selector')
 console.log('\nTest Group 6: XPath - Text Content')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>Hello</div>
     <div>World</div>
   `
@@ -147,7 +147,7 @@ console.log('\nTest Group 6: XPath - Text Content')
 console.log('\nTest Group 7: XPath - First Child')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul>
       <li>Item 1</li>
       <li>Item 2</li>
@@ -173,7 +173,7 @@ console.log('\nTest Group 7: XPath - First Child')
 console.log('\nTest Group 8: XPath - Last Child')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul>
       <li>Item 1</li>
       <li>Item 2</li>
@@ -198,7 +198,7 @@ console.log('\nTest Group 8: XPath - Last Child')
 console.log('\nTest Group 9: XPath - Count Function')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>
       <p>1</p>
       <p>2</p>
@@ -224,7 +224,7 @@ console.log('\nTest Group 9: XPath - Count Function')
 console.log('\nTest Group 10: XPath - Iterator Result Type')
 {
   const window = new Window()
-  window.document.body.innerHTML = '<div><span>1</span><span>2</span></div>'
+  window.document.body!.innerHTML = '<div><span>1</span><span>2</span></div>'
 
   const result = window.document.evaluate(
     '//span',
@@ -250,7 +250,7 @@ console.log('\nTest Group 10: XPath - Iterator Result Type')
 console.log('\nTest Group 11: createExpression - Reusable Expression')
 {
   const window = new Window()
-  window.document.body.innerHTML = '<div><p>Test</p></div>'
+  window.document.body!.innerHTML = '<div><p>Test</p></div>'
 
   const expr = window.document.createExpression('//p', null)
   assert(expr !== null, 'createExpression returns expression')
@@ -265,7 +265,7 @@ console.log('\nTest Group 11: createExpression - Reusable Expression')
 console.log('\nTest Group 12: XPath - Single Node Result Types')
 {
   const window = new Window()
-  window.document.body.innerHTML = '<div><span>Test</span></div>'
+  window.document.body!.innerHTML = '<div><span>Test</span></div>'
 
   const result1 = window.document.evaluate('//span', window.document, null, 9, null)
   assert(result1.singleNodeValue !== null, 'FIRST_ORDERED_NODE_TYPE returns single node')
@@ -277,7 +277,7 @@ console.log('\nTest Group 12: XPath - Single Node Result Types')
 console.log('\nTest Group 13: XPath - Context Node')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div id="container">
       <span>Inside</span>
     </div>
@@ -302,7 +302,7 @@ console.log('\nTest Group 13: XPath - Context Node')
 console.log('\nTest Group 14: XPath - Multiple Predicates')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="foo" id="d1">Div 1</div>
     <div class="foo" id="d2">Div 2</div>
     <div class="bar" id="d3">Div 3</div>
@@ -325,7 +325,7 @@ console.log('\nTest Group 14: XPath - Multiple Predicates')
 console.log('\nTest Group 15: XPath - Parent Axis')
 {
   const window = new Window()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div id="parent">
       <span id="child">Test</span>
     </div>
@@ -341,7 +341,7 @@ console.log('\nTest Group 15: XPath - Parent Axis')
   )
 
   assert(result.singleNodeValue !== null, 'Parent axis returns parent node')
-  assert(result.singleNodeValue?.getAttribute?.('id') === 'parent', 'Parent has correct id')
+  assert((result.singleNodeValue as any)?.getAttribute?.('id') === 'parent', 'Parent has correct id')
 
   await window.happyDOM.close()
 }

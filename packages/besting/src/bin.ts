@@ -128,15 +128,15 @@ async function runTests() {
     // Process each line to extract test results and format them
     for (const line of outputLines) {
       // Process test results - extract real information from the line
-      if (line.match(/^✓\s+(.*?)(?=\s+\[|\s*$)/)) {
+      if (line.match(/^✓[ \t]+/)) {
         // Found a passing test in Bun's original format, copy it directly
         console.log(line)
       }
-      else if (line.match(/^✗\s+(.*?)(?=\s+\[|\s*$)/)) {
+      else if (line.match(/^✗[ \t]+/)) {
         // Found a failing test in Bun's original format, copy it directly
         console.log(line)
       }
-      else if (line.match(/^»\s+(.*?)(?=\s+\[|\s*$)/)) {
+      else if (line.match(/^»[ \t]+/)) {
         // Found a skipped test in Bun's original format, copy it directly
         console.log(line)
       }

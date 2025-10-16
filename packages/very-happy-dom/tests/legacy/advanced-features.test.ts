@@ -4,8 +4,8 @@
  * Event Emitters, XPath, Observers, XMLHttpRequest, Screenshot/PDF
  */
 
-import { Browser, Window, XPathResultType } from '../../src/index'
 import { Buffer } from 'node:buffer'
+import { Browser, Window, XPathResultType } from '../../src/index'
 
 let passed = 0
 let failed = 0
@@ -37,7 +37,7 @@ console.log('Test 1: BrowserPage Event Emitters')
     assert(event.type === 'log', 'Console event type is log')
   })
 
-  page.on('error', (error) => {
+  page.on('error', (_error) => {
     errorEmitted = true
   })
 
@@ -88,7 +88,7 @@ console.log('\nTest 3: XPath - Simple element selection')
 
   const firstSpan = result.snapshotItem(0)
   assert(firstSpan !== null, 'First span found')
-  assert((firstSpan as any).tagName === 'SPAN', 'First item is SPAN')
+  assert((firstSpan as any)?.tagName === 'SPAN', 'First item is SPAN')
 
   await window.happyDOM.close()
 }
@@ -135,10 +135,10 @@ console.log('\nTest 6: IntersectionObserver')
   assert(typeof window.IntersectionObserver === 'function', 'IntersectionObserver exists')
 
   let observerCalled = false
-  const observer = new window.IntersectionObserver((entries) => {
+  const observer = new window.IntersectionObserver((_entries) => {
     observerCalled = true
-    assert(entries.length === 1, 'Received 1 entry')
-    assert(entries[0].isIntersecting === true, 'Element is intersecting')
+    assert(_entries.length === 1, 'Received 1 entry')
+    assert(_entries[0].isIntersecting === true, 'Element is intersecting')
   })
 
   const target = window.document.getElementById('target')
@@ -275,7 +275,7 @@ console.log('\nTest 13: IntersectionObserver - Multiple targets')
   window.document.write('<html><body><div id="t1">Target 1</div><div id="t2">Target 2</div></body></html>')
 
   let callCount = 0
-  const observer = new window.IntersectionObserver((entries) => {
+  const observer = new window.IntersectionObserver((_entries) => {
     callCount++
   })
 
@@ -300,7 +300,9 @@ console.log('\nTest 14: Event emitter - off()')
   const page = browser.newPage()
 
   let count = 0
-  const handler = () => { count++ }
+  const handler = () => {
+    count++
+  }
 
   page.on('console', handler)
   page._emitConsole('log', 'First')

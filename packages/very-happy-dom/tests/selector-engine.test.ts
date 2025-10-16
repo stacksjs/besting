@@ -15,7 +15,7 @@ console.log('=== 🎯 Selector Engine Test Suite ===\n')
 console.log('Test Group 1: Tag Selectors')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>Div 1</div>
     <div>Div 2</div>
     <span>Span 1</span>
@@ -38,7 +38,7 @@ console.log('Test Group 1: Tag Selectors')
 console.log('\nTest Group 2: ID Selectors')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div id="main">Main</div>
     <div id="sidebar">Sidebar</div>
     <span id="header-title">Title</span>
@@ -60,7 +60,7 @@ console.log('\nTest Group 2: ID Selectors')
 console.log('\nTest Group 3: Class Selectors')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="container">Container 1</div>
     <div class="container">Container 2</div>
     <span class="highlight">Highlight</span>
@@ -83,7 +83,7 @@ console.log('\nTest Group 3: Class Selectors')
 console.log('\nTest Group 4: Multiple Class Selectors')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="btn">Button</div>
     <div class="btn primary">Primary Button</div>
     <div class="btn primary active">Active Primary</div>
@@ -104,7 +104,7 @@ console.log('\nTest Group 4: Multiple Class Selectors')
 console.log('\nTest Group 5: Universal Selector')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>Div</div>
     <span>Span</span>
     <p>Paragraph</p>
@@ -120,7 +120,7 @@ console.log('\nTest Group 5: Universal Selector')
 console.log('\nTest Group 6: Attribute Selectors - Existence')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <input type="text" />
     <input type="email" />
     <div data-id="123">With data-id</div>
@@ -140,7 +140,7 @@ console.log('\nTest Group 6: Attribute Selectors - Existence')
 console.log('\nTest Group 7: Attribute Selectors - Exact Match')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <input type="text" />
     <input type="email" />
     <input type="password" />
@@ -159,7 +159,7 @@ console.log('\nTest Group 7: Attribute Selectors - Exact Match')
 console.log('\nTest Group 8: Attribute Selectors - Starts With')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="btn-primary">Primary</div>
     <div class="btn-secondary">Secondary</div>
     <div class="button">Button</div>
@@ -175,7 +175,7 @@ console.log('\nTest Group 8: Attribute Selectors - Starts With')
 console.log('\nTest Group 9: Attribute Selectors - Ends With')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <a href="file.pdf">PDF</a>
     <a href="image.jpg">Image</a>
     <a href="document.pdf">Document</a>
@@ -191,7 +191,7 @@ console.log('\nTest Group 9: Attribute Selectors - Ends With')
 console.log('\nTest Group 10: Attribute Selectors - Contains')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="user-profile-card">Profile</div>
     <div class="admin-profile-view">Admin</div>
     <div class="settings">Settings</div>
@@ -207,7 +207,7 @@ console.log('\nTest Group 10: Attribute Selectors - Contains')
 console.log('\nTest Group 11: Attribute Selectors - Word Match')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="btn primary active">Active Primary</div>
     <div class="btn primary">Primary</div>
     <div class="btn-primary">Hyphenated</div>
@@ -223,7 +223,7 @@ console.log('\nTest Group 11: Attribute Selectors - Word Match')
 console.log('\nTest Group 12: Descendant Combinator')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="parent">
       <span>Direct child</span>
       <div>
@@ -243,7 +243,7 @@ console.log('\nTest Group 12: Descendant Combinator')
 console.log('\nTest Group 13: Child Combinator')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="parent">
       <span>Direct child</span>
       <div>
@@ -263,7 +263,7 @@ console.log('\nTest Group 13: Child Combinator')
 console.log('\nTest Group 14: Adjacent Sibling Combinator')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>
       <h1>Title</h1>
       <p>First paragraph</p>
@@ -286,7 +286,7 @@ console.log('\nTest Group 14: Adjacent Sibling Combinator')
 console.log('\nTest Group 15: General Sibling Combinator')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>
       <h1>Title</h1>
       <p>Paragraph 1</p>
@@ -306,7 +306,7 @@ console.log('\nTest Group 15: General Sibling Combinator')
 console.log('\nTest Group 16: :first-child Pseudo-class')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul>
       <li>First</li>
       <li>Second</li>
@@ -324,7 +324,7 @@ console.log('\nTest Group 16: :first-child Pseudo-class')
 console.log('\nTest Group 17: :last-child Pseudo-class')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul>
       <li>First</li>
       <li>Second</li>
@@ -342,7 +342,7 @@ console.log('\nTest Group 17: :last-child Pseudo-class')
 console.log('\nTest Group 18: :nth-child Pseudo-class')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul>
       <li>Item 1</li>
       <li>Item 2</li>
@@ -368,7 +368,7 @@ console.log('\nTest Group 18: :nth-child Pseudo-class')
 console.log('\nTest Group 19: :not Pseudo-class')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="item active">Active</div>
     <div class="item">Normal 1</div>
     <div class="item">Normal 2</div>
@@ -388,7 +388,7 @@ console.log('\nTest Group 19: :not Pseudo-class')
 console.log('\nTest Group 20: :disabled and :enabled Pseudo-classes')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <input type="text" />
     <input type="text" disabled />
     <button>Enabled</button>
@@ -408,7 +408,7 @@ console.log('\nTest Group 20: :disabled and :enabled Pseudo-classes')
 console.log('\nTest Group 21: :checked Pseudo-class')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <input type="checkbox" />
     <input type="checkbox" checked />
     <input type="radio" />
@@ -425,7 +425,7 @@ console.log('\nTest Group 21: :checked Pseudo-class')
 console.log('\nTest Group 22: :empty Pseudo-class')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div></div>
     <div>Not empty</div>
     <span></span>
@@ -442,7 +442,7 @@ console.log('\nTest Group 22: :empty Pseudo-class')
 console.log('\nTest Group 23: Complex Selector Combinations')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="container">
       <div class="item active" data-id="1">Item 1</div>
       <div class="item" data-id="2">Item 2</div>
@@ -463,7 +463,7 @@ console.log('\nTest Group 23: Complex Selector Combinations')
 console.log('\nTest Group 24: Tag + ID + Class Combination')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div id="main" class="container">Main Container</div>
     <span id="main" class="container">Span with same ID/class</span>
     <div id="other" class="container">Other Container</div>
@@ -479,7 +479,7 @@ console.log('\nTest Group 24: Tag + ID + Class Combination')
 console.log('\nTest Group 25: Multiple Selectors')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <h1>Heading</h1>
     <h2>Subheading</h2>
     <p>Paragraph</p>
@@ -496,7 +496,7 @@ console.log('\nTest Group 25: Multiple Selectors')
 console.log('\nTest Group 26: Nested Combinators')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="outer">
       <div class="middle">
         <div class="inner">
@@ -519,7 +519,7 @@ console.log('\nTest Group 26: Nested Combinators')
 console.log('\nTest Group 27: Pseudo-class with Combinators')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <ul class="menu">
       <li>First</li>
       <li class="active">Second</li>
@@ -540,7 +540,7 @@ console.log('\nTest Group 27: Pseudo-class with Combinators')
 console.log('\nTest Group 28: Attribute + Pseudo-class Combination')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <input type="text" disabled />
     <input type="email" />
     <input type="password" disabled />
@@ -559,7 +559,7 @@ console.log('\nTest Group 28: Attribute + Pseudo-class Combination')
 console.log('\nTest Group 29: Case Insensitivity')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <DIV class="test">Uppercase tag</DIV>
     <Span CLASS="highlight">Mixed case</Span>
   `
@@ -580,7 +580,7 @@ console.log('\nTest Group 29: Case Insensitivity')
 console.log('\nTest Group 30: Empty Results')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `<div>Content</div>`
+  window.document.body!.innerHTML = `<div>Content</div>`
 
   const notFound = window.document.querySelector('.nonexistent')
   assert(notFound === null, 'querySelector returns null for non-matching selector')
@@ -595,7 +595,7 @@ console.log('\nTest Group 30: Empty Results')
 console.log('\nTest Group 31: Sibling Combinator Edge Cases')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div>
       <p>P1</p>
       <div>Div between</div>
@@ -617,7 +617,7 @@ console.log('\nTest Group 31: Sibling Combinator Edge Cases')
 console.log('\nTest Group 32: Complex :not() Scenarios')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="item active featured">Item 1</div>
     <div class="item active">Item 2</div>
     <div class="item featured">Item 3</div>
@@ -635,7 +635,7 @@ console.log('\nTest Group 32: Complex :not() Scenarios')
 console.log('\nTest Group 33: matches() Method')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="container active" id="main">
       <span>Content</span>
     </div>
@@ -654,7 +654,7 @@ console.log('\nTest Group 33: matches() Method')
 console.log('\nTest Group 34: closest() Method')
 {
   const window = createTestWindow()
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     <div class="grandparent">
       <div class="parent">
         <span class="child">Target</span>

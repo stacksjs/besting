@@ -104,7 +104,7 @@ export class IntersectionObserver {
     }
   }
 
-  private _getBoundingClientRect(element: VirtualElement): DOMRectReadOnly {
+  private _getBoundingClientRect(_element: VirtualElement): DOMRectReadOnly {
     // In a virtual DOM, we simulate a basic rect
     // In a real implementation, this would calculate actual positions
     return {

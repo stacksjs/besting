@@ -39,7 +39,7 @@ export class VeryHappyWebSocket {
     try {
       this._ws = new WebSocket(url, protocols)
 
-      this._ws.addEventListener('open', (event) => {
+      this._ws.addEventListener('open', (_event) => {
         this.readyState = WebSocketReadyState.OPEN
         this.dispatchEvent({ type: 'open' } as Event)
       })
@@ -52,11 +52,11 @@ export class VeryHappyWebSocket {
           lastEventId: '',
           source: null,
           ports: [],
-        } as MessageEvent
+        } as unknown as MessageEvent
         this.dispatchEvent(messageEvent)
       })
 
-      this._ws.addEventListener('error', (event) => {
+      this._ws.addEventListener('error', (_event) => {
         this.dispatchEvent({ type: 'error' } as Event)
       })
 

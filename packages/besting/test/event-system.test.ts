@@ -139,12 +139,12 @@ describe('Event System', () => {
       let outerTarget: any = null
       let outerCurrent: any = null
 
-      inner.addEventListener('click', (e) => {
+      inner.addEventListener('click', (e: VirtualEvent) => {
         innerTarget = e.target
         innerCurrent = e.currentTarget
       })
 
-      outer.addEventListener('click', (e) => {
+      outer.addEventListener('click', (e: VirtualEvent) => {
         outerTarget = e.target
         outerCurrent = e.currentTarget
       })
@@ -203,7 +203,7 @@ describe('Event System', () => {
 
       const calls: string[] = []
 
-      inner.addEventListener('click', (e) => {
+      inner.addEventListener('click', (e: VirtualEvent) => {
         calls.push('inner')
         e.stopPropagation()
       })
@@ -225,7 +225,7 @@ describe('Event System', () => {
 
       const calls: string[] = []
 
-      outer.addEventListener('click', (e) => {
+      outer.addEventListener('click', (e: VirtualEvent) => {
         calls.push('outer-capture')
         e.stopPropagation()
       }, true)
@@ -247,7 +247,7 @@ describe('Event System', () => {
 
       const calls: string[] = []
 
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', (e: VirtualEvent) => {
         calls.push('first')
         e.stopImmediatePropagation()
       })
@@ -273,7 +273,7 @@ describe('Event System', () => {
 
       let defaultPrevented = false
 
-      link.addEventListener('click', (e) => {
+      link.addEventListener('click', (e: VirtualEvent) => {
         e.preventDefault()
         defaultPrevented = e.defaultPrevented
       })
@@ -289,7 +289,7 @@ describe('Event System', () => {
       const doc = createDocument()
       const div = doc.createElement('div')
 
-      div.addEventListener('custom', (e) => {
+      div.addEventListener('custom', (e: VirtualEvent) => {
         e.preventDefault()
       })
 
@@ -303,7 +303,7 @@ describe('Event System', () => {
       const doc = createDocument()
       const button = doc.createElement('button')
 
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', (e: VirtualEvent) => {
         e.preventDefault()
       })
 
@@ -335,7 +335,7 @@ describe('Event System', () => {
 
       let eventType = ''
 
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', (e: VirtualEvent) => {
         eventType = e.type
       })
 

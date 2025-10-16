@@ -17,7 +17,7 @@ console.log('Test Group 1: Script Injection Prevention')
   const window = createTestWindow()
 
   // Test innerHTML with script tags
-  window.document.body.innerHTML = '<div><script>alert("XSS")</script></div>'
+  window.document.body!.innerHTML = '<div><script>alert("XSS")</script></div>'
   const scriptTags = window.document.querySelectorAll('script')
   assert(scriptTags.length > 0, 'Script tags are parsed (not executed)')
 
@@ -60,7 +60,7 @@ console.log('\nTest Group 3: HTML Entity Handling')
   const window = createTestWindow()
 
   // Test common entities
-  window.document.body.innerHTML = '<div>&lt;script&gt;alert("XSS")&lt;/script&gt;</div>'
+  window.document.body!.innerHTML = '<div>&lt;script&gt;alert("XSS")&lt;/script&gt;</div>'
   const div = window.document.querySelector('div')
   assert(div !== null, 'Div created')
   // Entities should be decoded in textContent
@@ -152,6 +152,7 @@ console.log('\nTest Group 7: Prototype Pollution Prevention')
   // Test __proto__ in attributes
   div.setAttribute('__proto__', 'polluted')
   assert(div.getAttribute('__proto__') === 'polluted', '__proto__ stored as regular attribute')
+  // eslint-disable-next-line no-proto, no-restricted-properties
   assert((div as any).__proto__ !== 'polluted', 'Prototype not polluted')
 
   // Test constructor in attributes
@@ -172,12 +173,12 @@ console.log('\nTest Group 8: Form Input Sanitization')
   assert(input.getAttribute('value')!.includes('script'), 'Script in value attribute')
 
   // Test textarea content
-  window.document.body.innerHTML = '<textarea><script>alert("XSS")</script></textarea>'
+  window.document.body!.innerHTML = '<textarea><script>alert("XSS")</script></textarea>'
   const textarea = window.document.querySelector('textarea')
   assert(textarea !== null, 'Textarea created')
 
   // Test select options
-  window.document.body.innerHTML = '<select><option value="<script>">Test</option></select>'
+  window.document.body!.innerHTML = '<select><option value="<script>">Test</option></select>'
   const select = window.document.querySelector('select')
   const option = window.document.querySelector('option')
   assert(select !== null && option !== null, 'Select and option created')
@@ -247,7 +248,7 @@ console.log('\nTest Group 11: Nested Injection Attempts')
   assert(scripts.length > 0, 'Deeply nested script found')
 
   // Test mixed content
-  window.document.body.innerHTML = `
+  window.document.body!.innerHTML = `
     Text <b>bold</b>
     <script>alert("XSS")</script>
     More text <i>italic</i>
@@ -265,12 +266,12 @@ console.log('\nTest Group 12: Comment Injection')
   const window = createTestWindow()
 
   // Test HTML comments with scripts
-  window.document.body.innerHTML = '<!-- <script>alert("XSS")</script> --><div>Content</div>'
+  window.document.body!.innerHTML = '<!-- <script>alert("XSS")</script> --><div>Content</div>'
   const comments = window.document.body.children.filter(child => child.nodeType === 'comment')
   assert(comments.length > 0, 'Comments parsed')
 
   // Test conditional comments (IE-specific)
-  window.document.body.innerHTML = '<!--[if IE]><script>alert("XSS")</script><![endif]-->'
+  window.document.body!.innerHTML = '<!--[if IE]><script>alert("XSS")</script><![endif]-->'
   assert(window.document.body.children.length > 0, 'Conditional comment parsed')
 
   await cleanupWindow(window)

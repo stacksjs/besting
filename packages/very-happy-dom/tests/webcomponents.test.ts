@@ -44,7 +44,7 @@ console.log('\nTest Group 2: CustomElements - define()')
     connectedCallback() {}
   }
 
-  window.customElements.define('my-element', MyElement)
+  window.customElements.define('my-element', MyElement as any)
   assert(true, 'Custom element defined without error')
 
   const retrieved = window.customElements.get('my-element')
@@ -62,7 +62,7 @@ console.log('\nTest Group 3: CustomElements - Invalid Name')
 
   let errorThrown = false
   try {
-    window.customElements.define('badelement', BadElement) // Missing hyphen
+    window.customElements.define('badelement', BadElement as any) // Missing hyphen
   }
   catch {
     errorThrown = true
@@ -129,7 +129,7 @@ console.log('\nTest Group 7: Shadow DOM - querySelector')
   const shadow = element.attachShadow({ mode: 'open' })
 
   const span = window.document.createElement('span')
-  span.className = 'test'
+  span.setAttribute('class', 'test')
   shadow.appendChild(span)
 
   const found = shadow.querySelector('.test')
@@ -160,7 +160,7 @@ console.log('\nTest Group 9: HTMLElement - Base Class')
 
   assert(typeof window.HTMLElement === 'function', 'HTMLElement constructor exists')
 
-  class CustomEl extends window.HTMLElement {}
+  class _CustomEl extends window.HTMLElement {}
   assert(true, 'Can extend HTMLElement')
 
   await window.happyDOM.close()
@@ -178,7 +178,7 @@ console.log('\nTest Group 10: Custom Element - Lifecycle Callbacks')
     adoptedCallback() {}
   }
 
-  window.customElements.define('lifecycle-element', LifecycleElement)
+  window.customElements.define('lifecycle-element', LifecycleElement as any)
   assert(true, 'Lifecycle callbacks defined')
 
   await window.happyDOM.close()

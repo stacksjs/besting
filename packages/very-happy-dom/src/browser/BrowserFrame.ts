@@ -106,18 +106,19 @@ export class BrowserFrame {
   /**
    * Evaluates code in the frame's context
    */
-  evaluate(code: string | Function): any {
+  evaluate(code: string | ((...args: any[]) => any)): any {
     if (typeof code === 'function') {
       // Create a wrapper that provides window as a variable in the function scope
-      const window = this.window
+      const _window = this.window
       const document = this.document
       // Use Function constructor to create a function with window in scope
-      const wrappedFn = new Function('window', 'document', `return (${code.toString()})()`).bind(null, window, document)
+      // eslint-disable-next-line no-new-func
+      const wrappedFn = new Function('window', 'document', `return (${code.toString()})()`).bind(null, _window, document)
       return wrappedFn()
     }
     else {
       // Simple eval in context - in a real implementation this would use VM
-      const window = this.window
+      // eslint-disable-next-line no-eval
       return eval(code)
     }
   }
@@ -151,7 +152,7 @@ export class BrowserFrame {
   /**
    * Navigates by a number of steps in history
    */
-  async goSteps(steps: number): Promise<Response | null> {
+  async goSteps(_steps: number): Promise<Response | null> {
     // For now, this is a no-op
     return null
   }

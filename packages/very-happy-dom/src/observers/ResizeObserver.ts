@@ -42,7 +42,7 @@ export class ResizeObserver {
     this._callback = callback
   }
 
-  observe(target: VirtualElement, options?: { box?: 'content-box' | 'border-box' | 'device-pixel-content-box' }): void {
+  observe(target: VirtualElement, _options?: { box?: 'content-box' | 'border-box' | 'device-pixel-content-box' }): void {
     if (this._observedElements.has(target))
       return
 
@@ -81,7 +81,7 @@ export class ResizeObserver {
     }
   }
 
-  private _getContentRect(element: VirtualElement): DOMRectReadOnly {
+  private _getContentRect(_element: VirtualElement): DOMRectReadOnly {
     // In a virtual DOM, we simulate a basic rect
     // In a real implementation, this would calculate actual sizes
     return {

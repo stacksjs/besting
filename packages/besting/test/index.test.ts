@@ -51,11 +51,15 @@ test('object and array assertions work', () => {
 
 // Test exception assertions
 test('exception assertions work', () => {
-  const throwingFn = () => { throw new Error('boom!') }
+  const throwingFn = () => {
+    throw new Error('boom!')
+  }
   expect(throwingFn).toThrow()
   expect(throwingFn).toThrow('boom!')
 
-  const nonThrowingFn = () => { return 'safe' }
+  const nonThrowingFn = () => {
+    return 'safe'
+  }
   expect(nonThrowingFn).not.toThrow()
 })
 
@@ -204,7 +208,9 @@ test('mock functions work', () => {
 
   // Mock the add method
   const originalAdd = calc.add
-  calc.add = function (a, b) { return 42 }
+  calc.add = function (_a, _b) {
+    return 42
+  }
 
   expect(calc.add(2, 3)).toBe(42)
 

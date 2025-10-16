@@ -113,7 +113,7 @@ export class BrowserPage {
   /**
    * Evaluates code in the page's context
    */
-  evaluate(code: string | Function): any {
+  evaluate(code: string | ((...args: any[]) => any)): any {
     return this.mainFrame.evaluate(code)
   }
 
@@ -189,7 +189,7 @@ export class BrowserPage {
    * Waits for a function to return a truthy value
    */
   async waitForFunction(
-    fn: Function | string,
+    fn: ((...args: any[]) => any) | string,
     options: { timeout?: number, polling?: number | 'raf' } = {},
   ): Promise<any> {
     const { timeout = 30000, polling = 100 } = options
@@ -473,9 +473,9 @@ export class BrowserPage {
     encoding?: 'base64' | 'binary'
   } = {}): Promise<string | Buffer> {
     const {
-      type = 'png',
-      quality = 100,
-      fullPage = false,
+      type: _type = 'png',
+      quality: _quality = 100,
+      fullPage: _fullPage = false,
       encoding = 'binary',
     } = options
 
@@ -517,16 +517,16 @@ export class BrowserPage {
     preferCSSPageSize?: boolean
   } = {}): Promise<Buffer> {
     const {
-      scale = 1,
-      displayHeaderFooter = false,
-      printBackground = false,
-      landscape = false,
-      format = 'A4',
+      scale: _scale = 1,
+      displayHeaderFooter: _displayHeaderFooter = false,
+      printBackground: _printBackground = false,
+      landscape: _landscape = false,
+      format: _format = 'A4',
     } = options
 
     // Generate a simple PDF representation
     const html = this.content
-    const pdf = this._generatePDF(html, options)
+    const pdf = this._generatePDF(html)
 
     return Buffer.from(pdf)
   }
@@ -547,8 +547,8 @@ export class BrowserPage {
 </svg>`
   }
 
-  private _generatePDF(html: string, options: any): string {
-    const title = this.mainFrame.document.title || 'Document'
+  private _generatePDF(html: string): string {
+    const _title = this.mainFrame.document.title || 'Document'
 
     // Simple PDF-like text representation
     return `%PDF-1.4
