@@ -1,8 +1,11 @@
+import type { XPathResult } from '../xpath/XPathResult'
 import type { History, HistoryState, Location, NodeType, VirtualNode } from './VirtualNode'
+import { parseHTML } from '../parsers/html-parser'
+import { XPathEvaluator } from '../xpath/XPathEvaluator'
+import { XPathResultType } from '../xpath/XPathResult'
+import { VirtualCommentNode } from './VirtualCommentNode'
 import { VirtualElement } from './VirtualElement'
 import { VirtualTextNode } from './VirtualTextNode'
-import { VirtualCommentNode } from './VirtualCommentNode'
-import { parseHTML } from '../parsers/html-parser'
 
 export class VirtualDocument implements VirtualNode {
   nodeType: NodeType = 'document'
@@ -21,6 +24,9 @@ export class VirtualDocument implements VirtualNode {
 
   private _historyStack: HistoryState[] = []
   private _historyIndex = -1
+  private _eventListeners = new Map<string, Array<(event: any) => void>>()
+  private _xpathEvaluator = new XPathEvaluator()
+  private _cookies: Record<string, string> = {}
 
   constructor() {
     // Initialize with basic structure
@@ -179,6 +185,15 @@ export class VirtualDocument implements VirtualNode {
     return new VirtualCommentNode(text)
   }
 
+  createDocumentFragment(): VirtualElement {
+    // DocumentFragment is similar to a VirtualElement but doesn't get serialized
+    // For simplicity, we use a VirtualElement with a special tag
+    const fragment = new VirtualElement('document-fragment')
+    // Mark it as a fragment internally
+    ;(fragment as any)._isFragment = true
+    return fragment
+  }
+
   querySelector(selector: string): VirtualElement | null {
     return this.documentElement?.querySelector(selector) || null
   }
@@ -211,15 +226,90 @@ export class VirtualDocument implements VirtualNode {
     }
   }
 
+  /**
+   * Writes HTML to the document
+   * Compatible with Happy DOM's document.write()
+   */
+  write(html: string): void {
+    // Parse the HTML
+    const nodes = parseHTML(html)
+
+    // If the HTML contains a full document structure, replace documentElement
+    for (const node of nodes) {
+      if (node.nodeType === 'element') {
+        const element = node as VirtualElement
+        if (element.tagName === 'HTML') {
+          // Replace the entire document structure
+          this.documentElement = element
+          element.parentNode = this
+
+          // Update head and body references
+          for (const child of element.children) {
+            if (child.nodeType === 'element') {
+              const childEl = child as VirtualElement
+              if (childEl.tagName === 'HEAD') {
+                this.head = childEl
+              }
+              else if (childEl.tagName === 'BODY') {
+                this.body = childEl
+              }
+            }
+          }
+          return
+        }
+      }
+    }
+
+    // Otherwise, append to body
+    if (this.body) {
+      for (const node of nodes) {
+        this.body.appendChild(node)
+      }
+    }
+  }
+
   // Get computed styles
   getComputedStyle(element: VirtualElement): any {
-    // For now, just return the inline styles with direct property access
-    // In a full implementation, this would include default styles and cascaded styles
+    // Define default display values for common elements
+    const defaultDisplay: Record<string, string> = {
+      DIV: 'block',
+      P: 'block',
+      H1: 'block',
+      H2: 'block',
+      H3: 'block',
+      H4: 'block',
+      H5: 'block',
+      H6: 'block',
+      UL: 'block',
+      OL: 'block',
+      LI: 'list-item',
+      TABLE: 'table',
+      TR: 'table-row',
+      TD: 'table-cell',
+      TH: 'table-cell',
+      SPAN: 'inline',
+      A: 'inline',
+      EM: 'inline',
+      STRONG: 'inline',
+      SCRIPT: 'none',
+      STYLE: 'none',
+      HEAD: 'none',
+    }
+
     const self = element
     return new Proxy(
       {
         getPropertyValue(property: string): string {
-          return self.style.getPropertyValue(property)
+          const value = self.style.getPropertyValue(property)
+          if (value)
+            return value
+
+          // Return default display value for the element type
+          if (property === 'display' && !value) {
+            return defaultDisplay[self.tagName] || 'block'
+          }
+
+          return value || ''
         },
       },
       {
@@ -229,10 +319,90 @@ export class VirtualDocument implements VirtualNode {
           }
           // Convert camelCase to kebab-case
           const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
-          return self.style.getPropertyValue(kebabProp)
+          const value = self.style.getPropertyValue(kebabProp)
+          if (value)
+            return value
+
+          // Return default display value for the element type
+          if (kebabProp === 'display' && !value) {
+            return defaultDisplay[self.tagName] || 'block'
+          }
+
+          return value || ''
         },
       },
     )
+  }
+
+  // Event listener methods
+  addEventListener(type: string, listener: (event: any) => void): void {
+    if (!this._eventListeners.has(type)) {
+      this._eventListeners.set(type, [])
+    }
+    this._eventListeners.get(type)!.push(listener)
+  }
+
+  removeEventListener(type: string, listener: (event: any) => void): void {
+    const listeners = this._eventListeners.get(type)
+    if (listeners) {
+      const index = listeners.indexOf(listener)
+      if (index !== -1) {
+        listeners.splice(index, 1)
+      }
+    }
+  }
+
+  dispatchEvent(event: any): boolean {
+    const listeners = this._eventListeners.get(event.type)
+    if (listeners) {
+      for (const listener of listeners) {
+        listener(event)
+      }
+    }
+    return true
+  }
+
+  // XPath support
+  evaluate(
+    expression: string,
+    contextNode: VirtualNode = this,
+    resolver: any = null,
+    type: XPathResultType = XPathResultType.ANY_TYPE,
+    result: XPathResult | null = null,
+  ): XPathResult {
+    // If contextNode is the document, start from documentElement
+    const actualContext = contextNode === this ? (this.documentElement || this) : contextNode
+    return this._xpathEvaluator.evaluate(expression, actualContext, resolver, type, result)
+  }
+
+  createExpression(expression: string, resolver: any = null): any {
+    return {
+      evaluate: (contextNode: VirtualNode, type: XPathResultType = XPathResultType.ANY_TYPE) => {
+        // If contextNode is the document, start from documentElement
+        const actualContext = contextNode === this ? (this.documentElement || this) : contextNode
+        return this._xpathEvaluator.evaluate(expression, actualContext, resolver, type, null)
+      },
+    }
+  }
+
+  // Cookie API
+  get cookie(): string {
+    return Object.entries(this._cookies)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('; ')
+  }
+
+  set cookie(value: string) {
+    // Parse cookie string: "name=value; expires=...; path=..."
+    const parts = value.split(';').map(p => p.trim())
+    const [nameValue, ...attributes] = parts
+
+    if (nameValue) {
+      const [name, val] = nameValue.split('=').map(s => s.trim())
+      if (name) {
+        this._cookies[name] = val || ''
+      }
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "very-happy-dom",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.5",
   "description": "Like a light-weight version of `happy-dom` powered by Bun.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
@@ -18,10 +18,11 @@
     "happy-dom",
     "bun"
   ],
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/src/index.js"
+      "import": "./dist/index.js"
     },
     "./*": {
       "import": "./dist/*"
@@ -37,7 +38,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "bun --bun build.ts && bun run compile",
+    "build": "bun --bun build.ts",
+    "build:all": "bun --bun build.ts && bun run compile",
     "compile": "bun build ./bin/cli.ts --compile --minify --outfile bin/bin-name",
     "compile:all": "bun run compile:linux-x64 && bun run compile:linux-arm64 && bun run compile:windows-x64 && bun run compile:darwin-x64 && bun run compile:darwin-arm64",
     "compile:linux-x64": "bun build ./bin/cli.ts --compile --minify --target=bun-linux-x64 --outfile bin/bin-name-linux-x64",
@@ -58,7 +60,9 @@
     "changelog": "bunx changelogen --output CHANGELOG.md",
     "prepublishOnly": "bun --bun run build && bun run compile:all && bun run zip",
     "release": "bun run changelog && bunx bumpp package.json --all",
-    "test": "bun test"
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "size": "bun run build && du -sh dist && find dist -name '*.js' -exec du -h {} \\; | sort -h"
   },
   "devDependencies": {
     "bunfig": "^0.15.0"

@@ -4,7 +4,9 @@
     "types": [
       "bun"
     ],
+    "declarationMap": true,
     "noEmit": true,
+    "sourceMap": true,
     "isolatedDeclarations": true
   },
   "include": [

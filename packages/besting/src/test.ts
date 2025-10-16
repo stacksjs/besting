@@ -5,17 +5,17 @@
  * Provides additional assertion methods and testing patterns.
  */
 
-import { describe, expect as bunExpect, test } from 'bun:test'
 import type { Matchers } from 'bun:test'
+import { expect as bunExpect, describe, test } from 'bun:test'
 
 // Extend Bun's expect with custom matchers
 interface CustomMatchers<T = any> extends Matchers<T> {
-  toPass(fn: (value: T) => boolean, message?: string): void
-  assert(fn: (value: T) => void): void
-  withMessage(message: string): CustomMatchers<T>
-  toStartWith(substring: string): void
-  toEndWith(substring: string): void
-  toBeEmpty(): void
+  toPass: (fn: (value: T) => boolean, message?: string) => void
+  assert: (fn: (value: T) => void) => void
+  withMessage: (message: string) => CustomMatchers<T>
+  toStartWith: (substring: string) => void
+  toEndWith: (substring: string) => void
+  toBeEmpty: () => void
 }
 
 // Create a custom expect that returns chainable assertions
@@ -67,7 +67,7 @@ export function customExpect<T>(value: T, isNegated = false): CustomMatchers<T> 
       if (prop === 'toStartWith') {
         return (substring: string) => {
           if (typeof value !== 'string') {
-            throw new Error('toStartWith can only be used with strings')
+            throw new TypeError('toStartWith can only be used with strings')
           }
           const result = value.startsWith(substring)
           if (isNegated) {
@@ -83,7 +83,7 @@ export function customExpect<T>(value: T, isNegated = false): CustomMatchers<T> 
       if (prop === 'toEndWith') {
         return (substring: string) => {
           if (typeof value !== 'string') {
-            throw new Error('toEndWith can only be used with strings')
+            throw new TypeError('toEndWith can only be used with strings')
           }
           const result = value.endsWith(substring)
           if (isNegated) {
