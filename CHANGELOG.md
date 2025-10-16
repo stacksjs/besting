@@ -1,3 +1,28 @@
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.7...v0.0.8)
+
+### 🧹 Chores
+
+- release v0.0.8 ([3d25ed5](https://github.com/stacksjs/besting/commit/3d25ed5))
+- wip ([2392327](https://github.com/stacksjs/besting/commit/2392327))
+- **deps**: update dependency happy-dom to v20 [security] (#21) ([449ebb7](https://github.com/stacksjs/besting/commit/449ebb7)) ([#21](https://github.com/stacksjs/besting/issues/21), [#21](https://github.com/stacksjs/besting/issues/21))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+- renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+[Compare changes](https://github.com/stacksjs/besting/compare/v0.0.7...HEAD)
+
+### 🧹 Chores
+
+- wip ([2392327](https://github.com/stacksjs/besting/commit/2392327))
+- **deps**: update dependency happy-dom to v20 [security] (#21) ([449ebb7](https://github.com/stacksjs/besting/commit/449ebb7)) ([#21](https://github.com/stacksjs/besting/issues/21), [#21](https://github.com/stacksjs/besting/issues/21))
+
+### Contributors
+
+- Chris <chrisbreuer93@gmail.com>
+- renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
 [Compare changes](https://github.com/stacksjs/besting/compare/v0.0.6...v0.0.7)
 
 ### 🧹 Chores
