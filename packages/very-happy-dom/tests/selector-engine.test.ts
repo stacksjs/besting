@@ -432,7 +432,8 @@ console.log('\nTest Group 22: :empty Pseudo-class')
     <p>Content</p>
   `
 
-  const empty = window.document.querySelectorAll(':empty')
+  // Query from body to exclude the empty head element
+  const empty = window.document.body!.querySelectorAll(':empty')
   assert(empty.length === 2, ':empty finds 2 empty elements')
 
   await cleanupWindow(window)

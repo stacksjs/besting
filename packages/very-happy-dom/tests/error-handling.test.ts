@@ -17,12 +17,24 @@ console.log('Test Group 1: Invalid Selectors')
   const window = createTestWindow()
   window.document.body!.innerHTML = '<div>Test</div>'
 
-  // querySelector with empty selector matches first element (HTML)
-  let result = window.document.querySelector('')
-  assert(result !== null, 'Empty selector matches first element')
+  // querySelector with empty selector should throw
+  let errorThrown = false
+  try {
+    window.document.querySelector('')
+  }
+  catch {
+    errorThrown = true
+  }
+  assert(errorThrown, 'Empty selector throws error')
 
-  result = window.document.querySelector('   ')
-  assert(result !== null, 'Whitespace selector matches first element')
+  errorThrown = false
+  try {
+    window.document.querySelector('   ')
+  }
+  catch {
+    errorThrown = true
+  }
+  assert(errorThrown, 'Whitespace selector throws error')
 
   await cleanupWindow(window)
 }

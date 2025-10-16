@@ -376,10 +376,13 @@ export function matchesSimpleSelector(element: VirtualElement, selector: string)
   // Remove pseudo-class content before parsing other parts to avoid matching inside pseudo-classes
   const selectorWithoutPseudo = selector.replace(/:([a-z-]+)\([^)]*\)/gi, ':$1')
 
+  // Remove attribute selectors before parsing classes/ids to avoid false matches inside brackets
+  const selectorWithoutAttr = selectorWithoutPseudo.replace(/\[[^\]]+\]/g, '')
+
   // Parse selector parts (tag, id, classes, attributes, pseudo-classes)
-  const tagMatch = selectorWithoutPseudo.match(/^([a-z0-9-]+)/i)
-  const idMatch = selectorWithoutPseudo.match(/#([\w-]+)/)
-  const classMatches = selectorWithoutPseudo.match(/\.([\w-]+)/g)
+  const tagMatch = selectorWithoutAttr.match(/^([a-z0-9-]+)/i)
+  const idMatch = selectorWithoutAttr.match(/#([\w-]+)/)
+  const classMatches = selectorWithoutAttr.match(/\.([\w-]+)/g)
   const attrMatches = selectorWithoutPseudo.match(/\[([^\]]+)\]/g)
   const pseudoMatches = selector.match(/:([a-z-]+)(\([^)]*\))?/gi)
 
@@ -515,7 +518,8 @@ export function matchesPseudoClass(element: VirtualElement, pseudo: string): boo
       return element.hasAttribute('checked')
 
     case 'empty':
-      return element.children.length === 0
+      // :empty matches elements with no children (elements or text nodes)
+      return element.childNodes.length === 0 || (element.childNodes.length === 1 && element.childNodes[0].nodeType === 'text' && (element.childNodes[0].nodeValue?.trim() === '' || element.childNodes[0].nodeValue === null))
 
     case 'first-of-type':
     {
