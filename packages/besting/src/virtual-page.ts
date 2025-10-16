@@ -56,7 +56,13 @@ export class VirtualPage {
 
     // Fetch the page
     try {
-      const response = await fetch(url)
+      // Add timeout to fetch with AbortController
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), this._timeout)
+
+      const response = await fetch(url, { signal: controller.signal })
+      clearTimeout(timeoutId)
+
       const html = await response.text()
 
       // Use document.write() to properly handle the HTML
@@ -70,6 +76,10 @@ export class VirtualPage {
       }
     }
     catch (error) {
+      // If it's an abort error, throw a more specific message
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error(`Navigation failed: Request timeout after ${this._timeout}ms`)
+      }
       throw new Error(`Navigation failed: ${error}`)
     }
   }
