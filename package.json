@@ -1,7 +1,7 @@
 {
   "name": "besting",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": true,
   "description": "A Bun test framework.",
   "author": "Chris Breuer <chris@stacksjs.org>",
@@ -20,24 +20,6 @@
     "test",
     "framework"
   ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./*": {
-      "import": "./dist/*"
-    }
-  },
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "bin": {
-    "besting": "./dist/bin/cli.js"
-  },
-  "files": [
-    "README.md",
-    "dist"
-  ],
   "scripts": {
     "build": "bun --bun build.ts",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
@@ -45,7 +27,7 @@
     "lint:fix": "bunx --bun eslint . --fix",
     "changelog": "bunx logsmith --verbose",
     "changelog:generate": "bunx logsmith --output CHANGELOG.md",
-    "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
+    "release": "bun run changelog:generate && bunx --bun bumpx prompt --recursive",
     "bench": "bun packages/benchmarks/dom-performance.bench.ts",
     "bench:dom": "bun packages/benchmarks/dom-performance.bench.ts",
     "bench:compare": "bun packages/benchmarks/competitive-comparison.bench.ts",
@@ -67,9 +49,6 @@
     "bun-git-hooks": "^0.3.1",
     "bun-plugin-dtsx": "0.21.12",
     "bunfig": "^0.15.0",
-    "happy-dom": "^15.11.7",
-    "jsdom": "^25.0.1",
-    "mitata": "^1.0.34",
     "typescript": "^5.9.3"
   },
   "overrides": {
