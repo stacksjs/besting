@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createDocument } from '../../very-happy-dom/src/index'
 
 const HTMLPage = require('./data/HTMLPage')

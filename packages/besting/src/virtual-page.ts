@@ -5,8 +5,8 @@
  * No browser needed - everything runs in Bun's runtime!
  */
 
-import { expect } from 'bun:test'
 import type { VirtualDocument, VirtualElement } from 'very-happy-dom'
+import { expect } from 'bun:test'
 import { createDocument, parseHTML, VirtualEvent } from 'very-happy-dom'
 
 interface VirtualStorage {

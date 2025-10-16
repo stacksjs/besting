@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { createDocument, parseHTML } from '../src/dom'
+import { createDocument } from '../src/dom'
 
 describe('Advanced Selector Tests', () => {
   describe('ID Selectors', () => {

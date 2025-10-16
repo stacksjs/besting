@@ -1,7 +1,9 @@
+import type { ShadowRootInit } from '../webcomponents/ShadowRoot'
 import type { EventListener, EventListenerOptions, NodeType, VirtualNode } from './VirtualNode'
 import { VirtualEvent } from '../events/VirtualEvent'
-import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
 import { parseHTML } from '../parsers/html-parser'
+import { matchesSimpleSelector, querySelectorAllEngine, querySelectorEngine } from '../selectors/engine'
+import { ShadowRoot } from '../webcomponents/ShadowRoot'
 
 export class VirtualElement implements VirtualNode {
   nodeType: NodeType = 'element'
@@ -9,11 +11,17 @@ export class VirtualElement implements VirtualNode {
   nodeValue: string | null = null
   tagName: string
   attributes = new Map<string, string>()
-  children: VirtualNode[] = []
+  childNodes: VirtualNode[] = []
   parentNode: VirtualNode | null = null
+  shadowRoot: ShadowRoot | null = null
   private eventListeners = new Map<string, EventListener[]>()
   private _customValidity = ''
   private _internalStyles = new Map<string, string>()
+
+  // children should only contain element nodes, per DOM spec
+  get children(): VirtualNode[] {
+    return this.childNodes.filter(node => node.nodeType === 'element')
+  }
 
   constructor(tagName: string) {
     this.tagName = tagName.toUpperCase()
@@ -22,7 +30,7 @@ export class VirtualElement implements VirtualNode {
 
   // Attribute methods
   getAttribute(name: string): string | null {
-    return this.attributes.get(name.toLowerCase()) || null
+    return this.attributes.get(name.toLowerCase()) ?? null
   }
 
   setAttribute(name: string, value: string): void {
@@ -42,25 +50,25 @@ export class VirtualElement implements VirtualNode {
     // Don't remove from previous parent - allow same child to be appended multiple times
     // if (child.parentNode) {
     //   const prevParent = child.parentNode as VirtualElement
-    //   const index = prevParent.children.indexOf(child)
+    //   const index = prevParent.childNodes.indexOf(child)
     //   if (index !== -1) {
-    //     prevParent.children.splice(index, 1)
+    //     prevParent.childNodes.splice(index, 1)
     //   }
     // }
 
-    this.children.push(child)
+    this.childNodes.push(child)
     child.parentNode = this
     return child
   }
 
   removeChild(child: VirtualNode): VirtualNode {
-    const index = this.children.indexOf(child)
+    const index = this.childNodes.indexOf(child)
     if (index === -1) {
       // Don't throw - just return the child
       return child
     }
 
-    this.children.splice(index, 1)
+    this.childNodes.splice(index, 1)
     child.parentNode = null
     return child
   }
@@ -70,7 +78,7 @@ export class VirtualElement implements VirtualNode {
       return this.appendChild(newNode)
     }
 
-    const index = this.children.indexOf(referenceNode)
+    const index = this.childNodes.indexOf(referenceNode)
     if (index === -1) {
       throw new Error('Reference node not found')
     }
@@ -78,19 +86,19 @@ export class VirtualElement implements VirtualNode {
     // Remove from previous parent if any
     if (newNode.parentNode) {
       const prevParent = newNode.parentNode as VirtualElement
-      const prevIndex = prevParent.children.indexOf(newNode)
+      const prevIndex = prevParent.childNodes.indexOf(newNode)
       if (prevIndex !== -1) {
-        prevParent.children.splice(prevIndex, 1)
+        prevParent.childNodes.splice(prevIndex, 1)
       }
     }
 
-    this.children.splice(index, 0, newNode)
+    this.childNodes.splice(index, 0, newNode)
     newNode.parentNode = this
     return newNode
   }
 
   replaceChild(newNode: VirtualNode, oldNode: VirtualNode): VirtualNode {
-    const index = this.children.indexOf(oldNode)
+    const index = this.childNodes.indexOf(oldNode)
     if (index === -1) {
       throw new Error('Old node not found')
     }
@@ -98,13 +106,13 @@ export class VirtualElement implements VirtualNode {
     // Remove from previous parent if any
     if (newNode.parentNode) {
       const prevParent = newNode.parentNode as VirtualElement
-      const prevIndex = prevParent.children.indexOf(newNode)
+      const prevIndex = prevParent.childNodes.indexOf(newNode)
       if (prevIndex !== -1) {
-        prevParent.children.splice(prevIndex, 1)
+        prevParent.childNodes.splice(prevIndex, 1)
       }
     }
 
-    this.children.splice(index, 1, newNode)
+    this.childNodes.splice(index, 1, newNode)
     oldNode.parentNode = null
     newNode.parentNode = this
     return oldNode
@@ -120,7 +128,7 @@ export class VirtualElement implements VirtualNode {
 
     // Deep clone children
     if (deep) {
-      for (const child of this.children) {
+      for (const child of this.childNodes) {
         if (child.nodeType === 'element') {
           const childClone = (child as VirtualElement).cloneNode(true)
           clone.appendChild(childClone)
@@ -151,6 +159,47 @@ export class VirtualElement implements VirtualNode {
     }
 
     return null
+  }
+
+  // childNodes - returns all children including text and comment nodes
+  get childNodes(): VirtualNode[] {
+    return this.childNodes
+  }
+
+  // firstChild - returns first child of any type
+  get firstChild(): VirtualNode | null {
+    return this.childNodes.length > 0 ? this.childNodes[0] : null
+  }
+
+  // lastChild - returns last child of any type
+  get lastChild(): VirtualNode | null {
+    return this.childNodes.length > 0 ? this.childNodes[this.childNodes.length - 1] : null
+  }
+
+  // nextSibling - returns next sibling node of any type
+  get nextSibling(): VirtualNode | null {
+    if (!this.parentNode)
+      return null
+
+    const siblings = (this.parentNode as VirtualElement).childNodes
+    const index = siblings.indexOf(this)
+    if (index === -1 || index >= siblings.length - 1)
+      return null
+
+    return siblings[index + 1]
+  }
+
+  // previousSibling - returns previous sibling node of any type
+  get previousSibling(): VirtualNode | null {
+    if (!this.parentNode)
+      return null
+
+    const siblings = (this.parentNode as VirtualElement).childNodes
+    const index = siblings.indexOf(this)
+    if (index <= 0)
+      return null
+
+    return siblings[index - 1]
   }
 
   get nextElementSibling(): VirtualElement | null {
@@ -192,14 +241,14 @@ export class VirtualElement implements VirtualNode {
   // Text content
   get textContent(): string {
     let text = ''
-    for (const child of this.children) {
+    for (const child of this.childNodes) {
       text += child.textContent
     }
     return text
   }
 
   set textContent(value: string) {
-    this.children = []
+    this.childNodes = []
     if (value) {
       // We need to import VirtualTextNode but avoid circular dependency
       // For now, create a simple text node object
@@ -212,20 +261,44 @@ export class VirtualElement implements VirtualNode {
         parentNode: this,
         textContent: value,
       }
-      this.children.push(textNode)
+      this.childNodes.push(textNode)
     }
   }
 
   get innerHTML(): string {
-    return this.children.map(child => this._serializeNode(child)).join('')
+    return this.childNodes.map(child => this._serializeNode(child)).join('')
   }
 
   set innerHTML(html: string) {
-    this.children = []
+    this.childNodes = []
     if (html) {
       const nodes = parseHTML(html)
-      for (const node of nodes) {
-        this.appendChild(node)
+
+      // Special case: if we're the documentElement (<html>) and the parsed HTML
+      // contains an <html> element, extract its children instead of nesting
+      if (this.tagName === 'HTML' && nodes.length > 0) {
+        // Look for an <html> element in the parsed nodes
+        for (const node of nodes) {
+          if (node.nodeType === 'element') {
+            const element = node as VirtualElement
+            if (element.tagName === 'HTML') {
+              // Extract the <html> element's children (head, body, etc.)
+              for (const child of element.children) {
+                this.appendChild(child)
+              }
+              // Continue to process any remaining nodes
+              continue
+            }
+          }
+          // For non-html elements, append normally
+          this.appendChild(node)
+        }
+      }
+      else {
+        // Normal case: just append all parsed nodes
+        for (const node of nodes) {
+          this.appendChild(node)
+        }
       }
     }
   }
@@ -309,10 +382,18 @@ export class VirtualElement implements VirtualNode {
     }
     if (node.nodeType === 'element') {
       const element = node as VirtualElement
-      let html = `<${element.tagName.toLowerCase()}`
+      const tagName = element.tagName.toLowerCase()
+      let html = `<${tagName}`
 
       for (const [name, value] of element.attributes) {
         html += ` ${name}="${value}"`
+      }
+
+      // Check if this is a void element (self-closing tag)
+      const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']
+      if (voidElements.includes(tagName)) {
+        html += '/>'
+        return html
       }
 
       html += '>'
@@ -321,7 +402,7 @@ export class VirtualElement implements VirtualNode {
         html += this._serializeNode(child)
       }
 
-      html += `</${element.tagName.toLowerCase()}>`
+      html += `</${tagName}>`
       return html
     }
     return ''
@@ -358,7 +439,7 @@ export class VirtualElement implements VirtualNode {
           // Convert camelCase to kebab-case
           const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
           const value = self._internalStyles.get(kebabProp)
-          return value !== undefined ? value : ''
+          return value
         },
         set(target, prop: string, value: string) {
           // Convert camelCase to kebab-case
@@ -382,6 +463,58 @@ export class VirtualElement implements VirtualNode {
     else {
       this.removeAttribute('style')
     }
+  }
+
+  // Dataset property for data-* attributes
+  get dataset(): { [key: string]: string } {
+    const self = this
+
+    return new Proxy({}, {
+      get(target, prop: string): string {
+        // Convert camelCase to kebab-case
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        return self.getAttribute(`data-${kebabProp}`) || ''
+      },
+      set(target, prop: string, value: string): boolean {
+        // Convert camelCase to kebab-case
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        self.setAttribute(`data-${kebabProp}`, value)
+        return true
+      },
+      deleteProperty(target, prop: string): boolean {
+        // Convert camelCase to kebab-case
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        self.removeAttribute(`data-${kebabProp}`)
+        return true
+      },
+      has(target, prop: string): boolean {
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        return self.hasAttribute(`data-${kebabProp}`)
+      },
+      ownKeys(target): string[] {
+        const dataAttrs: string[] = []
+        for (const [key] of self.attributes) {
+          if (key.startsWith('data-')) {
+            // Convert data-kebab-case to camelCase
+            const camelKey = key.slice(5).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+            dataAttrs.push(camelKey)
+          }
+        }
+        return dataAttrs
+      },
+      getOwnPropertyDescriptor(target, prop: string) {
+        const kebabProp = prop.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+        if (self.hasAttribute(`data-${kebabProp}`)) {
+          return {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: self.getAttribute(`data-${kebabProp}`),
+          }
+        }
+        return undefined
+      },
+    })
   }
 
   // Form validation
@@ -465,7 +598,7 @@ export class VirtualElement implements VirtualNode {
 
     // Check type-specific validation
     if (type === 'email' && value) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      const emailRegex = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/
       if (!emailRegex.test(value)) {
         validity.typeMismatch = true
         validity.valid = false
@@ -598,8 +731,16 @@ export class VirtualElement implements VirtualNode {
     }
   }
 
-  dispatchEvent(event: VirtualEvent): boolean {
-    event.target = this
+  dispatchEvent(event: any): boolean {
+    // Try to set target and currentTarget if they're writable
+    // Native Event objects have readonly properties, so we need to handle that
+    try {
+      event.target = this
+      event.currentTarget = this
+    }
+    catch {
+      // If properties are readonly, that's okay - native Events set these automatically
+    }
 
     // Capture phase - traverse from root to target
     const path: VirtualElement[] = []
@@ -609,30 +750,50 @@ export class VirtualElement implements VirtualNode {
       current = current.parentNode
     }
 
+    // Get event properties safely
+    const isPropagationStopped = () => event.propagationStopped || event._propagationStopped || false
+    const isImmediatePropagationStopped = () => event.immediatePropagationStopped || event._immediatePropagationStopped || false
+
     // Capture phase
-    for (let i = 0; i < path.length - 1 && !event.propagationStopped; i++) {
+    for (let i = 0; i < path.length - 1 && !isPropagationStopped(); i++) {
       const element = path[i]
-      event.currentTarget = element
+      try {
+        event.currentTarget = element
+      }
+      catch {
+        // Ignore if readonly
+      }
       this._invokeEventListeners(element, event, true)
     }
 
     // Target phase
-    if (!event.propagationStopped) {
-      event.currentTarget = this
+    if (!isPropagationStopped()) {
+      try {
+        event.currentTarget = this
+      }
+      catch {
+        // Ignore if readonly
+      }
       this._invokeEventListeners(this, event, false)
       this._invokeEventListeners(this, event, true)
     }
 
     // Bubble phase
-    if (event.bubbles && !event.propagationStopped) {
-      for (let i = path.length - 2; i >= 0 && !event.propagationStopped; i--) {
+    const bubbles = event.bubbles ?? true
+    if (bubbles && !isPropagationStopped()) {
+      for (let i = path.length - 2; i >= 0 && !isPropagationStopped(); i--) {
         const element = path[i]
-        event.currentTarget = element
+        try {
+          event.currentTarget = element
+        }
+        catch {
+          // Ignore if readonly
+        }
         this._invokeEventListeners(element, event, false)
       }
     }
 
-    return !event.defaultPrevented
+    return !(event.defaultPrevented ?? false)
   }
 
   private _invokeEventListeners(element: VirtualElement, event: VirtualEvent, capture: boolean): void {
@@ -682,5 +843,14 @@ export class VirtualElement implements VirtualNode {
       return false
 
     return true
+  }
+
+  // Shadow DOM
+  attachShadow(init: ShadowRootInit): ShadowRoot {
+    if (this.shadowRoot) {
+      throw new Error('Shadow root already exists')
+    }
+    this.shadowRoot = new ShadowRoot(this, init)
+    return this.shadowRoot
   }
 }
