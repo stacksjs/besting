@@ -41,7 +41,7 @@
     "test": "bun test"
   },
   "devDependencies": {
-    "happy-dom": "^20.0.4",
+    "happy-dom": "^20.0.5",
     "jsdom": "^25.0.1",
     "mitata": "^1.0.34"
   }
