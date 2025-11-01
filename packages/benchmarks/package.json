@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "happy-dom": "^20.0.2",
-    "jsdom": "^25.0.1",
+    "jsdom": "^27.1.0",
     "mitata": "^1.0.34"
   }
 }
