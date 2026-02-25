@@ -54,8 +54,8 @@
     "zip:darwin-arm64": "zip -j bin/besting-darwin-arm64.zip bin/besting-darwin-arm64",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
     "prepublishOnly": "bun --bun run build && bun run compile:all && bun run zip",
-    "lint": "bunx --bun eslint .",
-    "lint:fix": "bunx --bun eslint . --fix",
+    "lint": "bunx --bun pickier lint .",
+    "lint:fix": "bunx --bun pickier lint . --fix",
     "changelog": "bunx logsmith --verbose",
     "changelog:generate": "bunx logsmith --output CHANGELOG.md",
     "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
@@ -76,7 +76,7 @@
     "typecheck": "bun --bun tsc --noEmit"
   },
   "dependencies": {
-    "very-happy-dom": "workspace:*"
+    "very-happy-dom": "*"
   },
   "devDependencies": {
     "@stacksjs/clapp": "^0.2.0",

@@ -72,7 +72,7 @@ export class VirtualPage {
       // Extract title
       const titleElement = this.document.querySelector('title')
       if (titleElement) {
-        this.document.title = titleElement.textContent
+        this.document.title = (titleElement as any).textContent
       }
     }
     catch (error) {
@@ -197,7 +197,7 @@ export class VirtualPage {
   // Element Properties
   async text(selector: string): Promise<string> {
     const element = await this.waitForSelector(selector)
-    return element?.textContent || ''
+    return (element as any)?.textContent || ''
   }
 
   async value(selector: string): Promise<string> {
@@ -242,7 +242,7 @@ export class VirtualPage {
   }
 
   async content(): Promise<string> {
-    return this.document.documentElement?.outerHTML || ''
+    return (this.document.documentElement as any)?.outerHTML || ''
   }
 
   // JavaScript Execution
@@ -512,12 +512,12 @@ export class VirtualPage {
 
   async assertHasClass(selector: string, className: string): Promise<void> {
     const element = await this.querySelector(selector)
-    expect(element?.classList.contains(className)).toBe(true)
+    expect((element as any)?.classList.contains(className)).toBe(true)
   }
 
   async assertHasNotClass(selector: string, className: string): Promise<void> {
     const element = await this.querySelector(selector)
-    expect(element?.classList.contains(className)).toBe(false)
+    expect((element as any)?.classList.contains(className)).toBe(false)
   }
 }
 

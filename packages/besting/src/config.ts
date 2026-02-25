@@ -20,6 +20,7 @@ export function loadConfig(config: Partial<BestingConfig> = {}): BestingConfig {
 }
 
 // eslint-disable-next-line antfu/no-top-level-await
+// eslint-disable-next-line ts/no-top-level-await
 export const config: BestingConfig = await loadBunfigConfig({
   name: 'besting',
   cwd: resolve(__dirname, '..'),

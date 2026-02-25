@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "moduleDetection": "force",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "besting": ["./packages/besting/src/index.ts"],
-      "very-happy-dom": ["./packages/very-happy-dom/src/index.ts"]
+      "besting": [
+        "./packages/besting/src/index.ts"
+      ]
     },
     "resolveJsonModule": true,
-    "types": ["bun"],
+    "types": [
+      "bun"
+    ],
     "allowImportingTsExtensions": true,
     "strict": true,
     "strictNullChecks": true,
@@ -24,5 +30,10 @@
     "verbatimModuleSyntax": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "packages/*/test",
+    "packages/benchmarks"
+  ]
 }

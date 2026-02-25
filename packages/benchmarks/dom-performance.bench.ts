@@ -832,6 +832,7 @@ group('🏆 Competitive Comparison (Real-World GitHub HTML)', () => {
 })
 
 // Run all benchmarks
+// eslint-disable-next-line ts/no-top-level-await
 await run({
   format: 'mitata', // output format: 'mitata', 'json', 'markdown', 'quiet'
   colors: true, // enable/disable colors

@@ -140,6 +140,7 @@ class CDPClient {
   private ws: WebSocket | null = null
   private messageId = 0
   private callbacks = new Map<number, { resolve: (...args: any[]) => any, reject: (...args: any[]) => any }>()
+  // eslint-disable-next-line pickier/no-unused-vars
   private eventHandlers = new Map<string, ((...args: any[]) => any)[]>()
 
   constructor(private wsUrl: string) {}
@@ -699,6 +700,7 @@ class Page {
   }
 
   // Dialog Handling
+  // eslint-disable-next-line pickier/no-unused-vars
   private dialogHandler: ((message: string) => boolean | string | Promise<boolean | string>) | null = null
 
   async onDialog(handler: (message: string) => boolean | string | Promise<boolean | string>): Promise<void> {

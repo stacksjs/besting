@@ -24,16 +24,16 @@ bun run bench:very-happy-dom
 
 | Operation | VeryHappyDOM | HappyDOM | JSDOM | VHD vs HD | VHD vs JSDOM |
 |-----------|--------------|----------|-------|-----------|--------------|
-| **HTML Parsing** | **413 ns** | 14.20 ms | 32.69 ms | **34,400× faster** | **79,200× faster** |
-| **HTML Serialization** | **841 ns** | 15.83 ms | 46.54 ms | **18,800× faster** | **55,300× faster** |
-| **querySelector (tag)** | **741 ns** | 14.27 ms | 30.74 ms | **19,300× faster** | **41,500× faster** |
-| **querySelector (class)** | **1.08 µs** | 15.70 ms | 33.32 ms | **14,500× faster** | **30,900× faster** |
-| **querySelector (attribute)** | **975 ns** | 17.09 ms | 36.00 ms | **17,500× faster** | **36,900× faster** |
-| **querySelector (complex)** | **2.07 µs** | 20.32 ms | 48.15 ms | **9,800× faster** | **23,300× faster** |
-| **querySelector (pseudo)** | **1.82 µs** | 19.16 ms | 41.70 ms | **10,500× faster** | **22,900× faster** |
-| **DOM Manipulation (100 items)** | **35.49 µs** | 1.06 ms | 3.00 ms | **30× faster** | **84× faster** |
-| **Attribute Operations (100)** | **17.38 µs** | 285 µs | 1.24 ms | **16× faster** | **71× faster** |
-| **Build Data Table (20×5)** | **47.60 µs** | 886 µs | 2.00 ms | **19× faster** | **42× faster** |
+| **HTML Parsing**|**413 ns**| 14.20 ms | 32.69 ms |**34,400× faster**|**79,200× faster** |
+| **HTML Serialization**|**841 ns**| 15.83 ms | 46.54 ms |**18,800× faster**|**55,300× faster** |
+| **querySelector (tag)**|**741 ns**| 14.27 ms | 30.74 ms |**19,300× faster**|**41,500× faster** |
+| **querySelector (class)**|**1.08 µs**| 15.70 ms | 33.32 ms |**14,500× faster**|**30,900× faster** |
+| **querySelector (attribute)**|**975 ns**| 17.09 ms | 36.00 ms |**17,500× faster**|**36,900× faster** |
+| **querySelector (complex)**|**2.07 µs**| 20.32 ms | 48.15 ms |**9,800× faster**|**23,300× faster** |
+| **querySelector (pseudo)**|**1.82 µs**| 19.16 ms | 41.70 ms |**10,500× faster**|**22,900× faster** |
+| **DOM Manipulation (100 items)**|**35.49 µs**| 1.06 ms | 3.00 ms |**30× faster**|**84× faster** |
+| **Attribute Operations (100)**|**17.38 µs**| 285 µs | 1.24 ms |**16× faster**|**71× faster** |
+| **Build Data Table (20×5)**|**47.60 µs**| 886 µs | 2.00 ms |**19× faster**|**42× faster** |
 
 ### 🚀 Key Achievements
 
@@ -88,6 +88,7 @@ bun run bench:very-happy-dom
 3. **✅ Implemented Complete Browser API** (2024-10-09):
 
    **Core Features:**
+
    - **Storage APIs** - localStorage, sessionStorage
    - **Timers** - setTimeout, setInterval, requestAnimationFrame + clear methods
    - **Waiting Utilities** - waitForSelector, waitForFunction, waitForTimeout, waitUntilComplete
@@ -98,16 +99,19 @@ bun run bench:very-happy-dom
    - **Rendering** - screenshot (SVG), PDF generation
 
    **Network & Communication:**
+
    - **Request Interception** - page.setRequestInterception(), fetch mocking
    - **WebSocket** - Full WebSocket API with events
    - **XMLHttpRequest** - Legacy XHR API
    - **Fetch API** - fetch, Request, Response, Headers, FormData
 
    **Web Components:**
+
    - **Shadow DOM** - element.attachShadow()
    - **Custom Elements** - customElements.define(), HTMLElement
 
    **Device & Browser APIs:**
+
    - **Clipboard** - navigator.clipboard.writeText/readText
    - **File API** - File, FileReader, FileList
    - **Drag & Drop** - dragAndDrop, DataTransfer
@@ -133,7 +137,7 @@ bun run bench:very-happy-dom
    - Optimize hot paths in tree traversal
    - Consider lazy parsing strategies for large HTML documents
 
-## 💡 Why Is VeryHappyDOM So Fast?
+## 💡 Why Is VeryHappyDOM So Fast
 
 The extreme performance advantage comes from several key architectural decisions:
 

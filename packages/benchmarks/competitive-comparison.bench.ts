@@ -307,6 +307,7 @@ group('🌍 Real-World: Build Data Table (20×5)', () => {
 console.log('\n🏁 Running Competitive Benchmarks...\n')
 console.log('📊 Testing against real GitHub HTML page (~193KB)\n')
 
+// eslint-disable-next-line ts/no-top-level-await
 await run({
   format: 'mitata',
   colors: true,
