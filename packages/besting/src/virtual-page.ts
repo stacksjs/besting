@@ -60,7 +60,10 @@ export class VirtualPage {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), this._timeout)
 
-      const response = await fetch(url, { signal: controller.signal })
+      const response = await fetch(url, {
+        signal: controller.signal,
+        tls: { rejectUnauthorized: false },
+      } as any)
       clearTimeout(timeoutId)
 
       const html = await response.text()
