@@ -104,7 +104,8 @@ jobs:
         run: bun install
 
       - name: Build
-        run: bun run build
+        run: bun --bun build.ts
+        working-directory: packages/besting
 
       - name: Publish Commit
-        run: bunx pkg-pr-new publish "./packages/besting" "./packages/very-happy-dom"
+        run: bunx pkg-pr-new publish "./packages/besting"
