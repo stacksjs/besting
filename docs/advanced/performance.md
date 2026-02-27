@@ -48,8 +48,10 @@ export default {
 ```typescript
 // Mark test file as isolated
 /**
+
  * @besting-environment node
  * @besting-pool forks
+
  */
 
 describe('Database tests', () => {
@@ -195,7 +197,7 @@ export default {
     all: false,
 
     // Exclude test files
-    exclude: ['**/*.test.ts', '**/__mocks__/**'],
+    exclude: ['**/*.test.ts', '**/**mocks**/**'],
   },
 }
 ```
@@ -227,7 +229,7 @@ besting --changed
 ```typescript
 export default {
   watchExclude: [
-    'node_modules/**',
+    'node*modules/**',
     'dist/**',
     'coverage/**',
   ],
@@ -314,13 +316,17 @@ jobs:
       matrix:
         shard: [1, 2, 3, 4]
     steps:
+
       - run: besting --shard=${{ matrix.shard }}/4
+
 ```
 
 ### Cache Dependencies
 
 ```yaml
+
 - uses: actions/cache@v4
+
   with:
     path: ~/.bun/install/cache
     key: bun-${{ hashFiles('bun.lockb') }}
@@ -329,7 +335,9 @@ jobs:
 ### Incremental Testing
 
 ```yaml
+
 - name: Test changed files
+
   run: besting --changed --since=origin/main
 ```
 
@@ -342,6 +350,7 @@ besting --profile
 ```
 
 Output:
+
 ```
 Profile Results:
   Setup: 500ms
@@ -349,9 +358,11 @@ Profile Results:
   Teardown: 200ms
 
 Slowest Tests:
+
   1. user.test.ts (800ms)
   2. api.test.ts (600ms)
   3. database.test.ts (400ms)
+
 ```
 
 ### Find Slow Tests
@@ -363,7 +374,7 @@ besting --reporter=verbose --slow=100
 ### Heap Snapshot
 
 ```bash
-NODE_OPTIONS="--heap-prof" besting
+NODE*OPTIONS="--heap-prof" besting
 ```
 
 ## Best Practices
@@ -377,6 +388,6 @@ NODE_OPTIONS="--heap-prof" besting
 
 ## Related
 
-- [Configuration](/advanced/configuration) - Full configuration
-- [CI/CD Integration](/advanced/ci-cd) - CI optimization
-- [Test Suites](/features/test-suites) - Test organization
+* [Configuration](/advanced/configuration) - Full configuration
+* [CI/CD Integration](/advanced/ci-cd) - CI optimization
+* [Test Suites](/features/test-suites) - Test organization

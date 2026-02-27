@@ -2,24 +2,6 @@
 title: Database Testing
 description: Laravel-inspired database testing with migrations, seeders, and factories.
 ---
-
-# Database Testing
-
-Besting includes Laravel-inspired database testing utilities with migrations, seeders, and factories.
-
-## Basic Database Testing
-
-```ts
-import { db, migration, seeder, test } from 'besting'
-
-// Define a migration
-migration(async (connection) => {
-  await connection.raw('CREATE TABLE users (id INT, name TEXT, email TEXT)')
-})
-
-// Define a seeder
-seeder(async (connection) => {
-  await connection.table('users').insert([
     { id: 1, name: 'John', email: 'john@example.com' },
     { id: 2, name: 'Jane', email: 'jane@example.com' },
   ])
@@ -47,6 +29,7 @@ test('Basic database operations', async () => {
   await database.assertExists('users', { id: 3 })
   await database.assertSame('users', { id: 3 }, { name: 'Alice' })
 })
+
 ```
 
 ## Database Assertions
@@ -54,6 +37,7 @@ test('Basic database operations', async () => {
 ### Assert Record Exists
 
 ```ts
+
 import { db, test } from 'besting'
 
 test('assert record exists', async () => {
@@ -69,11 +53,13 @@ test('assert record exists', async () => {
   await database.assertExists('users', { id: 1 })
   await database.assertExists('users', { email: 'john@example.com' })
 })
+
 ```
 
 ### Assert Record Values
 
 ```ts
+
 test('assert record values', async () => {
   const database = db().register(yourDatabaseConnection)
 
@@ -89,11 +75,13 @@ test('assert record values', async () => {
     status: 'active'
   })
 })
+
 ```
 
 ### Assert Record Count
 
 ```ts
+
 test('assert record count', async () => {
   const database = db().register(yourDatabaseConnection)
 
@@ -104,6 +92,7 @@ test('assert record count', async () => {
   await database.assertCount('users', 2)
   await database.assertCount('users', 1, { name: 'John' })
 })
+
 ```
 
 ## Transactions
@@ -111,6 +100,7 @@ test('assert record count', async () => {
 Use transactions to isolate tests and ensure clean state:
 
 ```ts
+
 import { db, test, useTransaction } from 'besting'
 
 test('database transactions', async () => {
@@ -132,11 +122,13 @@ test('database transactions', async () => {
   // The insert was rolled back
   await database.assertNotExists('users', { id: 3 })
 })
+
 ```
 
 ### Transaction Helper
 
 ```ts
+
 import { useTransaction } from 'besting'
 
 test('use transaction helper', async () => {
@@ -155,6 +147,7 @@ test('use transaction helper', async () => {
   await transactionTest()
   // Transaction is automatically rolled back after the test
 })
+
 ```
 
 ## Database Factories
@@ -162,6 +155,7 @@ test('use transaction helper', async () => {
 Create test data easily with factories:
 
 ```ts
+
 import { db, test } from 'besting'
 
 test('database factories', async () => {
@@ -192,11 +186,13 @@ test('database factories', async () => {
   const user = userFactory.make()
   expect(user.name).toBe('Default User')
 })
+
 ```
 
 ### Factory States
 
 ```ts
+
 const userFactory = database.factory('users')
   .define({
     name: 'Default User',
@@ -218,6 +214,7 @@ await userFactory
   .has('active')
   .has('admin')
   .create({ id: 1 })
+
 ```
 
 ## Migrations
@@ -225,6 +222,7 @@ await userFactory
 Define migrations to set up your test database schema:
 
 ```ts
+
 import { migration } from 'besting'
 
 // Define table migrations
@@ -251,6 +249,7 @@ migration(async (connection) => {
     )
   `)
 })
+
 ```
 
 ## Seeders
@@ -258,6 +257,7 @@ migration(async (connection) => {
 Seed your database with test data:
 
 ```ts
+
 import { seeder } from 'besting'
 
 seeder(async (connection) => {
@@ -274,11 +274,13 @@ seeder(async (connection) => {
     { id: 2, user_id: 1, title: 'Second Post', content: 'More content' },
   ])
 })
+
 ```
 
 ## Complete Example
 
 ```ts
+
 import { db, describe, migration, seeder, test, useTransaction } from 'besting'
 
 // Setup migrations
@@ -346,6 +348,7 @@ describe('Order System', () => {
     }
   })
 })
+
 ```
 
 ## Related

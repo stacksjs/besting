@@ -36,68 +36,93 @@ function serializeHTML() {
 function querySelectorAllLiElements() {
   const window = new Window()
   window.document.write(HTMLPage)
-  const time1 = performance.now()
-  const elements = window.document.querySelectorAll('li')
-  const time2 = performance.now()
-  console.log(
-    `HappyDOM -> querySelectorAll('li') found ${
-      elements.length
-    } elements: ${time2 - time1}ms`,
-  )
+  try {
+    const time1 = performance.now()
+    const elements = window.document.querySelectorAll('li')
+    const time2 = performance.now()
+    console.log(
+      `HappyDOM -> querySelectorAll('li') found ${
+        elements.length
+      } elements: ${time2 - time1}ms`,
+    )
+  }
+  catch {
+    console.log('HappyDOM -> querySelectorAll(\'li\') skipped due to happy-dom compatibility issue')
+  }
 }
 
 function querySelectorAllClassElements() {
   const window = new Window()
   window.document.write(HTMLPage)
-  const time1 = performance.now()
-  const elements = window.document.querySelectorAll('.flex-shrink-0')
-  const time2 = performance.now()
-  console.log(
-    `HappyDOM -> querySelectorAll('.flex-shrink-0') found ${
-      elements.length
-    } elements: ${time2 - time1}ms`,
-  )
+  try {
+    const time1 = performance.now()
+    const elements = window.document.querySelectorAll('.flex-shrink-0')
+    const time2 = performance.now()
+    console.log(
+      `HappyDOM -> querySelectorAll('.flex-shrink-0') found ${
+        elements.length
+      } elements: ${time2 - time1}ms`,
+    )
+  }
+  catch {
+    console.log('HappyDOM -> querySelectorAll(\'.flex-shrink-0\') skipped due to happy-dom compatibility issue')
+  }
 }
 
 function querySelectorAllAttributeElements() {
   const window = new Window()
   window.document.write(HTMLPage)
-  const time1 = performance.now()
-  const elements = window.document.querySelectorAll('[aria-label]')
-  const time2 = performance.now()
-  console.log(
-    `HappyDOM -> querySelectorAll('[aria-label]') found ${
-      elements.length
-    } elements: ${time2 - time1}ms`,
-  )
+  try {
+    const time1 = performance.now()
+    const elements = window.document.querySelectorAll('[aria-label]')
+    const time2 = performance.now()
+    console.log(
+      `HappyDOM -> querySelectorAll('[aria-label]') found ${
+        elements.length
+      } elements: ${time2 - time1}ms`,
+    )
+  }
+  catch {
+    console.log('HappyDOM -> querySelectorAll(\'[aria-label]\') skipped due to happy-dom compatibility issue')
+  }
 }
 
 function querySelectorAllAttributeContainsElements() {
   const window = new Window()
   window.document.write(HTMLPage)
-  const time1 = performance.now()
-  const elements = window.document.querySelectorAll(
-    '[class~="flex-shrink-0"]',
-  )
-  const time2 = performance.now()
-  console.log(
-    `HappyDOM -> querySelectorAll('[class~="flex-shrink-0"]') found ${
-      elements.length
-    } elements: ${time2 - time1}ms`,
-  )
+  try {
+    const time1 = performance.now()
+    const elements = window.document.querySelectorAll(
+      '[class~="flex-shrink-0"]',
+    )
+    const time2 = performance.now()
+    console.log(
+      `HappyDOM -> querySelectorAll('[class~="flex-shrink-0"]') found ${
+        elements.length
+      } elements: ${time2 - time1}ms`,
+    )
+  }
+  catch {
+    console.log('HappyDOM -> querySelectorAll(\'[class~="flex-shrink-0"]\') skipped due to happy-dom compatibility issue')
+  }
 }
 
 function querySelectorAllNthChildElements() {
   const window = new Window()
   window.document.write(HTMLPage)
-  const time1 = performance.now()
-  const elements = window.document.querySelectorAll(':nth-child(2n+1)')
-  const time2 = performance.now()
-  console.log(
-    `HappyDOM -> querySelectorAll(':nth-child(2n+1)') found ${
-      elements.length
-    } elements: ${time2 - time1}ms`,
-  )
+  try {
+    const time1 = performance.now()
+    const elements = window.document.querySelectorAll(':nth-child(2n+1)')
+    const time2 = performance.now()
+    console.log(
+      `HappyDOM -> querySelectorAll(':nth-child(2n+1)') found ${
+        elements.length
+      } elements: ${time2 - time1}ms`,
+    )
+  }
+  catch {
+    console.log('HappyDOM -> querySelectorAll(\':nth-child(2n+1)\') skipped due to happy-dom compatibility issue')
+  }
 }
 
 // function renderCustomElement() {

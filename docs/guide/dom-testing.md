@@ -2,25 +2,6 @@
 title: DOM Testing
 description: Virtual DOM testing with besting's zero-dependency DOM implementation.
 ---
-
-# DOM Testing
-
-Besting includes a pure Bun virtual DOM implementation - **no browser downloads needed**.
-
-## Overview
-
-Unlike other testing frameworks that require browser engines or heavy dependencies like happy-dom, besting's virtual DOM is:
-
-- **Lightning fast** - No browser overhead
-- **Zero setup** - No downloads required
-- **Pure Bun** - No external dependencies
-- **Faster than happy-dom** - Optimized for performance
-
-## Basic Usage
-
-```ts
-import { browse, test } from 'besting'
-
 test('visit a website', async () => {
   await browse(async (page) => {
     await page.goto('https://example.com')
@@ -28,6 +9,7 @@ test('visit a website', async () => {
     await page.assertTitle('Example Domain')
   })
 })
+
 ```
 
 ## Browser API
@@ -35,6 +17,7 @@ test('visit a website', async () => {
 For full browser control:
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('full browser control', async () => {
@@ -77,6 +60,7 @@ test('full browser control', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## Laravel Dusk-Style Assertions
@@ -84,6 +68,7 @@ test('full browser control', async () => {
 Besting provides familiar assertions inspired by Laravel Dusk:
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('Dusk-style assertions', async () => {
@@ -120,11 +105,13 @@ test('Dusk-style assertions', async () => {
     await page.assertUrlContains('example')
   })
 })
+
 ```
 
 ## Form Testing
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('fill and submit a form', async () => {
@@ -150,11 +137,13 @@ test('fill and submit a form', async () => {
     await page.assertSee('Your message has been sent')
   })
 })
+
 ```
 
 ## Mouse Interactions
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('mouse interactions', async () => {
@@ -174,11 +163,13 @@ test('mouse interactions', async () => {
     await page.drag('.draggable', '.drop-zone')
   })
 })
+
 ```
 
 ## Scrolling
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('scroll operations', async () => {
@@ -198,11 +189,13 @@ test('scroll operations', async () => {
     await page.scrollToBottom()
   })
 })
+
 ```
 
 ## Screenshots
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('take screenshots', async () => {
@@ -229,6 +222,7 @@ test('take screenshots', async () => {
     })
   })
 })
+
 ```
 
 ## Storage Operations
@@ -236,6 +230,7 @@ test('take screenshots', async () => {
 ### Local Storage & Session Storage
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('storage operations', async () => {
@@ -255,11 +250,13 @@ test('storage operations', async () => {
     await page.clearSessionStorage()
   })
 })
+
 ```
 
 ## Browser Configuration
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('configure browser options', async () => {
@@ -285,11 +282,13 @@ test('configure browser options', async () => {
     await chromiumBrowser.close()
   }
 })
+
 ```
 
 ## Multiple Pages
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('work with multiple pages', async () => {
@@ -314,6 +313,7 @@ test('work with multiple pages', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## Performance Benchmarks

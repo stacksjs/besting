@@ -14,15 +14,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v4
 
       - name: Setup Bun
+
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
+
         run: bun install
 
       - name: Run tests
+
         run: bun test
 ```
 
@@ -33,6 +37,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
 
@@ -40,6 +45,7 @@ jobs:
       - run: bun test --coverage
 
       - name: Upload coverage
+
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage/lcov.info
@@ -57,14 +63,17 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
+
       - uses: actions/checkout@v4
 
       - uses: oven-sh/setup-bun@v2
+
         with:
           bun-version: ${{ matrix.bun-version }}
 
       - run: bun install
       - run: bun test
+
 ```
 
 ### Sharded Tests
@@ -78,10 +87,12 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - run: bun install
       - run: bun test --shard=${{ matrix.shard }}/4
+
 ```
 
 ### Caching
@@ -91,11 +102,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v4
 
       - uses: oven-sh/setup-bun@v2
 
       - name: Cache dependencies
+
         uses: actions/cache@v4
         with:
           path: ~/.bun/install/cache
@@ -103,6 +116,7 @@ jobs:
 
       - run: bun install
       - run: bun test
+
 ```
 
 ## GitLab CI
@@ -111,15 +125,18 @@ jobs:
 
 ```yaml
 stages:
+
   - test
 
 test:
   stage: test
   image: oven/bun:latest
   script:
+
     - bun install
     - bun test
-  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+
+  coverage: '/All files[^|]_\|[^|]_\s+([\d\.]+)/'
 ```
 
 ### With Coverage
@@ -129,8 +146,10 @@ test:
   stage: test
   image: oven/bun:latest
   script:
+
     - bun install
     - bun test --coverage
+
   artifacts:
     reports:
       coverage_report:
@@ -146,8 +165,10 @@ test:
   image: oven/bun:latest
   parallel: 4
   script:
+
     - bun install
     - bun test --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL
+
 ```
 
 ## CircleCI
@@ -158,27 +179,39 @@ version: 2.1
 jobs:
   test:
     docker:
+
       - image: oven/bun:latest
+
     steps:
+
       - checkout
       - restore_cache:
+
           keys:
+
             - bun-deps-{{ checksum "bun.lockb" }}
       - run: bun install
       - save_cache:
+
           key: bun-deps-{{ checksum "bun.lockb" }}
           paths:
+
             - ~/.bun/install/cache
       - run: bun test --coverage
       - store_test_results:
+
           path: ./test-results
+
       - store_artifacts:
+
           path: ./coverage
 
 workflows:
   test:
     jobs:
+
       - test
+
 ```
 
 ## Jenkins
@@ -223,31 +256,39 @@ pipeline {
 
 ```yaml
 trigger:
+
   - main
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
+
   - task: UseNode@1
+
     inputs:
       version: '20.x'
 
   - script: npm install -g bun
+
     displayName: Install Bun
 
   - script: bun install
+
     displayName: Install dependencies
 
   - script: bun test --coverage --reporter=junit --outputFile=$(System.DefaultWorkingDirectory)/test-results.xml
+
     displayName: Run tests
 
   - task: PublishTestResults@2
+
     inputs:
       testResultsFormat: JUnit
       testResultsFiles: '**/test-results.xml'
 
   - task: PublishCodeCoverageResults@2
+
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
@@ -345,10 +386,13 @@ export default {
 
 ```yaml
 # GitHub Actions
+
 - name: Run tests
+
   run: bun test --coverage
 
 - name: Check coverage
+
   run: |
     COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
     if (( $(echo "$COVERAGE < 80" | bc -l) )); then
@@ -360,7 +404,9 @@ export default {
 ### PR Comments
 
 ```yaml
+
 - name: Comment coverage
+
   uses: marocchino/sticky-pull-request-comment@v2
   with:
     path: coverage/coverage-summary.txt
@@ -388,12 +434,14 @@ it.skip('flaky test - quarantined', async () => {
 ### Track Flakiness
 
 ```yaml
+
 - name: Run tests with flake detection
+
   run: |
     for i in {1..3}; do
       bun test --json >> test-runs.json
     done
-    # Analyze for flaky tests
+# Analyze for flaky tests
 ```
 
 ## Notifications
@@ -401,7 +449,9 @@ it.skip('flaky test - quarantined', async () => {
 ### Slack on Failure
 
 ```yaml
+
 - name: Notify Slack
+
   if: failure()
   uses: slackapi/slack-github-action@v1
   with:

@@ -240,8 +240,10 @@ Snapshot name: `component renders correctly 1`
 
   {
     "name": "John",
--   "age": 30,
-+   "age": 31,
+
+- "age": 30,
++ "age": 31,
+
   }
 ```
 
@@ -280,12 +282,14 @@ besting --check-snapshots
 ### When to Use Snapshots
 
 Good for:
+
 - Complex objects and data structures
 - UI component output
 - Error messages
 - API responses
 
 Avoid for:
+
 - Simple values (use specific assertions)
 - Frequently changing data
 - Performance-critical tests
@@ -304,7 +308,7 @@ expect(response.data).toMatchSnapshot()
 
 ```bash
 # Always review before updating
-git diff **/__snapshots__/**
+git diff __/__snapshots__/__
 ```
 
 ### Commit Snapshots

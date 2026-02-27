@@ -31,7 +31,7 @@
     "bench": "bun packages/benchmarks/dom-performance.bench.ts",
     "bench:dom": "bun packages/benchmarks/dom-performance.bench.ts",
     "bench:compare": "bun packages/benchmarks/competitive-comparison.bench.ts",
-    "bench:very-happy-dom": "bun packages/benchmarks/lib/very-happy-dom.test.ts",
+    "bench:very-happy-dom": "bun packages/benchmarks/lib/very-happy-dom.bench.ts",
     "test": "bun test",
     "dev:docs": "bun --bun vitepress dev docs",
     "build:docs": "bun --bun vitepress build docs",

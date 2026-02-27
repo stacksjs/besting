@@ -2,28 +2,12 @@
 title: Assertions
 description: Complete reference for besting assertions and matchers.
 ---
-
-# Assertions
-
-Besting provides a comprehensive set of assertions inspired by Jest and Pest.
-
-## Basic Assertions
-
-### Equality
-
-```ts
-import { expect, test } from 'besting'
-
-test('equality assertions', () => {
-  expect(1 + 1).toBe(2)
-  expect({ a: 1 }).toEqual({ a: 1 })
-  expect('hello').not.toBe('world')
-})
 ```
 
 ### Truthiness
 
 ```ts
+
 test('truthiness assertions', () => {
   expect(true).toBeTruthy()
   expect(false).toBeFalsy()
@@ -31,11 +15,13 @@ test('truthiness assertions', () => {
   expect(undefined).toBeUndefined()
   expect('value').toBeDefined()
 })
+
 ```
 
 ### Numbers
 
 ```ts
+
 test('number assertions', () => {
   expect(10).toBeGreaterThan(5)
   expect(10).toBeGreaterThanOrEqual(10)
@@ -43,6 +29,7 @@ test('number assertions', () => {
   expect(5).toBeLessThanOrEqual(5)
   expect(0.1 + 0.2).toBeCloseTo(0.3, 5)
 })
+
 ```
 
 ## Chainable Assertions
@@ -50,6 +37,7 @@ test('number assertions', () => {
 Besting supports fluent, chainable assertions:
 
 ```ts
+
 test('chainable assertions', () => {
   expect('Hello World')
     .toContain('Hello')
@@ -59,6 +47,7 @@ test('chainable assertions', () => {
     .toEndWith('World')
     .not.toBeEmpty()
 })
+
 ```
 
 ## String Assertions
@@ -66,27 +55,32 @@ test('chainable assertions', () => {
 ### Basic String Matchers
 
 ```ts
+
 test('string assertions', () => {
   expect('Hello World').toContain('World')
   expect('Hello World').toMatch(/Hello/)
   expect('Hello World').toHaveLength(11)
 })
+
 ```
 
 ### Extended String Matchers
 
 ```ts
+
 test('extended string assertions', () => {
   expect('Hello World').toStartWith('Hello')
   expect('Hello World').toEndWith('World')
   expect('').toBeEmpty()
   expect('  ').not.toBeEmpty()
 })
+
 ```
 
 ## Array Assertions
 
 ```ts
+
 test('array assertions', () => {
   const arr = [1, 2, 3]
 
@@ -95,11 +89,13 @@ test('array assertions', () => {
   expect(arr).toEqual([1, 2, 3])
   expect([]).toBeEmpty()
 })
+
 ```
 
 ### Array of Objects
 
 ```ts
+
 test('array of objects', () => {
   const users = [
     { id: 1, name: 'John' },
@@ -109,11 +105,13 @@ test('array of objects', () => {
   expect(users).toContainEqual({ id: 1, name: 'John' })
   expect(users).toHaveLength(2)
 })
+
 ```
 
 ## Object Assertions
 
 ```ts
+
 test('object assertions', () => {
   const user = { name: 'John', age: 30, email: 'john@example.com' }
 
@@ -122,11 +120,13 @@ test('object assertions', () => {
   expect(user).toMatchObject({ name: 'John' })
   expect({}).toBeEmpty()
 })
+
 ```
 
 ## Exception Assertions
 
 ```ts
+
 test('exception assertions', () => {
   const throwError = () => {
     throw new Error('Something went wrong')
@@ -137,11 +137,13 @@ test('exception assertions', () => {
   expect(throwError).toThrow(/wrong/)
   expect(throwError).toThrow(Error)
 })
+
 ```
 
 ## Async Assertions
 
 ```ts
+
 test('async assertions', async () => {
   const fetchData = async () => ({ data: 'value' })
 
@@ -155,6 +157,7 @@ test('async rejection', async () => {
 
   await expect(failingFetch()).rejects.toThrow('Network error')
 })
+
 ```
 
 ## Custom Validators
@@ -162,12 +165,14 @@ test('async rejection', async () => {
 Use `toPass` for custom validation:
 
 ```ts
+
 test('custom validation', () => {
   const isEven = (n: number) => n % 2 === 0
 
   expect(4).toPass(isEven)
   expect(4).toPass(isEven, 'Expected an even number')
 })
+
 ```
 
 ## Negation
@@ -175,12 +180,14 @@ test('custom validation', () => {
 Use `.not` to negate any assertion:
 
 ```ts
+
 test('negation', () => {
   expect(1).not.toBe(2)
   expect('hello').not.toContain('world')
   expect([1, 2, 3]).not.toBeEmpty()
   expect({ a: 1 }).not.toHaveProperty('b')
 })
+
 ```
 
 ## Test Groups
@@ -188,6 +195,7 @@ test('negation', () => {
 Group multiple assertions on the same value:
 
 ```ts
+
 import { testGroup } from 'besting'
 
 testGroup('Hello World', (str) => {
@@ -197,6 +205,7 @@ testGroup('Hello World', (str) => {
     .toEndWith('World')
     .not.toBeEmpty()
 })
+
 ```
 
 ## Special Matchers
@@ -215,10 +224,12 @@ Besting includes additional Pest-inspired matchers:
 Besting supports snapshot testing via Bun's built-in features:
 
 ```ts
+
 test('snapshot', () => {
   const user = { name: 'John', email: 'john@example.com' }
   expect(user).toMatchSnapshot()
 })
+
 ```
 
 ## Related

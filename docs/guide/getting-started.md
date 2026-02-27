@@ -3,30 +3,14 @@ title: Getting Started
 description: Learn how to install and use besting for testing your applications.
 ---
 
-# Getting Started
-
-Besting is a Jest and Pest inspired testing framework for Bun with **zero external dependencies**.
-
-## Prerequisites
-
-- [Bun](https://bun.sh) v1.0.0 or higher
-
-## Installation
-
-```bash
-bun add -d besting
-```
-
-## Quick Start
-
-### Basic Test
-
 ```ts
+
 import { expect, test } from 'besting'
 
 test('basic addition', () => {
   expect(1 + 1).toBe(2)
 })
+
 ```
 
 ### Chainable Assertions
@@ -34,6 +18,7 @@ test('basic addition', () => {
 Besting supports fluent, chainable assertions:
 
 ```ts
+
 import { expect, test } from 'besting'
 
 test('multiple assertions on same value', () => {
@@ -44,6 +29,7 @@ test('multiple assertions on same value', () => {
     .toStartWith('Hello')
     .toEndWith('World')
 })
+
 ```
 
 ### Pest-Style API
@@ -51,6 +37,7 @@ test('multiple assertions on same value', () => {
 Use the Pest-like syntax for a familiar experience:
 
 ```ts
+
 import { best } from 'besting'
 
 const p = best()
@@ -64,6 +51,7 @@ p.describe('Calculator', () => {
     p.it(3 - 1).toBe(2)
   })
 })
+
 ```
 
 ### Test Suites
@@ -71,6 +59,7 @@ p.describe('Calculator', () => {
 Organize tests with describe blocks:
 
 ```ts
+
 import { describe, expect, test } from 'besting'
 
 describe('Math operations', () => {
@@ -82,6 +71,7 @@ describe('Math operations', () => {
     expect(3 - 1).toBe(2)
   })
 })
+
 ```
 
 ### Lifecycle Hooks
@@ -89,6 +79,7 @@ describe('Math operations', () => {
 Use lifecycle hooks for setup and teardown:
 
 ```ts
+
 import { beforeEach, describe, expect, test } from 'besting'
 
 describe('User', () => {
@@ -103,19 +94,25 @@ describe('User', () => {
     expect(user.email).toBe('john@example.com')
   })
 })
+
 ```
 
 ## Running Tests
 
 ```bash
+
 # Run all tests
+
 bun test
 
 # Run a specific test file
+
 bun test path/to/test.ts
 
 # Run with custom runner (ensures all test files are executed)
+
 bun run test:custom
+
 ```
 
 ## Key Features

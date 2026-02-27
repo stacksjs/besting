@@ -78,7 +78,7 @@ export default {
 ```typescript
 export default {
   root: './src',
-  testMatch: ['**/__tests__/**/*.ts'],
+  testMatch: ['**/**tests**/**/*.ts'],
 }
 ```
 
@@ -117,8 +117,10 @@ export default {
 ```typescript
 // In test file
 /**
- * @besting-environment happy-dom
- */
+
+ _ @besting-environment happy-dom
+
+ _/
 
 import { it, expect } from 'besting'
 
@@ -332,7 +334,7 @@ export default {
 
 ```typescript
 export default {
-  snapshotDir: '__snapshots__',
+  snapshotDir: '**snapshots**',
   snapshotFormat: {
     escapeString: false,
     printBasicPrototype: false,
@@ -417,7 +419,7 @@ CI=true besting
 COVERAGE=true besting
 
 # Debug mode
-DEBUG=besting:* besting
+DEBUG=besting:_ besting
 
 # No colors
 NO_COLOR=1 besting
@@ -430,7 +432,7 @@ For monorepos:
 ```typescript
 // besting.config.ts
 export default {
-  workspace: ['packages/*'],
+  workspace: ['packages/_'],
   workspaceOptions: {
     parallel: true,
     isolate: true,
@@ -448,6 +450,7 @@ export default {
 
 ## Related
 
-- [Test Suites](/features/test-suites) - Organizing tests
-- [Custom Matchers](/advanced/custom-matchers) - Extending assertions
-- [CI/CD Integration](/advanced/ci-cd) - CI configuration
+_ [Test Suites](/features/test-suites) - Organizing tests
+_ [Custom Matchers](/advanced/custom-matchers) - Extending assertions
+
+* [CI/CD Integration](/advanced/ci-cd) - CI configuration

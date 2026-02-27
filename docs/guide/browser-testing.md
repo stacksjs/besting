@@ -2,24 +2,6 @@
 title: Browser Testing
 description: Full browser testing using Chrome DevTools Protocol.
 ---
-
-# Browser Testing
-
-Besting supports full browser testing using Chrome DevTools Protocol (CDP) - no Playwright, no Puppeteer, just pure Bun.
-
-## Overview
-
-While besting's virtual DOM is perfect for most testing scenarios, sometimes you need a real browser. Besting provides CDP-based browser testing for these cases.
-
-## Basic Browser Testing
-
-```ts
-import { browser, test } from 'besting'
-
-test('test with real browser', async () => {
-  const br = browser({ browser: 'chromium' })
-
-  try {
     await br.launch()
     const page = await br.newPage()
 
@@ -31,11 +13,13 @@ test('test with real browser', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## Browser Configuration
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('configure browser', async () => {
@@ -57,11 +41,13 @@ test('configure browser', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## Testing with Firefox
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('test with Firefox', async () => {
@@ -78,11 +64,13 @@ test('test with Firefox', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## Cookie Management
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('manage cookies', async () => {
@@ -111,11 +99,13 @@ test('manage cookies', async () => {
     await page.clearCookies()
   })
 })
+
 ```
 
 ## Dialog Handling
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('handle dialogs', async () => {
@@ -144,11 +134,13 @@ test('handle dialogs', async () => {
     await page.dismissDialog()
   })
 })
+
 ```
 
 ## File Uploads
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('upload files', async () => {
@@ -168,11 +160,13 @@ test('upload files', async () => {
     await page.click('button[type="submit"]')
   })
 })
+
 ```
 
 ## Console Log Capture
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('capture console logs', async () => {
@@ -199,11 +193,13 @@ test('capture console logs', async () => {
     page.clearConsoleLogs()
   })
 })
+
 ```
 
 ## PDF Generation
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('generate PDF', async () => {
@@ -224,11 +220,13 @@ test('generate PDF', async () => {
     })
   })
 })
+
 ```
 
 ## Network Control
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('network control', async () => {
@@ -255,11 +253,13 @@ test('network control', async () => {
     })
   })
 })
+
 ```
 
 ## Mobile Emulation
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('mobile emulation', async () => {
@@ -282,11 +282,13 @@ test('mobile emulation', async () => {
     await page.setTouchEmulation(true)
   })
 })
+
 ```
 
 ## Multiple Windows
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('work with multiple pages', async () => {
@@ -311,6 +313,7 @@ test('work with multiple pages', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## When to Use Browser vs Virtual DOM
