@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import { CLI } from '@stacksjs/clapp'
 import { version } from '../package.json'
 
