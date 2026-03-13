@@ -2,7 +2,7 @@
 
 ## About
 
-A Bun test framework.
+A Jest/Pest-inspired testing framework built exclusively for Bun with zero external dependencies. It provides a fluent, chainable assertion API, a built-in virtual DOM for browser testing (no browser downloads needed), and Laravel-inspired utilities for API testing, database testing, event testing, authentication testing, and more. All tests run on Bun's native test runner.
 
 ## Linting
 
