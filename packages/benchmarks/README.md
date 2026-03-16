@@ -40,33 +40,33 @@ bun run bench:very-happy-dom
 **VeryHappyDOM is 16× to 79,000× faster** than established DOM implementations:
 
 1. **Blazing Fast HTML Parsing**: 413ns average - parsing a 193KB GitHub page in less than half a microsecond
-   - **34,400× faster** than HappyDOM (14.20ms)
-   - **79,200× faster** than JSDOM (32.69ms)
+  - **34,400× faster** than HappyDOM (14.20ms)
+  - **79,200× faster** than JSDOM (32.69ms)
 
 2. **Ultra-Fast Serialization**: 841ns average - serializing entire DOM trees in under a microsecond
-   - **18,800× faster** than HappyDOM (15.83ms)
-   - **55,300× faster** than JSDOM (46.54ms)
+  - **18,800× faster** than HappyDOM (15.83ms)
+  - **55,300× faster** than JSDOM (46.54ms)
 
 3. **Lightning Selector Engine**: Sub-microsecond to low-microsecond performance across all selector types
-   - **10,000×–19,000× faster** for selector operations
+  - **10,000×–19,000× faster** for selector operations
 
 4. **Efficient DOM Manipulation**: Microsecond-level performance for real-world operations
-   - **16×–84× faster** for attribute operations and table building
+  - **16×–84× faster** for attribute operations and table building
 
 5. **Zero Dependencies**: Pure Bun implementation with no external dependencies
 6. **Real-world Testing**: Using actual production HTML from GitHub, not synthetic benchmarks
 
 ### 📊 Performance Breakdown
 
-**HTML Parsing (193KB GitHub Page)**
+#### HTML Parsing (193KB GitHub Page)
 
-- Min: 208 ns | Avg: 413 ns | Max: 286 µs | P99: 916 ns
+- Min: 208 ns / Avg: 413 ns / Max: 286 µs / P99: 916 ns
 
-**HTML Serialization**
+#### HTML Serialization
 
-- Min: 540 ns | Avg: 841 ns | Max: 1.98 µs | P99: 1.96 µs
+- Min: 540 ns / Avg: 841 ns / Max: 1.98 µs / P99: 1.96 µs
 
-**Selector Performance**
+#### Selector Performance
 
 - Simple tag (`li`): 741 ns avg
 - Class selector (`.flex-shrink-0`): 1.08 µs avg
@@ -77,65 +77,65 @@ bun run bench:very-happy-dom
 ### ✅ Recent Fixes
 
 1. **✅ Fixed DOCTYPE Parsing** (2024-10-09):
-   - Fixed HTML parser to correctly handle DOCTYPE declarations
-   - Parser was breaking when encountering `<!DOCTYPE html>`, now continues parsing correctly
-   - querySelector now works correctly with real-world HTML
+  - Fixed HTML parser to correctly handle DOCTYPE declarations
+  - Parser was breaking when encountering `<!DOCTYPE html>`, now continues parsing correctly
+  - querySelector now works correctly with real-world HTML
 
 2. **✅ Fixed querySelector** (2024-10-09):
-   - querySelector now correctly finds elements in parsed HTML trees
-   - Verified with GitHub HTML test page - successfully finding 78 `<li>` elements, 42 `.flex-shrink-0` elements, etc.
+  - querySelector now correctly finds elements in parsed HTML trees
+  - Verified with GitHub HTML test page - successfully finding 78 `<li>` elements, 42 `.flex-shrink-0` elements, etc.
 
 3. **✅ Implemented Complete Browser API** (2024-10-09):
 
-   **Core Features:**
+   Core Features:
 
-   - **Storage APIs** - localStorage, sessionStorage
-   - **Timers** - setTimeout, setInterval, requestAnimationFrame + clear methods
-   - **Waiting Utilities** - waitForSelector, waitForFunction, waitForTimeout, waitUntilComplete
-   - **Event APIs** - CustomEvent, Event Emitters (page.on), virtualConsolePrinter
-   - **Observer APIs** - MutationObserver, IntersectionObserver, ResizeObserver
-   - **XPath Support** - document.evaluate, XPathResult, createExpression
-   - **User Interaction** - click, type, focus, hover, keyboard.press, mouse.click
-   - **Rendering** - screenshot (SVG), PDF generation
+  - **Storage APIs** - localStorage, sessionStorage
+  - **Timers** - setTimeout, setInterval, requestAnimationFrame + clear methods
+  - **Waiting Utilities** - waitForSelector, waitForFunction, waitForTimeout, waitUntilComplete
+  - **Event APIs** - CustomEvent, Event Emitters (page.on), virtualConsolePrinter
+  - **Observer APIs** - MutationObserver, IntersectionObserver, ResizeObserver
+  - **XPath Support** - document.evaluate, XPathResult, createExpression
+  - **User Interaction** - click, type, focus, hover, keyboard.press, mouse.click
+  - **Rendering** - screenshot (SVG), PDF generation
 
-   **Network & Communication:**
+   Network & Communication:
 
-   - **Request Interception** - page.setRequestInterception(), fetch mocking
-   - **WebSocket** - Full WebSocket API with events
-   - **XMLHttpRequest** - Legacy XHR API
-   - **Fetch API** - fetch, Request, Response, Headers, FormData
+  - **Request Interception** - page.setRequestInterception(), fetch mocking
+  - **WebSocket** - Full WebSocket API with events
+  - **XMLHttpRequest** - Legacy XHR API
+  - **Fetch API** - fetch, Request, Response, Headers, FormData
 
-   **Web Components:**
+   Web Components:
 
-   - **Shadow DOM** - element.attachShadow()
-   - **Custom Elements** - customElements.define(), HTMLElement
+  - **Shadow DOM** - element.attachShadow()
+  - **Custom Elements** - customElements.define(), HTMLElement
 
-   **Device & Browser APIs:**
+   Device & Browser APIs:
 
-   - **Clipboard** - navigator.clipboard.writeText/readText
-   - **File API** - File, FileReader, FileList
-   - **Drag & Drop** - dragAndDrop, DataTransfer
-   - **Performance** - performance.now/mark/measure
-   - **Geolocation** - navigator.geolocation
-   - **Notifications** - Notification API
-   - **document.cookie** - Cookie getter/setter
-   - **URL & URLSearchParams**
+  - **Clipboard** - navigator.clipboard.writeText/readText
+  - **File API** - File, FileReader, FileList
+  - **Drag & Drop** - dragAndDrop, DataTransfer
+  - **Performance** - performance.now/mark/measure
+  - **Geolocation** - navigator.geolocation
+  - **Notifications** - Notification API
+  - **document.cookie** - Cookie getter/setter
+  - **URL & URLSearchParams**
 
 ### 🎯 Next Steps
 
 1. **✅ Completed**:
-   - ✅ Enabled all HappyDOM/JSDOM competitive benchmarks
-   - ✅ Added 7+ new benchmark groups for real-world scenarios
-   - ✅ Implemented missing DOM features (childNodes, dataset, createDocumentFragment, etc.)
-   - ✅ Fixed Event compatibility for native Event objects
-   - ✅ Fixed DOCTYPE parsing in HTML parser
-   - ✅ Fixed querySelector to work with real HTML
+  - ✅ Enabled all HappyDOM/JSDOM competitive benchmarks
+  - ✅ Added 7+ new benchmark groups for real-world scenarios
+  - ✅ Implemented missing DOM features (childNodes, dataset, createDocumentFragment, etc.)
+  - ✅ Fixed Event compatibility for native Event objects
+  - ✅ Fixed DOCTYPE parsing in HTML parser
+  - ✅ Fixed querySelector to work with real HTML
 
 2. **Performance Optimization**:
-   - Profile allocation patterns and memory usage
-   - Cache selector compilations for repeated queries
-   - Optimize hot paths in tree traversal
-   - Consider lazy parsing strategies for large HTML documents
+  - Profile allocation patterns and memory usage
+  - Cache selector compilations for repeated queries
+  - Optimize hot paths in tree traversal
+  - Consider lazy parsing strategies for large HTML documents
 
 ## 💡 Why Is VeryHappyDOM So Fast
 

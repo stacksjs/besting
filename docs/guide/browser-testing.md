@@ -2,42 +2,6 @@
 title: Browser Testing
 description: Full browser testing using Chrome DevTools Protocol.
 ---
-
-```ts
-
-import { browser, test } from 'besting'
-
-test('configure browser', async () => {
-  const br = browser({
-    browser: 'chromium',  // 'chromium' or 'firefox'
-    headless: true,       // Run without visible window
-    width: 1920,          // Viewport width
-    height: 1080,         // Viewport height
-    timeout: 30000,       // Default timeout (ms)
-    devtools: false,      // Open DevTools
-  })
-
-  try {
-    await br.launch()
-    const page = await br.newPage()
-    await page.goto('https://example.com')
-  }
-  finally {
-    await br.close()
-  }
-})
-
-```
-
-## Testing with Firefox
-
-```ts
-
-import { browser, test } from 'besting'
-
-test('test with Firefox', async () => {
-  const br = browser({ browser: 'firefox' })
-
   try {
     await br.launch()
     const page = await br.newPage()
@@ -50,7 +14,7 @@ test('test with Firefox', async () => {
   }
 })
 
-```
+```ts
 
 ## Cookie Management
 
@@ -85,7 +49,7 @@ test('manage cookies', async () => {
   })
 })
 
-```
+```ts
 
 ## Dialog Handling
 
@@ -120,7 +84,7 @@ test('handle dialogs', async () => {
   })
 })
 
-```
+```ts
 
 ## File Uploads
 
@@ -146,7 +110,7 @@ test('upload files', async () => {
   })
 })
 
-```
+```ts
 
 ## Console Log Capture
 
@@ -179,7 +143,7 @@ test('capture console logs', async () => {
   })
 })
 
-```
+```ts
 
 ## PDF Generation
 
@@ -206,7 +170,7 @@ test('generate PDF', async () => {
   })
 })
 
-```
+```ts
 
 ## Network Control
 
@@ -239,7 +203,7 @@ test('network control', async () => {
   })
 })
 
-```
+```ts
 
 ## Mobile Emulation
 
@@ -268,7 +232,7 @@ test('mobile emulation', async () => {
   })
 })
 
-```
+```ts
 
 ## Multiple Windows
 
@@ -299,7 +263,7 @@ test('work with multiple pages', async () => {
   }
 })
 
-```
+```ts
 
 ## When to Use Browser vs Virtual DOM
 

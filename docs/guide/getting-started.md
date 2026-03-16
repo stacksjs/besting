@@ -2,41 +2,6 @@
 title: Getting Started
 description: Learn how to install and use besting for testing your applications.
 ---
-  expect('Hello World')
-    .toContain('Hello')
-    .toContain('World')
-    .toHaveLength(11)
-    .toStartWith('Hello')
-    .toEndWith('World')
-})
-
-```
-
-### Pest-Style API
-
-Use the Pest-like syntax for a familiar experience:
-
-```ts
-
-import { best } from 'besting'
-
-const p = best()
-
-p.describe('Calculator', () => {
-  p.test('addition works', () => {
-    p.it(1 + 1).toBe(2)
-  })
-
-  p.test('subtraction works', () => {
-    p.it(3 - 1).toBe(2)
-  })
-})
-
-```
-
-### Test Suites
-
-Organize tests with describe blocks:
 
 ```ts
 

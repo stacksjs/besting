@@ -2,43 +2,8 @@
 title: API Testing
 description: Laravel-inspired API testing utilities for HTTP endpoints.
 ---
-  const response = await api('https://api.example.com')
-    .get('/users')
-
-  const data = await response.json()
-  expect(data).toBeInstanceOf(Array)
-})
-
-```
-
-### GET with Query Parameters
 
 ```ts
-
-test('GET with query parameters', async () => {
-  const response = await api('https://api.example.com')
-    .withQuery({ filter: 'active', page: 1 })
-    .get('/users')
-})
-
-```
-
-### POST Requests
-
-```ts
-
-test('POST request', async () => {
-  const response = await api('https://api.example.com')
-    .post('/users', {
-      name: 'John',
-      email: 'john@example.com'
-    })
-
-  const assertion = await assertResponse(response)
-  await assertion.assertStatus(201)
-})
-
-```
 
 ### PUT Requests
 
@@ -52,7 +17,7 @@ test('PUT request', async () => {
   await assertion.assertOk()
 })
 
-```
+```ts
 
 ### DELETE Requests
 
@@ -66,7 +31,7 @@ test('DELETE request', async () => {
   await assertion.assertStatus(204)
 })
 
-```
+```ts
 
 ## Authentication
 
@@ -85,7 +50,7 @@ test('authenticated request with token', async () => {
   await assertion.assertOk()
 })
 
-```
+```ts
 
 ### Basic Authentication
 
@@ -97,7 +62,7 @@ test('basic authentication', async () => {
     .get('/secured-endpoint')
 })
 
-```
+```ts
 
 ## JSON Assertions
 
@@ -119,7 +84,7 @@ test('assert JSON path', async () => {
   await assertion.assertJsonPath('address.city', 'New York')
 })
 
-```
+```ts
 
 ### Assert JSON Structure
 
@@ -139,7 +104,7 @@ test('assert JSON structure', async () => {
   })
 })
 
-```
+```ts
 
 ## Response Assertions
 
@@ -163,7 +128,7 @@ test('status assertions', async () => {
   // await assertion.assertNotFound()  // 404
 })
 
-```
+```ts
 
 ### Header Assertions
 
@@ -180,7 +145,7 @@ test('header assertions', async () => {
   await assertion.assertHeader('content-type', 'application/json')
 })
 
-```
+```ts
 
 ## Request Configuration
 
@@ -197,7 +162,7 @@ test('custom headers', async () => {
     .get('/endpoint')
 })
 
-```
+```ts
 
 ### Timeout
 
@@ -209,7 +174,7 @@ test('with timeout', async () => {
     .get('/slow-endpoint')
 })
 
-```
+```ts
 
 ### JSON Content Type
 
@@ -221,7 +186,7 @@ test('ensure JSON content type', async () => {
     .post('/users', { name: 'John' })
 })
 
-```
+```ts
 
 ## Complete Example
 
@@ -276,7 +241,7 @@ describe('User API', () => {
   })
 })
 
-```
+```ts
 
 ## Related
 

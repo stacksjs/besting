@@ -3,49 +3,13 @@ title: Assertions
 description: Complete reference for besting assertions and matchers.
 ---
 
-```ts
-
-test('number assertions', () => {
-  expect(10).toBeGreaterThan(5)
-  expect(10).toBeGreaterThanOrEqual(10)
-  expect(5).toBeLessThan(10)
-  expect(5).toBeLessThanOrEqual(5)
-  expect(0.1 + 0.2).toBeCloseTo(0.3, 5)
-})
-
-```
-
-## Chainable Assertions
-
-Besting supports fluent, chainable assertions:
-
-```ts
-
-test('chainable assertions', () => {
-  expect('Hello World')
-    .toContain('Hello')
-    .toContain('World')
-    .toHaveLength(11)
-    .toStartWith('Hello')
-    .toEndWith('World')
-    .not.toBeEmpty()
-})
-
-```
-
-## String Assertions
-
-### Basic String Matchers
-
-```ts
-
 test('string assertions', () => {
   expect('Hello World').toContain('World')
   expect('Hello World').toMatch(/Hello/)
   expect('Hello World').toHaveLength(11)
 })
 
-```
+```ts
 
 ### Extended String Matchers
 
@@ -58,7 +22,7 @@ test('extended string assertions', () => {
   expect('  ').not.toBeEmpty()
 })
 
-```
+```ts
 
 ## Array Assertions
 
@@ -73,7 +37,7 @@ test('array assertions', () => {
   expect([]).toBeEmpty()
 })
 
-```
+```ts
 
 ### Array of Objects
 
@@ -89,7 +53,7 @@ test('array of objects', () => {
   expect(users).toHaveLength(2)
 })
 
-```
+```ts
 
 ## Object Assertions
 
@@ -104,7 +68,7 @@ test('object assertions', () => {
   expect({}).toBeEmpty()
 })
 
-```
+```ts
 
 ## Exception Assertions
 
@@ -121,7 +85,7 @@ test('exception assertions', () => {
   expect(throwError).toThrow(Error)
 })
 
-```
+```ts
 
 ## Async Assertions
 
@@ -141,7 +105,7 @@ test('async rejection', async () => {
   await expect(failingFetch()).rejects.toThrow('Network error')
 })
 
-```
+```ts
 
 ## Custom Validators
 
@@ -156,7 +120,7 @@ test('custom validation', () => {
   expect(4).toPass(isEven, 'Expected an even number')
 })
 
-```
+```ts
 
 ## Negation
 
@@ -171,7 +135,7 @@ test('negation', () => {
   expect({ a: 1 }).not.toHaveProperty('b')
 })
 
-```
+```ts
 
 ## Test Groups
 
@@ -189,7 +153,7 @@ testGroup('Hello World', (str) => {
     .not.toBeEmpty()
 })
 
-```
+```ts
 
 ## Special Matchers
 
@@ -213,7 +177,7 @@ test('snapshot', () => {
   expect(user).toMatchSnapshot()
 })
 
-```
+```ts
 
 ## Related
 

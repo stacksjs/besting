@@ -2,44 +2,9 @@
 title: Database Testing
 description: Laravel-inspired database testing with migrations, seeders, and factories.
 ---
-
-  // Insert data
-  await database.insert('users', {
-    id: 3,
-    name: 'Alice',
-    email: 'alice@example.com'
-  })
-
-  // Make assertions
-  await database.assertExists('users', { id: 3 })
-  await database.assertSame('users', { id: 3 }, { name: 'Alice' })
 })
-
-```
-
-## Database Assertions
-
-### Assert Record Exists
 
 ```ts
-
-import { db, test } from 'besting'
-
-test('assert record exists', async () => {
-  const database = db().register(yourDatabaseConnection)
-
-  await database.insert('users', {
-    id: 1,
-    name: 'John',
-    email: 'john@example.com'
-  })
-
-  // Assert that a record exists with given criteria
-  await database.assertExists('users', { id: 1 })
-  await database.assertExists('users', { email: 'john@example.com' })
-})
-
-```
 
 ### Assert Record Values
 
@@ -61,7 +26,7 @@ test('assert record values', async () => {
   })
 })
 
-```
+```ts
 
 ### Assert Record Count
 
@@ -78,7 +43,7 @@ test('assert record count', async () => {
   await database.assertCount('users', 1, { name: 'John' })
 })
 
-```
+```ts
 
 ## Transactions
 
@@ -108,7 +73,7 @@ test('database transactions', async () => {
   await database.assertNotExists('users', { id: 3 })
 })
 
-```
+```ts
 
 ### Transaction Helper
 
@@ -133,7 +98,7 @@ test('use transaction helper', async () => {
   // Transaction is automatically rolled back after the test
 })
 
-```
+```ts
 
 ## Database Factories
 
@@ -172,7 +137,7 @@ test('database factories', async () => {
   expect(user.name).toBe('Default User')
 })
 
-```
+```ts
 
 ### Factory States
 
@@ -200,7 +165,7 @@ await userFactory
   .has('admin')
   .create({ id: 1 })
 
-```
+```ts
 
 ## Migrations
 
@@ -235,7 +200,7 @@ migration(async (connection) => {
   `)
 })
 
-```
+```ts
 
 ## Seeders
 
@@ -260,7 +225,7 @@ seeder(async (connection) => {
   ])
 })
 
-```
+```ts
 
 ## Complete Example
 
@@ -334,7 +299,7 @@ describe('Order System', () => {
   })
 })
 
-```
+```ts
 
 ## Related
 

@@ -2,39 +2,6 @@
 title: DOM Testing
 description: Virtual DOM testing with besting's zero-dependency DOM implementation.
 ---
-
-test('full browser control', async () => {
-  const br = browser({ headless: true })
-
-  try {
-    await br.launch()
-    const page = await br.newPage()
-
-    // Navigate
-    await page.goto('https://example.com')
-
-    // Interact with elements
-    await page.click('button')
-    await page.type('input[name="search"]', 'Hello')
-    await page.fill('input[name="email"]', 'test@example.com')
-
-    // Select from dropdown
-    await page.select('select[name="country"]', 'US')
-
-    // Handle checkboxes
-    await page.check('input[type="checkbox"]')
-    await page.uncheck('input[type="checkbox"]')
-
-    // Wait for elements
-    await page.waitForSelector('.result')
-    await page.waitForText('Success')
-
-    // Get element information
-    const text = await page.text('h1')
-    const value = await page.value('input')
-    const isVisible = await page.isVisible('.modal')
-
-    // Execute JavaScript
     const result = await page.evaluate(() => {
       return document.title
     })
@@ -44,7 +11,7 @@ test('full browser control', async () => {
   }
 })
 
-```
+```ts
 
 ## Laravel Dusk-Style Assertions
 
@@ -89,7 +56,7 @@ test('Dusk-style assertions', async () => {
   })
 })
 
-```
+```ts
 
 ## Form Testing
 
@@ -121,7 +88,7 @@ test('fill and submit a form', async () => {
   })
 })
 
-```
+```ts
 
 ## Mouse Interactions
 
@@ -147,7 +114,7 @@ test('mouse interactions', async () => {
   })
 })
 
-```
+```ts
 
 ## Scrolling
 
@@ -173,7 +140,7 @@ test('scroll operations', async () => {
   })
 })
 
-```
+```ts
 
 ## Screenshots
 
@@ -206,7 +173,7 @@ test('take screenshots', async () => {
   })
 })
 
-```
+```ts
 
 ## Storage Operations
 
@@ -234,7 +201,7 @@ test('storage operations', async () => {
   })
 })
 
-```
+```ts
 
 ## Browser Configuration
 
@@ -266,7 +233,7 @@ test('configure browser options', async () => {
   }
 })
 
-```
+```ts
 
 ## Multiple Pages
 
@@ -297,7 +264,7 @@ test('work with multiple pages', async () => {
   }
 })
 
-```
+```ts
 
 ## Performance Benchmarks
 
