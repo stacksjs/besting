@@ -2,23 +2,6 @@
 title: Assertions
 description: Complete reference for besting assertions and matchers.
 ---
-```
-
-### Truthiness
-
-```ts
-
-test('truthiness assertions', () => {
-  expect(true).toBeTruthy()
-  expect(false).toBeFalsy()
-  expect(null).toBeNull()
-  expect(undefined).toBeUndefined()
-  expect('value').toBeDefined()
-})
-
-```
-
-### Numbers
 
 ```ts
 

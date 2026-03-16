@@ -2,24 +2,6 @@
 title: API Testing
 description: Laravel-inspired API testing utilities for HTTP endpoints.
 ---
-  await assertion.assertHeader('content-type')
-
-  // Get and assert on JSON data
-  const data = await response.json()
-  expect(data).toHaveProperty('id', 1)
-})
-
-```
-
-## HTTP Methods
-
-### GET Requests
-
-```ts
-
-import { api, test } from 'besting'
-
-test('GET request', async () => {
   const response = await api('https://api.example.com')
     .get('/users')
 

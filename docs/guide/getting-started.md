@@ -2,26 +2,6 @@
 title: Getting Started
 description: Learn how to install and use besting for testing your applications.
 ---
-
-```ts
-
-import { expect, test } from 'besting'
-
-test('basic addition', () => {
-  expect(1 + 1).toBe(2)
-})
-
-```
-
-### Chainable Assertions
-
-Besting supports fluent, chainable assertions:
-
-```ts
-
-import { expect, test } from 'besting'
-
-test('multiple assertions on same value', () => {
   expect('Hello World')
     .toContain('Hello')
     .toContain('World')

@@ -2,21 +2,6 @@
 title: Database Testing
 description: Laravel-inspired database testing with migrations, seeders, and factories.
 ---
-    { id: 1, name: 'John', email: 'john@example.com' },
-    { id: 2, name: 'Jane', email: 'jane@example.com' },
-  ])
-})
-
-test('Basic database operations', async () => {
-  const database = db().register(yourDatabaseConnection)
-
-  // Run migrations and seeders
-  await database.migrate()
-  await database.seed()
-
-  // Query data
-  const users = await database.select('users')
-  expect(users.length).toBe(2)
 
   // Insert data
   await database.insert('users', {

@@ -2,23 +2,6 @@
 title: DOM Testing
 description: Virtual DOM testing with besting's zero-dependency DOM implementation.
 ---
-test('visit a website', async () => {
-  await browse(async (page) => {
-    await page.goto('https://example.com')
-    await page.assertSee('Example Domain')
-    await page.assertTitle('Example Domain')
-  })
-})
-
-```
-
-## Browser API
-
-For full browser control:
-
-```ts
-
-import { browser, test } from 'besting'
 
 test('full browser control', async () => {
   const br = browser({ headless: true })

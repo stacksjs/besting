@@ -2,21 +2,6 @@
 title: Browser Testing
 description: Full browser testing using Chrome DevTools Protocol.
 ---
-    await br.launch()
-    const page = await br.newPage()
-
-    await page.goto('https://example.com')
-    await page.assertSee('Example Domain')
-    await page.assertTitle('Example Domain')
-  }
-  finally {
-    await br.close()
-  }
-})
-
-```
-
-## Browser Configuration
 
 ```ts
 
