@@ -2,24 +2,8 @@
 title: Browser Testing
 description: Full browser testing using Chrome DevTools Protocol.
 ---
-  try {
-    await br.launch()
-    const page = await br.newPage()
-
-    await page.goto('https://example.com')
-    await page.assertSee('Example Domain')
-  }
-  finally {
-    await br.close()
-  }
-})
 
 ```ts
-
-## Cookie Management
-
-```ts
-
 import { browse, test } from 'besting'
 
 test('manage cookies', async () => {
@@ -48,13 +32,11 @@ test('manage cookies', async () => {
     await page.clearCookies()
   })
 })
-
-```ts
+```
 
 ## Dialog Handling
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('handle dialogs', async () => {
@@ -83,13 +65,11 @@ test('handle dialogs', async () => {
     await page.dismissDialog()
   })
 })
-
-```ts
+```
 
 ## File Uploads
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('upload files', async () => {
@@ -109,13 +89,11 @@ test('upload files', async () => {
     await page.click('button[type="submit"]')
   })
 })
-
-```ts
+```
 
 ## Console Log Capture
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('capture console logs', async () => {
@@ -142,13 +120,11 @@ test('capture console logs', async () => {
     page.clearConsoleLogs()
   })
 })
-
-```ts
+```
 
 ## PDF Generation
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('generate PDF', async () => {
@@ -169,13 +145,11 @@ test('generate PDF', async () => {
     })
   })
 })
-
-```ts
+```
 
 ## Network Control
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('network control', async () => {
@@ -202,13 +176,11 @@ test('network control', async () => {
     })
   })
 })
-
-```ts
+```
 
 ## Mobile Emulation
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('mobile emulation', async () => {
@@ -231,13 +203,11 @@ test('mobile emulation', async () => {
     await page.setTouchEmulation(true)
   })
 })
-
-```ts
+```
 
 ## Multiple Windows
 
 ```ts
-
 import { browser, test } from 'besting'
 
 test('work with multiple pages', async () => {
@@ -262,8 +232,7 @@ test('work with multiple pages', async () => {
     await br.close()
   }
 })
-
-```ts
+```
 
 ## When to Use Browser vs Virtual DOM
 

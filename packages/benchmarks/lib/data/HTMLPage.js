@@ -348,14 +348,13 @@ module.exports = `
 
     <notification-indicator class="js-socket-channel" data-channel="eyJjIjoibm90aWZpY2F0aW9uLWNoYW5nZWQ6MTkxNTU1NDQiLCJ0IjoxNjAxOTM1MzQ0fQ==--30730f2d7721bbec7a2ab0b29694c4a6a24608b9988bac88060a01ce55bc5615">
       <a href="/notifications"
-         class="Header-link notification-indicator position-relative tooltipped tooltipped-sw"
-         
-         aria-label="You have unread notifications"
-         data-hotkey="g n"
-         data-ga-click="Header, go to notifications, icon:unread"
-         data-target="notification-indicator.link">
-         <span class="mail-status unread " data-target="notification-indicator.modifier"></span>
-         <svg class="octicon octicon-bell" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 16a2 2 0 001.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 008 16z"></path><path fill-rule="evenodd" d="M8 1.5A3.5 3.5 0 004.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.018.018 0 00-.003.01l.001.006c0 .002.002.004.004.006a.017.017 0 00.006.004l.007.001h10.964l.007-.001a.016.016 0 00.006-.004.016.016 0 00.004-.006l.001-.007a.017.017 0 00-.003-.01l-1.703-2.554a1.75 1.75 0 01-.294-.97V5A3.5 3.5 0 008 1.5zM3 5a5 5 0 0110 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.518 1.518 0 0113.482 13H2.518a1.518 1.518 0 01-1.263-2.36l1.703-2.554A.25.25 0 003 7.947V5z"></path></svg>
+        class="Header-link notification-indicator position-relative tooltipped tooltipped-sw"
+        aria-label="You have unread notifications"
+        data-hotkey="g n"
+        data-ga-click="Header, go to notifications, icon:unread"
+        data-target="notification-indicator.link">
+        <span class="mail-status unread " data-target="notification-indicator.modifier"></span>
+        <svg class="octicon octicon-bell" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 16a2 2 0 001.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 008 16z"></path><path fill-rule="evenodd" d="M8 1.5A3.5 3.5 0 004.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.018.018 0 00-.003.01l.001.006c0 .002.002.004.004.006a.017.017 0 00.006.004l.007.001h10.964l.007-.001a.016.016 0 00.006-.004.016.016 0 00.004-.006l.001-.007a.017.017 0 00-.003-.01l-1.703-2.554a1.75 1.75 0 01-.294-.97V5A3.5 3.5 0 008 1.5zM3 5a5 5 0 0110 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.518 1.518 0 0113.482 13H2.518a1.518 1.518 0 01-1.263-2.36l1.703-2.554A.25.25 0 003 7.947V5z"></path></svg>
       </a>
     </notification-indicator>
 
@@ -437,11 +436,10 @@ module.exports = `
           </div>
         </div>
         <div class="
-          
-           user-status-message-wrapper f6 min-width-0"
-           style="line-height: 20px;" >
+          user-status-message-wrapper f6 min-width-0"
+          style="line-height: 20px;" >
           <div class="css-truncate css-truncate-target width-fit text-gray-dark text-left">
-              <span class="text-gray">Set status</span>
+            <span class="text-gray">Set status</span>
           </div>
         </div>
       </div>
@@ -832,17 +830,20 @@ module.exports = `
       <input type="hidden" name="context" value="repository"></input>
       <button type="submit" class="btn btn-sm btn-with-count  js-toggler-target" aria-label="Unstar this repository" title="Unstar capricorn86/happy-dom" data-hydro-click="{&quot;event_type&quot;:&quot;repository.click&quot;,&quot;payload&quot;:{&quot;target&quot;:&quot;UNSTAR_BUTTON&quot;,&quot;repository_id&quot;:207392577,&quot;originating_url&quot;:&quot;https://github.com/capricorn86/happy-dom&quot;,&quot;user_id&quot;:19155544}}" data-hydro-click-hmac="a13903d3073b95f87119f55d71692deb09578c38ea1aef345fda4230e9a8362f" data-ga-click="Repository, click unstar button, action:files#disambiguate; text:Unstar">        <svg height="16" class="octicon octicon-star-fill" viewBox="0 0 16 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"></path></svg>
         Unstar
-</button>        <a class="social-count js-social-count" href="/capricorn86/happy-dom/stargazers"
-           aria-label="49 users starred this repository">
-           49
+</button>
+        <a class="social-count js-social-count" href="/capricorn86/happy-dom/stargazers"
+          aria-label="49 users starred this repository">
+          49
         </a>
 </form>
     <form class="unstarred js-social-form" action="/capricorn86/happy-dom/star" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="05eH8EcFmCLgkF3MuNzYaVp2Xf2LrBiUUvl0ihM7np1uCykD6sHADV0MUSC6AExO454NXufy9mLgntO+y0ZuBA==" />
       <input type="hidden" name="context" value="repository"></input>
-      <button type="submit" class="btn btn-sm btn-with-count  js-toggler-target" aria-label="Unstar this repository" title="Star capricorn86/happy-dom" data-hydro-click="{&quot;event_type&quot;:&quot;repository.click&quot;,&quot;payload&quot;:{&quot;target&quot;:&quot;STAR_BUTTON&quot;,&quot;repository_id&quot;:207392577,&quot;originating_url&quot;:&quot;https://github.com/capricorn86/happy-dom&quot;,&quot;user_id&quot;:19155544}}" data-hydro-click-hmac="15efd3d8599c7959edb6cf90bf6a772824355117543454aaa7574143b7e92ee5" data-ga-click="Repository, click star button, action:files#disambiguate; text:Star">        <svg height="16" class="octicon octicon-star" viewBox="0 0 16 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z"></path></svg>
+      <button type="submit" class="btn btn-sm btn-with-count  js-toggler-target" aria-label="Unstar this repository" title="Star capricorn86/happy-dom" data-hydro-click="{&quot;event_type&quot;:&quot;repository.click&quot;,&quot;payload&quot;:{&quot;target&quot;:&quot;STAR_BUTTON&quot;,&quot;repository_id&quot;:207392577,&quot;originating_url&quot;:&quot;https://github.com/capricorn86/happy-dom&quot;,&quot;user_id&quot;:19155544}}" data-hydro-click-hmac="15efd3d8599c7959edb6cf90bf6a772824355117543454aaa7574143b7e92ee5" data-ga-click="Repository, click star button, action:files#disambiguate; text:Star">
+        <svg height="16" class="octicon octicon-star" viewBox="0 0 16 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z"></path></svg>
         Star
-</button>        <a class="social-count js-social-count" href="/capricorn86/happy-dom/stargazers"
-           aria-label="49 users starred this repository">
+</button>
+        <a class="social-count js-social-count" href="/capricorn86/happy-dom/stargazers"
+          aria-label="49 users starred this repository">
           49
         </a>
 </form>  </div>
@@ -855,7 +856,7 @@ module.exports = `
             Fork
 </span>
       <a href="/capricorn86/happy-dom/network/members" class="social-count"
-         aria-label="5 users forked this repository">
+        aria-label="5 users forked this repository">
         5
       </a>
   </li>
@@ -1332,8 +1333,8 @@ module.exports = `
     <div class="css-truncate css-truncate-overflow text-gray">
       
       <a href="/capricorn86/happy-dom/commits?author=capricorn86"
-     class="commit-author user-mention"
-     title="View all commits by capricorn86">capricorn86</a>
+        class="commit-author user-mention"
+        title="View all commits by capricorn86">capricorn86</a>
 
 
   
@@ -1347,7 +1348,7 @@ module.exports = `
         </span>
     </div>
     <span class="hidden-text-expander ml-2 d-inline-block ">
-      <button type="button" class="hx_bg-black-fade-15 text-gray-dark ellipsis-expander js-details-target" aria-expanded="false">&hellip;</button>
+      <button type="button" class="hx_bg-black-fade-15 text-gray-dark ellipsis-expander js-details-target" aria-expanded="false">...</button>
     </span>
     <div class="d-flex flex-auto flex-justify-end ml-3 flex-items-baseline">
         <include-fragment accept="text/fragment+html" src="/capricorn86/happy-dom/commit/98a295f7b22676056b256ec959cf4845101c5b29/rollup?direction=e" class="d-inline"></include-fragment>
@@ -1415,11 +1416,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1434,11 +1435,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1453,11 +1454,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1472,11 +1473,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1491,11 +1492,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1510,11 +1511,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1529,11 +1530,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1548,11 +1549,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1567,11 +1568,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1586,11 +1587,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1605,11 +1606,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1624,11 +1625,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1643,11 +1644,11 @@ module.exports = `
           </div>
 
           <div role="gridcell" class="flex-auto min-width-0 d-none d-md-block col-5 mr-3 commit-message">
-              <div class="Skeleton Skeleton--text col-7">&nbsp;</div>
+              <div class="Skeleton Skeleton--text col-7"> </div>
           </div>
 
           <div role="gridcell" class="text-gray-light text-right" style="width:100px;">
-              <div class="Skeleton Skeleton--text">&nbsp;</div>
+              <div class="Skeleton Skeleton--text"> </div>
           </div>
 
         </div>
@@ -1661,7 +1662,7 @@ module.exports = `
 
 </include-fragment>
   <div class="repo-file-upload-tree-target js-document-dropzone js-upload-manifest-tree-view"
-       data-drop-url="/capricorn86/happy-dom/upload/master">
+    data-drop-url="/capricorn86/happy-dom/upload/master">
     <div class="repo-file-upload-outline">
       <div class="repo-file-upload-slate">
           <svg width="204" height="52" viewBox="0 0 204 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

@@ -87,7 +87,7 @@ bun run bench:very-happy-dom
 
 3. **✅ Implemented Complete Browser API** (2024-10-09):
 
-   Core Features:
+  Core Features:
 
   - **Storage APIs** - localStorage, sessionStorage
   - **Timers** - setTimeout, setInterval, requestAnimationFrame + clear methods
@@ -98,19 +98,19 @@ bun run bench:very-happy-dom
   - **User Interaction** - click, type, focus, hover, keyboard.press, mouse.click
   - **Rendering** - screenshot (SVG), PDF generation
 
-   Network & Communication:
+  Network & Communication:
 
   - **Request Interception** - page.setRequestInterception(), fetch mocking
   - **WebSocket** - Full WebSocket API with events
   - **XMLHttpRequest** - Legacy XHR API
   - **Fetch API** - fetch, Request, Response, Headers, FormData
 
-   Web Components:
+  Web Components:
 
   - **Shadow DOM** - element.attachShadow()
   - **Custom Elements** - customElements.define(), HTMLElement
 
-   Device & Browser APIs:
+  Device & Browser APIs:
 
   - **Clipboard** - navigator.clipboard.writeText/readText
   - **File API** - File, FileReader, FileList
@@ -213,29 +213,29 @@ The benchmarks use production-grade test data:
 
 2. **Add to dom-performance.bench.ts**: Create a benchmark group for very-happy-dom
 
-   ```typescript
-   group('🔧 Your Operation Name', () => {
-     bench('VeryHappyDOM - description', () => {
-       // your benchmark code
-     })
-   })
-   ```
+  ```typescript
+  group('🔧 Your Operation Name', () => {
+    bench('VeryHappyDOM - description', () => {
+      // your benchmark code
+    })
+  })
+  ```
 
 3. **Add Competitive Comparison**: Update `competitive-comparison.bench.ts` with all three implementations
 
-   ```typescript
-   group('🔧 Your Operation Name', () => {
-     bench('VeryHappyDOM', () => { /* ... */ })
-     bench('HappyDOM', () => { /* ... */ })
-     bench('JSDOM', () => { /* ... */ })
-   })
-   ```
+  ```typescript
+  group('🔧 Your Operation Name', () => {
+    bench('VeryHappyDOM', () => { /* ... */ })
+    bench('HappyDOM', () => { /* ... */ })
+    bench('JSDOM', () => { /* ... */ })
+  })
+  ```
 
 4. **Run and Document**: Execute benchmarks and update this README with results
 
-   ```bash
-   bun run bench:compare
-   ```
+  ```bash
+  bun run bench:compare
+  ```
 
 5. **Submit PR**: Include benchmark results, analysis, and any performance improvements
 

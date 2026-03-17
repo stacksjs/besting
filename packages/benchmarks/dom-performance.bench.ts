@@ -88,12 +88,12 @@ group('HTML Parsing', () => {
         </header>
         <main>
           ${Array.from({ length: 100 }).map((_, i) => `
-            <article class="post" data-id="${i}">
-              <h2 class="post-title">Post ${i}</h2>
-              <p class="post-content">This is the content for post number ${i}</p>
+            <article class='post' data-id='${i}'>
+              <h2 class='post-title'>Post ${i}</h2>
+              <p class='post-content'>This is the content for post number ${i}</p>
               <footer>
-                <span class="author">Author ${i % 5}</span>
-                <time datetime="2024-01-01">2024-01-01</time>
+                <span class='author'>Author ${i % 5}</span>
+                <time datetime='2024-01-01'>2024-01-01</time>
               </footer>
             </article>
           `).join('')}

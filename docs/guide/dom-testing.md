@@ -2,23 +2,8 @@
 title: DOM Testing
 description: Virtual DOM testing with besting's zero-dependency DOM implementation.
 ---
-    const result = await page.evaluate(() => {
-      return document.title
-    })
-  }
-  finally {
-    await br.close()
-  }
-})
 
 ```ts
-
-## Laravel Dusk-Style Assertions
-
-Besting provides familiar assertions inspired by Laravel Dusk:
-
-```ts
-
 import { browse, test } from 'besting'
 
 test('Dusk-style assertions', async () => {
@@ -55,13 +40,11 @@ test('Dusk-style assertions', async () => {
     await page.assertUrlContains('example')
   })
 })
-
-```ts
+```
 
 ## Form Testing
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('fill and submit a form', async () => {
@@ -87,13 +70,11 @@ test('fill and submit a form', async () => {
     await page.assertSee('Your message has been sent')
   })
 })
-
-```ts
+```
 
 ## Mouse Interactions
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('mouse interactions', async () => {
@@ -113,13 +94,11 @@ test('mouse interactions', async () => {
     await page.drag('.draggable', '.drop-zone')
   })
 })
-
-```ts
+```
 
 ## Scrolling
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('scroll operations', async () => {
@@ -139,13 +118,11 @@ test('scroll operations', async () => {
     await page.scrollToBottom()
   })
 })
-
-```ts
+```
 
 ## Screenshots
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('take screenshots', async () => {
@@ -172,15 +149,13 @@ test('take screenshots', async () => {
     })
   })
 })
-
-```ts
+```
 
 ## Storage Operations
 
 ### Local Storage & Session Storage
 
 ```ts
-
 import { browse, test } from 'besting'
 
 test('storage operations', async () => {
@@ -200,13 +175,11 @@ test('storage operations', async () => {
     await page.clearSessionStorage()
   })
 })
-
-```ts
+```
 
 ## Browser Configuration
 
 ```ts
-
 import { browser, test } from 'besting'
 
 test('configure browser options', async () => {
@@ -232,13 +205,11 @@ test('configure browser options', async () => {
     await chromiumBrowser.close()
   }
 })
-
-```ts
+```
 
 ## Multiple Pages
 
 ```ts
-
 import { browser, test } from 'besting'
 
 test('work with multiple pages', async () => {
@@ -263,8 +234,7 @@ test('work with multiple pages', async () => {
     await br.close()
   }
 })
-
-```ts
+```
 
 ## Performance Benchmarks
 

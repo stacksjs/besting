@@ -13,10 +13,12 @@ cli
   .option('--verbose', 'Enable verbose logging')
   .example('besting test --verbose')
   .action(async (options?: CliOption) => {
+    // eslint-disable-next-line no-console
     console.log('Options:', options)
   })
 
 cli.command('version', 'Show the version of the CLI').action(() => {
+  // eslint-disable-next-line no-console
   console.log(version)
 })
 

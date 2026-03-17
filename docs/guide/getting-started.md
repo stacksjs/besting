@@ -3,24 +3,6 @@ title: Getting Started
 description: Learn how to install and use besting for testing your applications.
 ---
 
-```ts
-
-import { describe, expect, test } from 'besting'
-
-describe('Math operations', () => {
-  test('addition works', () => {
-    expect(1 + 1).toBe(2)
-  })
-
-  test('subtraction works', () => {
-    expect(3 - 1).toBe(2)
-  })
-})
-
-```
-
-### Lifecycle Hooks
-
 Use lifecycle hooks for setup and teardown:
 
 ```ts

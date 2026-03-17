@@ -5,24 +5,6 @@ description: Laravel-inspired API testing utilities for HTTP endpoints.
 
 ```ts
 
-### PUT Requests
-
-```ts
-
-test('PUT request', async () => {
-  const response = await api('https://api.example.com')
-    .put('/users/1', { name: 'Updated Name' })
-
-  const assertion = await assertResponse(response)
-  await assertion.assertOk()
-})
-
-```ts
-
-### DELETE Requests
-
-```ts
-
 test('DELETE request', async () => {
   const response = await api('https://api.example.com')
     .delete('/users/1')

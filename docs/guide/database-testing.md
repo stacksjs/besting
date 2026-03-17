@@ -2,23 +2,6 @@
 title: Database Testing
 description: Laravel-inspired database testing with migrations, seeders, and factories.
 ---
-})
-
-```ts
-
-### Assert Record Values
-
-```ts
-
-test('assert record values', async () => {
-  const database = db().register(yourDatabaseConnection)
-
-  await database.insert('users', {
-    id: 1,
-    name: 'John',
-    status: 'active'
-  })
-
   // Assert that a record matching criteria has specific values
   await database.assertSame('users', { id: 1 }, {
     name: 'John',
