@@ -58,10 +58,10 @@ group('HTML Parsing', () => {
   const smallHTML = '<div>Hello World</div>'
 
   const mediumHTML = `
-    <div class="container">
-      <h1 id="title">Hello World</h1>
-      <p class="description">Lorem ipsum dolor sit amet</p>
-      <ul class="list">
+    <div class='container'>
+      <h1 id='title'>Hello World</h1>
+      <p class='description'>Lorem ipsum dolor sit amet</p>
+      <ul class='list'>
         <li>Item 1</li>
         <li>Item 2</li>
         <li>Item 3</li>
@@ -75,8 +75,8 @@ group('HTML Parsing', () => {
     <html>
       <head>
         <title>Test Page</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width'>
       </head>
       <body>
         <header>
@@ -127,12 +127,12 @@ group('querySelector Operations', () => {
 
   // Setup large DOM
   doc.body!.innerHTML = `
-    <div class="app">
+    <div class='app'>
       ${Array.from({ length: 200 }).map((_, i) => `
-        <div class="item" id="item-${i}" data-index="${i}">
-          <h3 class="title">Title ${i}</h3>
-          <p class="description">Description ${i}</p>
-          <button class="btn" type="button">Click</button>
+        <div class='item' id='item-${i}' data-index='${i}'>
+          <h3 class='title'>Title ${i}</h3>
+          <p class='description'>Description ${i}</p>
+          <button class='btn' type='button'>Click</button>
         </div>
       `).join('')}
     </div>
@@ -165,12 +165,12 @@ group('querySelectorAll Operations', () => {
 
   // Setup large DOM
   doc.body!.innerHTML = `
-    <div class="app">
+    <div class='app'>
       ${Array.from({ length: 200 }).map((_, i) => `
-        <div class="item" id="item-${i}" data-index="${i}">
-          <h3 class="title">Title ${i}</h3>
-          <p class="description">Description ${i}</p>
-          <button class="btn" type="button">Click</button>
+        <div class='item' id='item-${i}' data-index='${i}'>
+          <h3 class='title'>Title ${i}</h3>
+          <p class='description'>Description ${i}</p>
+          <button class='btn' type='button'>Click</button>
         </div>
       `).join('')}
     </div>
@@ -374,12 +374,12 @@ group('innerHTML Operations', () => {
 group('DOM Traversal', () => {
   const doc = createDocument()
   doc.body!.innerHTML = `
-    <div id="root">
+    <div id='root'>
       ${Array.from({ length: 100 }).map((_, i) => `
-        <div class="parent" data-id="${i}">
-          <div class="child-1">Child 1</div>
-          <div class="child-2">Child 2</div>
-          <div class="child-3">Child 3</div>
+        <div class='parent' data-id='${i}'>
+          <div class='child-1'>Child 1</div>
+          <div class='child-2'>Child 2</div>
+          <div class='child-3'>Child 3</div>
         </div>
       `).join('')}
     </div>
