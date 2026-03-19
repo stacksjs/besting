@@ -84,28 +84,25 @@ jobs:
         run: bun test
 
   publish-commit:
+    needs: [lint, typecheck, test]
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5.0.0
-
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Use cached node_modules
-        uses: actions/cache@v4
+      - uses: actions/checkout@v6
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('**/bun.lock') }}
-          restore-keys: |
-            node-modules-
+          fetch-depth: 0
+
+      - name: Setup Pantry
+        uses: home-lang/pantry/packages/action@main
 
       - name: Install Dependencies
         run: bun install
 
       - name: Build
-        run: bun --bun build.ts
-        working-directory: packages/besting
+        run: bun run build
 
       - name: Publish Commit
-        run: bunx pkg-pr-new publish "./packages/besting"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: pantry publish:commit './packages/besting' './packages/very-happy-dom'
+        env:
+          PANTRY_REGISTRY_TOKEN: ${{ secrets.PANTRY_TOKEN }}
