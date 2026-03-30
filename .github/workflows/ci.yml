@@ -103,6 +103,6 @@ jobs:
 
       - name: Publish Commit
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: pantry publish:commit './packages/besting' './packages/very-happy-dom'
+        run: pantry publish:commit './packages/besting' && pantry publish:commit './packages/very-happy-dom'
         env:
           PANTRY_REGISTRY_TOKEN: ${{ secrets.PANTRY_TOKEN }}
