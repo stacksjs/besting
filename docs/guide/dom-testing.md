@@ -2,49 +2,19 @@
 title: DOM Testing
 description: Virtual DOM testing with besting's zero-dependency DOM implementation.
 ---
-
-```ts
-import { browse, test } from 'besting'
-
-test('Dusk-style assertions', async () => {
-  await browse(async (page) => {
-    await page.goto('https://example.com')
-
-    // Text assertions
-    await page.assertSee('Welcome')
-    await page.assertDontSee('Error')
-    await page.assertSeeIn('.header', 'Logo')
-
-    // Element assertions
-    await page.assertPresent('button')
-    await page.assertMissing('.error-message')
-    await page.assertVisible('.modal')
-    await page.assertNotVisible('.hidden')
-
-    // Form assertions
-    await page.assertValue('input[name="email"]', 'test@example.com')
-    await page.assertChecked('input[name="terms"]')
-    await page.assertNotChecked('input[name="newsletter"]')
-    await page.assertEnabled('button[type="submit"]')
-    await page.assertDisabled('button[type="submit"]')
-
-    // Attribute assertions
-    await page.assertAttribute('a', 'href', 'https://example.com')
-    await page.assertHasClass('.button', 'btn-primary')
-    await page.assertHasNotClass('.button', 'disabled')
-
-    // Page assertions
     await page.assertTitle('Example Domain')
     await page.assertTitleContains('Example')
     await page.assertUrlIs('https://example.com/')
     await page.assertUrlContains('example')
   })
 })
+
 ```
 
 ## Form Testing
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('fill and submit a form', async () => {
@@ -70,11 +40,13 @@ test('fill and submit a form', async () => {
     await page.assertSee('Your message has been sent')
   })
 })
+
 ```
 
 ## Mouse Interactions
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('mouse interactions', async () => {
@@ -94,11 +66,13 @@ test('mouse interactions', async () => {
     await page.drag('.draggable', '.drop-zone')
   })
 })
+
 ```
 
 ## Scrolling
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('scroll operations', async () => {
@@ -118,11 +92,13 @@ test('scroll operations', async () => {
     await page.scrollToBottom()
   })
 })
+
 ```
 
 ## Screenshots
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('take screenshots', async () => {
@@ -149,6 +125,7 @@ test('take screenshots', async () => {
     })
   })
 })
+
 ```
 
 ## Storage Operations
@@ -156,6 +133,7 @@ test('take screenshots', async () => {
 ### Local Storage & Session Storage
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('storage operations', async () => {
@@ -175,11 +153,13 @@ test('storage operations', async () => {
     await page.clearSessionStorage()
   })
 })
+
 ```
 
 ## Browser Configuration
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('configure browser options', async () => {
@@ -205,11 +185,13 @@ test('configure browser options', async () => {
     await chromiumBrowser.close()
   }
 })
+
 ```
 
 ## Multiple Pages
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('work with multiple pages', async () => {
@@ -234,6 +216,7 @@ test('work with multiple pages', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## Performance Benchmarks

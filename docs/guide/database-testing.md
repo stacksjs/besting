@@ -2,41 +2,6 @@
 title: Database Testing
 description: Laravel-inspired database testing with migrations, seeders, and factories.
 ---
-  // Assert that a record matching criteria has specific values
-  await database.assertSame('users', { id: 1 }, {
-    name: 'John',
-    status: 'active'
-  })
-})
-
-```ts
-
-### Assert Record Count
-
-```ts
-
-test('assert record count', async () => {
-  const database = db().register(yourDatabaseConnection)
-
-  await database.insert('users', { id: 1, name: 'John' })
-  await database.insert('users', { id: 2, name: 'Jane' })
-
-  // Assert the number of records
-  await database.assertCount('users', 2)
-  await database.assertCount('users', 1, { name: 'John' })
-})
-
-```ts
-
-## Transactions
-
-Use transactions to isolate tests and ensure clean state:
-
-```ts
-
-import { db, test, useTransaction } from 'besting'
-
-test('database transactions', async () => {
   const database = db().register(yourDatabaseConnection)
 
   // Begin a transaction

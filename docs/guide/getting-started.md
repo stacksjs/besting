@@ -3,41 +3,6 @@ title: Getting Started
 description: Learn how to install and use besting for testing your applications.
 ---
 
-Use lifecycle hooks for setup and teardown:
-
-```ts
-
-import { beforeEach, describe, expect, test } from 'besting'
-
-describe('User', () => {
-  let user
-
-  beforeEach(() => {
-    user = { name: 'John', email: 'john@example.com' }
-  })
-
-  test('has correct properties', () => {
-    expect(user.name).toBe('John')
-    expect(user.email).toBe('john@example.com')
-  })
-})
-
-```
-
-## Running Tests
-
-```bash
-
-# Run all tests
-
-bun test
-
-# Run a specific test file
-
-bun test path/to/test.ts
-
-# Run with custom runner (ensures all test files are executed)
-
 bun run test:custom
 
 ```

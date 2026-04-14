@@ -3,40 +3,10 @@ title: Browser Testing
 description: Full browser testing using Chrome DevTools Protocol.
 ---
 
-```ts
-import { browse, test } from 'besting'
-
-test('manage cookies', async () => {
-  await browse(async (page) => {
-    await page.goto('https://example.com')
-
-    // Set a cookie
-    await page.setCookie('session', 'abc123', {
-      domain: 'example.com',
-      path: '/',
-      secure: true,
-      httpOnly: true,
-      sameSite: 'Strict'
-    })
-
-    // Get all cookies
-    const cookies = await page.getCookies()
-
-    // Get specific cookie
-    const sessionCookie = await page.getCookie('session')
-
-    // Delete a cookie
-    await page.deleteCookie('session')
-
-    // Clear all cookies
-    await page.clearCookies()
-  })
-})
-```
-
 ## Dialog Handling
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('handle dialogs', async () => {
@@ -65,11 +35,13 @@ test('handle dialogs', async () => {
     await page.dismissDialog()
   })
 })
+
 ```
 
 ## File Uploads
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('upload files', async () => {
@@ -89,11 +61,13 @@ test('upload files', async () => {
     await page.click('button[type="submit"]')
   })
 })
+
 ```
 
 ## Console Log Capture
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('capture console logs', async () => {
@@ -120,11 +94,13 @@ test('capture console logs', async () => {
     page.clearConsoleLogs()
   })
 })
+
 ```
 
 ## PDF Generation
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('generate PDF', async () => {
@@ -145,11 +121,13 @@ test('generate PDF', async () => {
     })
   })
 })
+
 ```
 
 ## Network Control
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('network control', async () => {
@@ -176,11 +154,13 @@ test('network control', async () => {
     })
   })
 })
+
 ```
 
 ## Mobile Emulation
 
 ```ts
+
 import { browse, test } from 'besting'
 
 test('mobile emulation', async () => {
@@ -203,11 +183,13 @@ test('mobile emulation', async () => {
     await page.setTouchEmulation(true)
   })
 })
+
 ```
 
 ## Multiple Windows
 
 ```ts
+
 import { browser, test } from 'besting'
 
 test('work with multiple pages', async () => {
@@ -232,6 +214,7 @@ test('work with multiple pages', async () => {
     await br.close()
   }
 })
+
 ```
 
 ## When to Use Browser vs Virtual DOM

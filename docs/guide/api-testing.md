@@ -2,43 +2,6 @@
 title: API Testing
 description: Laravel-inspired API testing utilities for HTTP endpoints.
 ---
-
-```ts
-
-test('DELETE request', async () => {
-  const response = await api('https://api.example.com')
-    .delete('/users/1')
-
-  const assertion = await assertResponse(response)
-  await assertion.assertStatus(204)
-})
-
-```ts
-
-## Authentication
-
-### Bearer Token
-
-```ts
-
-import { api, test } from 'besting'
-
-test('authenticated request with token', async () => {
-  const response = await api('https://api.example.com')
-    .withToken('your-auth-token')
-    .get('/secured-endpoint')
-
-  const assertion = await assertResponse(response)
-  await assertion.assertOk()
-})
-
-```ts
-
-### Basic Authentication
-
-```ts
-
-test('basic authentication', async () => {
   const response = await api('https://api.example.com')
     .withBasicAuth('username', 'password')
     .get('/secured-endpoint')
