@@ -2,22 +2,6 @@
 title: Assertions
 description: Complete reference for besting assertions and matchers.
 ---
-  ]
-
-  expect(users).toContainEqual({ id: 1, name: 'John' })
-  expect(users).toHaveLength(2)
-})
-
-```
-
-## Object Assertions
-
-```ts
-
-test('object assertions', () => {
-  const user = { name: 'John', age: 30, email: 'john@example.com' }
-
-  expect(user).toHaveProperty('name')
   expect(user).toHaveProperty('name', 'John')
   expect(user).toMatchObject({ name: 'John' })
   expect({}).toBeEmpty()

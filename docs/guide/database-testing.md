@@ -2,21 +2,6 @@
 title: Database Testing
 description: Laravel-inspired database testing with migrations, seeders, and factories.
 ---
-  const database = db().register(yourDatabaseConnection)
-
-  // Begin a transaction
-  await database.beginTransaction()
-
-  // Make changes
-  await database.insert('users', {
-    id: 3,
-    name: 'Alice',
-    email: 'alice@example.com'
-  })
-
-  // Rollback changes
-  await database.rollbackTransaction()
-
   // The insert was rolled back
   await database.assertNotExists('users', { id: 3 })
 })

@@ -2,24 +2,6 @@
 title: Browser Testing
 description: Full browser testing using Chrome DevTools Protocol.
 ---
-
-## Dialog Handling
-
-```ts
-
-import { browse, test } from 'besting'
-
-test('handle dialogs', async () => {
-  await browse(async (page) => {
-    await page.goto('https://example.com')
-
-    // Set up dialog handler
-    await page.onDialog(async (message) => {
-      console.log('Dialog message:', message)
-
-      // Return true to accept, false to dismiss
-      if (message.includes('confirm')) {
-        return true
       }
 
       // Return string for prompt dialogs

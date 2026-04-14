@@ -2,24 +2,6 @@
 title: DOM Testing
 description: Virtual DOM testing with besting's zero-dependency DOM implementation.
 ---
-    await page.assertTitle('Example Domain')
-    await page.assertTitleContains('Example')
-    await page.assertUrlIs('https://example.com/')
-    await page.assertUrlContains('example')
-  })
-})
-
-```
-
-## Form Testing
-
-```ts
-
-import { browse, test } from 'besting'
-
-test('fill and submit a form', async () => {
-  await browse(async (page) => {
-    await page.goto('https://myapp.com/contact')
 
     // Fill form fields
     await page.fill('input[name="name"]', 'John Doe')

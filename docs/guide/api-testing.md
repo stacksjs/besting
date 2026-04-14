@@ -2,24 +2,6 @@
 title: API Testing
 description: Laravel-inspired API testing utilities for HTTP endpoints.
 ---
-  const response = await api('https://api.example.com')
-    .withBasicAuth('username', 'password')
-    .get('/secured-endpoint')
-})
-
-```ts
-
-## JSON Assertions
-
-### Assert JSON Path
-
-```ts
-
-import { api, assertResponse, test } from 'besting'
-
-test('assert JSON path', async () => {
-  const response = await api('https://api.example.com')
-    .get('/users/1')
 
   const assertion = await assertResponse(response)
 
