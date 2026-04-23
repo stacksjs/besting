@@ -13,7 +13,7 @@
       "name": "@besting/benchmarks",
       "version": "0.0.9",
       "devDependencies": {
-        "happy-dom": "^20.0.2",
+        "happy-dom": "^20.9.0",
         "jsdom": "^25.0.1",
         "mitata": "^1.0.34",
       },
@@ -29,7 +29,7 @@
       },
       "devDependencies": {
         "@stacksjs/clapp": "^0.2.0",
-        "bunfig": "^0.15.0",
+        "bunfig": "^0.15.6",
       },
     },
   },
