@@ -31,7 +31,7 @@ jobs:
             node-modules-
 
       - name: Install Dependencies
-        run: bun install
+        run: pantry install
 
       - name: Publish to npm
         run: ./scripts/publish.sh
