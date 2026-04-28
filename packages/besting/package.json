@@ -76,10 +76,10 @@
     "typecheck": "bun --bun tsc --noEmit"
   },
   "dependencies": {
-    "very-happy-dom": "*"
+    "very-happy-dom": "*0.1.2"
   },
   "devDependencies": {
     "@stacksjs/clapp": "^0.2.0",
-    "bunfig": "^0.15.0"
+    "bunfig": "^0.15.8"
   }
 }
