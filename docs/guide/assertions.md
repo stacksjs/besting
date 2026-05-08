@@ -2,23 +2,6 @@
 title: Assertions
 description: Complete reference for besting assertions and matchers.
 ---
-  expect(user).toHaveProperty('name', 'John')
-  expect(user).toMatchObject({ name: 'John' })
-  expect({}).toBeEmpty()
-})
-
-```
-
-## Exception Assertions
-
-```ts
-
-test('exception assertions', () => {
-  const throwError = () => {
-    throw new Error('Something went wrong')
-  }
-
-  expect(throwError).toThrow()
   expect(throwError).toThrow('Something went wrong')
   expect(throwError).toThrow(/wrong/)
   expect(throwError).toThrow(Error)

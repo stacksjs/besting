@@ -2,22 +2,6 @@
 title: DOM Testing
 description: Virtual DOM testing with besting's zero-dependency DOM implementation.
 ---
-
-    // Fill form fields
-    await page.fill('input[name="name"]', 'John Doe')
-    await page.fill('input[name="email"]', 'john@example.com')
-    await page.fill('textarea[name="message"]', 'Hello!')
-
-    // Select from dropdown
-    await page.select('select[name="subject"]', 'inquiry')
-
-    // Check agreement
-    await page.check('input[name="agree"]')
-
-    // Submit form
-    await page.click('button[type="submit"]')
-
-    // Assert success
     await page.waitForText('Thank you')
     await page.assertSee('Your message has been sent')
   })

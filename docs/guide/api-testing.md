@@ -5,24 +5,6 @@ description: Laravel-inspired API testing utilities for HTTP endpoints.
 
   const assertion = await assertResponse(response)
 
-  // Assert specific JSON paths
-  await assertion.assertJsonPath('name', 'John Doe')
-  await assertion.assertJsonPath('email')
-  await assertion.assertJsonPath('address.city', 'New York')
-})
-
-```ts
-
-### Assert JSON Structure
-
-```ts
-
-test('assert JSON structure', async () => {
-  const response = await api('https://api.example.com')
-    .get('/users/1')
-
-  const assertion = await assertResponse(response)
-
   // Assert on the entire JSON structure
   await assertion.assertJson({
     id: 1,

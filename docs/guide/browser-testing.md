@@ -2,22 +2,6 @@
 title: Browser Testing
 description: Full browser testing using Chrome DevTools Protocol.
 ---
-      }
-
-      // Return string for prompt dialogs
-      if (message.includes('name')) {
-        return 'John Doe'
-      }
-
-      return false
-    })
-
-    // Or accept/dismiss manually
-    await page.acceptDialog()
-    await page.dismissDialog()
-  })
-})
-
 ```
 
 ## File Uploads

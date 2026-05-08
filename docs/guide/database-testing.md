@@ -2,24 +2,6 @@
 title: Database Testing
 description: Laravel-inspired database testing with migrations, seeders, and factories.
 ---
-  // The insert was rolled back
-  await database.assertNotExists('users', { id: 3 })
-})
-
-```ts
-
-### Transaction Helper
-
-```ts
-
-import { useTransaction } from 'besting'
-
-test('use transaction helper', async () => {
-  const transactionTest = useTransaction(async (db) => {
-    // This code runs within a transaction
-    await db.insert('users', {
-      id: 4,
-      name: 'Bob',
       email: 'bob@example.com'
     })
 
