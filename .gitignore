@@ -13,3 +13,4 @@ docs/.vitepress/cache
 bin/besting
 .zed
 .cursor
+pantry
