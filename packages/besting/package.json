@@ -1,7 +1,7 @@
 {
   "name": "besting",
   "type": "module",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "description": "A Bun test framework.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
@@ -76,7 +76,7 @@
     "typecheck": "bun --bun tsc --noEmit"
   },
   "dependencies": {
-    "very-happy-dom": "*"
+    "very-happy-dom": "^0.1.4"
   },
   "devDependencies": {
     "@stacksjs/clapp": "^0.2.0",
