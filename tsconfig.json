@@ -35,6 +35,6 @@
     "node_modules",
     "packages/*/test",
     "packages/benchmarks",
-    "docs"
+    "docs/dist"
   ]
 }

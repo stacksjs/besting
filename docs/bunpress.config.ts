@@ -1,12 +1,14 @@
-import type { BunPressOptions } from 'bunpress'
+import type { BunPressConfig } from '@stacksjs/bunpress'
 
-const config: BunPressOptions = {
-  name: 'besting',
+const config: BunPressConfig = {
+  title: 'besting',
   description: 'A Jest and Pest inspired testing framework for Bun with zero external dependencies.',
   url: 'https://besting.stacksjs.org',
 
-  theme: {
-    primaryColor: '#22c55e',
+  themeConfig: {
+    colors: {
+      primary: '#22c55e',
+    },
   },
 
   nav: [
