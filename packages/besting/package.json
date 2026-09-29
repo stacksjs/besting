@@ -58,7 +58,7 @@
     "lint:fix": "bunx --bun pickier lint . --fix",
     "changelog": "bunx logsmith --verbose",
     "changelog:generate": "bunx logsmith --output CHANGELOG.md",
-    "release": "bun run changelog:generate && bunx bumpx prompt --recursive",
+    "release": "bun run changelog:generate && bunx @stacksjs/bumpx prompt --recursive",
     "bench": "bun benchmarks/dom-performance.bench.ts",
     "bench:dom": "bun benchmarks/dom-performance.bench.ts",
     "test": "bun test",
